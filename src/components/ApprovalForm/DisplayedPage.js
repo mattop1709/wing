@@ -14,7 +14,7 @@ import { Dropdown } from "react-native-material-dropdown";
 import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 
-const DisplayedPage = ({ navigate, page, name2 }) => {
+const DisplayedPage = ({ navigate, page, approverDetails }) => {
 	let screen;
 	let nominator1Name;
 	let nominator2Name;
@@ -91,7 +91,7 @@ const DisplayedPage = ({ navigate, page, name2 }) => {
 
 				<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
 					<Text style={{ color: "grey", paddingBottom: 8 }}>
-						{name2.staffName}
+						{approverDetails.nominatorName}
 					</Text>
 				</View>
 			</View>
@@ -105,7 +105,7 @@ const DisplayedPage = ({ navigate, page, name2 }) => {
 
 				<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
 					<Text style={{ color: "grey", paddingBottom: 8 }}>
-						{name2.staffName}
+						{approverDetails.nominatorName}
 					</Text>
 				</View>
 			</View>
@@ -118,7 +118,9 @@ const DisplayedPage = ({ navigate, page, name2 }) => {
 				</TouchableOpacity>
 
 				<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
-					<Text style={{ color: "grey", paddingBottom: 8 }}>XXX</Text>
+					<Text style={{ color: "grey", paddingBottom: 8 }}>
+						{approverDetails.endorserName}
+					</Text>
 				</View>
 			</View>
 
@@ -130,7 +132,9 @@ const DisplayedPage = ({ navigate, page, name2 }) => {
 				</TouchableOpacity>
 
 				<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
-					<Text style={{ color: "grey", paddingBottom: 8 }}>XXX</Text>
+					<Text style={{ color: "grey", paddingBottom: 8 }}>
+						{approverDetails.approverName}
+					</Text>
 				</View>
 			</View>
 		</View>

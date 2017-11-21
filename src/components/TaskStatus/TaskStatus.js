@@ -259,7 +259,7 @@ const CalltoAction = ({ navigate }) => (
 	>
 		<TouchableOpacity
 			onPress={() =>
-				Alert.alert("Really!", "Confirm to Reject the Request?", [
+				Alert.alert("Revert Request", "Confirm to revert this Request?", [
 					{
 						text: "Back",
 						onPress: () => console.log("Ask"),
@@ -277,26 +277,22 @@ const CalltoAction = ({ navigate }) => (
 				borderColor: "grey"
 			}}
 		>
-			<Text style={{ fontSize: 16, color: "red", padding: 16 }}>Reject</Text>
+			<Text style={{ fontSize: 16, color: "red", padding: 16 }}>Revert</Text>
 		</TouchableOpacity>
 		<TouchableOpacity
 			onPress={() =>
-				Alert.alert(
-					"Attention",
-					"Are you ready to Approve the Travel Request",
-					[
-						{
-							text: "Back",
-							onPress: () => console.log("Ask"),
-							style: "default"
-						},
-						{
-							text: "Confirm",
-							onPress: () => navigate("Task"),
-							style: "default"
-						}
-					]
-				)
+				Alert.alert("Approve Request", "Wish to approve this Request?", [
+					{
+						text: "Back",
+						onPress: () => console.log("Ask"),
+						style: "default"
+					},
+					{
+						text: "Confirm",
+						onPress: () => navigate("Task"),
+						style: "default"
+					}
+				])
 			}
 			style={{
 				alignItems: "center",

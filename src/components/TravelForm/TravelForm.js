@@ -18,11 +18,29 @@ import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 
 export default class TravelForm extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			travelTypeInput: "",
+			destinationInput: "",
+			date: "",
+			date2: "",
+			justificationInput: "",
+			cost: ""
+		};
+	}
 	state = { date: "01-11-2017", date2: "01-11-2018" };
 
 	render() {
-		// alert(0.1 + 0.1 + 0.1);
 		const { navigate, state } = this.props.navigation;
+		const {
+			travelTypeInput,
+			destinationInput,
+			date,
+			date2,
+			justificationInput,
+			cost1
+		} = this.state;
 		const { goBack } = this.props.navigation;
 		const { requestForm } = this.props;
 		let data = [
@@ -66,20 +84,35 @@ export default class TravelForm extends React.Component {
 						leftButton={{
 							title: "Exit",
 							handler: () =>
-								Alert.alert("confirm to Exit without submitting?", "Lala", [
-									{
-										text: "No",
-										style: "destructive"
-									},
-									{
-										text: "Yes",
-										onPress: () => navigate("Request"),
-										style: "default"
-									}
-								])
+								Alert.alert(
+									"Confirm to Exit?",
+									"Request will be saved as Draft",
+									[
+										{
+											text: "No",
+											style: "destructive"
+										},
+										{
+											text: "Yes",
+											onPress: () => {
+												navigate("Request"),
+													this.props.setTravelType({
+														destinationInput,
+														travelTypeInput,
+														date,
+														date2,
+														justificationInput,
+														cost1
+													});
+											},
+											style: "default"
+										}
+									]
+								)
 						}}
 					/>
 				)}
+
 				{state.params.reedit == 1 ? null : (
 					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
 						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
@@ -87,13 +120,13 @@ export default class TravelForm extends React.Component {
 						</Text>
 					</View>
 				)}
-
 				<FormBar />
+
 				<ScrollView style={{ flex: 1 }}>
 					<View
 						style={{ paddingHorizontal: 16, paddingBottom: 16, paddingTop: 24 }}
 					>
-						<Text style={{ fontSize: 12, paddingBottom: 16 }}>Destination</Text>
+						<Text style={{ fontSize: 12, paddingBottom: 8 }}>Destination</Text>
 						<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
 							<TextInput
 								style={{
@@ -101,8 +134,8 @@ export default class TravelForm extends React.Component {
 									paddingBottom: 8,
 									alignItems: "flex-end"
 								}}
-								placeholder="e.g. Seremban, Negeri Sembilan"
-								onChangeText={text => this.props.setDestination(text)}
+								placeholder="e.g. Jakarta, Indonesia"
+								onChangeText={text => this.setState({ destinationInput: text })}
 								clearButtonMode="always"
 								underlineColorAndroid="rgba(0,0,0,0)"
 							/>
@@ -117,7 +150,9 @@ export default class TravelForm extends React.Component {
 								labelHeight={0}
 								label=""
 								data={data}
-								onChangeText={value => this.props.setTravelType(value)}
+								onChangeText={value =>
+									this.setState({ travelTypeInput: value })
+								}
 							/>
 						</View>
 					</View>
@@ -197,6 +232,9 @@ export default class TravelForm extends React.Component {
 									alignItems: "flex-start"
 								}}
 								placeholder="Provide justification for your travel..."
+								onChangeText={text =>
+									this.setState({ justificationInput: text })
+								}
 								underlineColorAndroid="rgba(0,0,0,0)"
 								multiline={true}
 							/>
@@ -312,3 +350,85 @@ const FormBar = () => (
 		</View>
 	</View>
 );
+
+// {state.params.reedit == 1 ? (
+// 	<NavigationBar
+// 		style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
+// 		title={{ title: "New Request" }}
+// 		leftButton={{
+// 			title: "Back",
+// 			handler: () => goBack()
+// 		}}
+// 	/>
+// ) : (
+// 	<NavigationBar
+// 		style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
+// 		title={{ title: "New Request" }}
+// 		leftButton={{
+// 			title: "Exit",
+// 			handler: () =>
+// 				Alert.alert(
+// 					"Confirm to Exit?",
+// 					"Request will be saved as Draft",
+// 					[
+// 						{
+// 							text: "No",
+// 							style: "destructive"
+// 						},
+// 						{
+// 							text: "Yes",
+// 							onPress: () => {
+// 								navigate("Request"),
+// 									this.props.setTravelType({
+// 										destinationInput,
+// 										travelTypeInput,
+// 										date,
+// 										date2,
+// 										justificationInput
+// 									});
+// 							},
+// 							style: "default"
+// 						}
+// 					]
+// 				)
+// 		}}
+// 	/>
+// )}
+
+// {state.params.reedit == 1 ? null : (
+// 	<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
+// 		<Text style={{ fontSize: 14, fontWeight: "bold" }}>
+// 			Step 2: Travel Information
+// 		</Text>
+// 	</View>
+// )}
+
+// {state.params.reedit == 1 ? null : (
+// 	<View
+// 		style={{
+// 			flexDirection: "row",
+// 			paddingVertical: 4,
+// 			justifyContent: "center"
+// 		}}
+// 	>
+// 		<TouchableOpacity
+// 			onPress={() => goBack()}
+// 			style={{
+// 				alignItems: "center",
+// 				marginRight: 16,
+// 				borderRadius: 100
+// 			}}
+// 		>
+// 			<Icon name="chevron-left" size={32} color="#000000" />
+// 		</TouchableOpacity>
+// 		<TouchableOpacity
+// 			onPress={() => navigate("CostForm", { reedit: 0 })}
+// 			style={{
+// 				alignItems: "center",
+// 				borderRadius: 100
+// 			}}
+// 		>
+// 			<Icon name="chevron-right" size={32} color="#000000" />
+// 		</TouchableOpacity>
+// 	</View>
+// )}

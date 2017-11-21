@@ -6,7 +6,8 @@ import {
 	TouchableOpacity,
 	Alert,
 	ScrollView,
-	StatusBar
+	StatusBar,
+	FlatList
 } from "react-native";
 import NavigationBar from "react-native-navbar";
 import Send from "react-native-vector-icons/Ionicons";
@@ -15,7 +16,7 @@ class SubmitForm extends React.Component {
 	render() {
 		const { navigate } = this.props.navigation;
 		const { goBack } = this.props.navigation;
-		const { submit, user, formDraft1 } = this.props;
+		const { userDetails, requestDetails, friendsDetails } = this.props;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
 				<StatusBar
@@ -29,17 +30,21 @@ class SubmitForm extends React.Component {
 					leftButton={{
 						title: "Exit",
 						handler: () =>
-							Alert.alert("Warning", "Lala", [
-								{
-									text: "No",
-									style: "destructive"
-								},
-								{
-									text: "Yes",
-									onPress: () => navigate("Request"),
-									style: "default"
-								}
-							])
+							Alert.alert(
+								"Confirm to Exit?",
+								"Request will be saved as Draft",
+								[
+									({
+										text: "No",
+										style: "destructive"
+									},
+									{
+										text: "Yes",
+										onPress: () => navigate("Request"),
+										style: "default"
+									})
+								]
+							)
 					}}
 				/>
 
@@ -49,48 +54,42 @@ class SubmitForm extends React.Component {
 							<Text style={styles.logoBox}>Logo</Text>
 						</View>
 						<View style={{ paddingHorizontal: 8, justifyContent: "center" }}>
-							<Text style={{ fontSize: 12 }}>{formDraft1.ref}</Text>
-							<Text style={{ fontSize: 12 }}>{formDraft1.timeStamp}</Text>
+							<Text style={{ fontSize: 12 }}>{requestDetails.ref}</Text>
+							<Text style={{ fontSize: 12 }}>{requestDetails.timeStamp}</Text>
 						</View>
 					</View>
 
-					<TravelDetails
-						submit={submit}
-						navigate={navigate}
-						formDraft1={formDraft1}
-					/>
+					<TravelDetails navigate={navigate} requestDetails={requestDetails} />
 
 					<ProfileDetails
-						submit={submit}
-						user={user}
-						formDraft1={formDraft1}
+						userDetails={userDetails}
+						requestDetails={requestDetails}
 						navigate={navigate}
+						friendsDetails={friendsDetails}
 					/>
 
 					<ApproverDetails
-						submit={submit}
-						formDraft1={formDraft1}
+						requestDetails={requestDetails}
 						navigate={navigate}
 					/>
 
-					<CostDetails
-						submit={submit}
-						formDraft1={formDraft1}
-						navigate={navigate}
-					/>
+					<CostDetails requestDetails={requestDetails} navigate={navigate} />
 				</ScrollView>
 
 				<View style={{ backgroundColor: "#f3f3f3" }}>
 					<TouchableOpacity
 						onPress={() =>
-							Alert.alert("Attention!", "Ready to Submit?", [
+							Alert.alert("Submit Request", "Ready to submit the request?", [
 								{
 									text: "No",
 									style: "destructive"
 								},
 								{
 									text: "Yes",
-									onPress: () => navigate("Request"),
+									onPress: () => {
+										navigate("Request"),
+											this.props.submitComplete(requestDetails.status);
+									},
 									style: "default"
 								}
 							])
@@ -107,7 +106,7 @@ class SubmitForm extends React.Component {
 
 export default SubmitForm;
 
-const TravelDetails = ({ submit, navigate, formDraft1 }) => (
+const TravelDetails = ({ navigate, requestDetails }) => (
 	<View style={{ paddingHorizontal: 8, paddingBottom: 40 }}>
 		<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 			<Text style={{ fontSize: 12, paddingBottom: 12, color: "#f27178" }}>
@@ -121,24 +120,29 @@ const TravelDetails = ({ submit, navigate, formDraft1 }) => (
 			</TouchableOpacity>
 		</View>
 		<Text style={{ fontSize: 16, paddingBottom: 8, fontWeight: "bold" }}>
-			{formDraft1.destination}
+			{requestDetails.destination}
 		</Text>
 		<Text style={{ fontSize: 14, paddingBottom: 8 }}>
-			{formDraft1.travelFrom} until {formDraft1.travelUntil} 2016
+			{requestDetails.travelFrom} until {requestDetails.travelUntil} 2016
 		</Text>
 		<Text style={{ fontSize: 14, paddingBottom: 8 }}>
-			{formDraft1.travelType}
+			{requestDetails.travelType}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#c4c4c4" }}>
 			Description
 		</Text>
 		<Text style={{ fontSize: 14, lineHeight: 24, textAlign: "justify" }}>
-			{formDraft1.justificationText}
+			{requestDetails.justificationText}
 		</Text>
 	</View>
 );
 
-const ProfileDetails = ({ user, submit, formDraft1, navigate }) => (
+const ProfileDetails = ({
+	userDetails,
+	requestDetails,
+	friendsDetails,
+	navigate
+}) => (
 	<View style={{ paddingHorizontal: 8, paddingBottom: 32 }}>
 		<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 			<Text style={{ fontSize: 12, paddingBottom: 8, color: "#f27178" }}>
@@ -152,12 +156,30 @@ const ProfileDetails = ({ user, submit, formDraft1, navigate }) => (
 			</TouchableOpacity>
 		</View>
 		<Text style={{ fontSize: 20, paddingBottom: 4, fontWeight: "bold" }}>
-			{user.name}
+			{userDetails.name}
 		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 16 }}>{user.division}</Text>
+		<Text style={{ fontSize: 12, paddingBottom: 16 }}>
+			{userDetails.division}
+		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#c4c4c4" }}>
 			Additional Travellers
 		</Text>
+		<FlatList
+			data={friendsDetails}
+			keyExtractor={(item, index) => item.id}
+			renderItem={({ item }) => (
+				<FriendList
+					id={item.id}
+					staffName={item.staffName}
+					staffDivision={item.staffDivision}
+				/>
+			)}
+		/>
+	</View>
+);
+
+const FriendList = ({ staffName, staffDivision }) => (
+	<View>
 		<Text
 			style={{
 				paddingLeft: 8,
@@ -166,41 +188,15 @@ const ProfileDetails = ({ user, submit, formDraft1, navigate }) => (
 				fontWeight: "bold"
 			}}
 		>
-			{formDraft1.additionalTravellerName1}
+			{staffName}
 		</Text>
 		<Text style={{ paddingLeft: 8, fontSize: 12, paddingBottom: 12 }}>
-			{formDraft1.additionalTravellerDivision1}
-		</Text>
-		<Text
-			style={{
-				paddingLeft: 8,
-				fontSize: 14,
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{formDraft1.additionalTravellerName2}
-		</Text>
-		<Text style={{ paddingLeft: 8, fontSize: 12, paddingBottom: 12 }}>
-			{formDraft1.additionalTravellerDivision2}
-		</Text>
-		<Text
-			style={{
-				paddingLeft: 8,
-				fontSize: 14,
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{formDraft1.additionalTravellerName3}
-		</Text>
-		<Text style={{ paddingLeft: 8, fontSize: 12, paddingBottom: 12 }}>
-			{formDraft1.additionalTravellerDivision3}
+			{staffDivision}
 		</Text>
 	</View>
 );
 
-const ApproverDetails = ({ submit, formDraft1, navigate }) => (
+const ApproverDetails = ({ requestDetails, navigate }) => (
 	<View style={{ paddingHorizontal: 8, paddingBottom: 32 }}>
 		<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 			<Text style={{ fontSize: 12, paddingBottom: 8, color: "#f27178" }}>
@@ -214,21 +210,21 @@ const ApproverDetails = ({ submit, formDraft1, navigate }) => (
 			</TouchableOpacity>
 		</View>
 		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
-			{formDraft1.nominatorName}
+			{requestDetails.nominatorName}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Nominator</Text>
 		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
-			{formDraft1.endorserName}
+			{requestDetails.endorserName}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Endorser</Text>
 		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
-			{formDraft1.approverName}
+			{requestDetails.approverName}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Approver</Text>
 	</View>
 );
 
-const CostDetails = ({ submit, formDraft1, navigate }) => (
+const CostDetails = ({ requestDetails, navigate }) => (
 	<View style={{ paddingBottom: 40, paddingHorizontal: 8 }}>
 		<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 			<Text style={{ fontSize: 12, paddingBottom: 8, color: "#f27178" }}>
@@ -250,9 +246,11 @@ const CostDetails = ({ submit, formDraft1, navigate }) => (
 				borderColor: "#c4c4c4"
 			}}
 		>
-			<Text style={{ color: "grey" }}>Budget - {formDraft1.costCategory}</Text>
+			<Text style={{ color: "grey" }}>
+				Budget - {requestDetails.costCategory}
+			</Text>
 			<Text style={{ paddingRight: 8, color: "grey" }}>
-				{formDraft1.budget}
+				{requestDetails.budget}
 			</Text>
 		</View>
 		<View
@@ -264,7 +262,7 @@ const CostDetails = ({ submit, formDraft1, navigate }) => (
 		>
 			<Text style={{ fontSize: 18 }}>TOTAL</Text>
 			<Text style={{ paddingRight: 8, fontSize: 18, fontWeight: "bold" }}>
-				{formDraft1.cost}
+				{requestDetails.cost}
 			</Text>
 		</View>
 	</View>

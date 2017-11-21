@@ -21,9 +21,8 @@ class ApprovalForm extends React.Component {
 		this.state = { data: null };
 	}
 	render() {
-		const { navigate, state } = this.props.navigation;
-		const { goBack } = this.props.navigation;
-		const { approver, name1, name2 } = this.props;
+		const { navigate, state, goBack } = this.props.navigation;
+		const { approverDetails } = this.props;
 		let data = [
 			{
 				value: "AGM and below"
@@ -71,17 +70,21 @@ class ApprovalForm extends React.Component {
 						leftButton={{
 							title: "Exit",
 							handler: () =>
-								Alert.alert("confirm to Exit without submitting?", "Lala", [
-									{
-										text: "No",
-										style: "destructive"
-									},
-									{
-										text: "Yes",
-										onPress: () => navigate("Request"),
-										style: "default"
-									}
-								])
+								Alert.alert(
+									"Confirm to Exit?",
+									"Request will be saved as Draft",
+									[
+										{
+											text: "No",
+											style: "destructive"
+										},
+										{
+											text: "Yes",
+											onPress: () => navigate("Request"),
+											style: "default"
+										}
+									]
+								)
 						}}
 					/>
 				)}
@@ -117,7 +120,7 @@ class ApprovalForm extends React.Component {
 					<DisplayedPage
 						navigate={navigate}
 						page={this.state.data}
-						name2={name2}
+						approverDetails={approverDetails}
 					/>
 				</ScrollView>
 
@@ -141,7 +144,10 @@ class ApprovalForm extends React.Component {
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={() =>
-								navigate("SubmitForm", { reedit: 0, formDraftId: 1 })
+								navigate("SubmitForm", {
+									reedit: 0,
+									formDraftId: 1
+								})
 							}
 							style={{
 								alignItems: "center",

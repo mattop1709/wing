@@ -1,15 +1,28 @@
 import { connect } from "react-redux";
 import SubmitForm from "./SubmitForm";
 
+import { submitComplete } from "../../redux/request/action";
+
 const mapStateToProps = (state, ownProps) => {
 	return {
-		user: state.user,
-		submit: state.request[0],
+		userDetails: state.user,
 		formDraftId: ownProps.navigation.state.params.formDraftId,
-		formDraft1: state.request.filter(
+		requestDetails: state.request.filter(
 			f => f.ticketNumber == ownProps.navigation.state.params.formDraftId
-		)[0]
+		)[0],
+		friendsDetails: state.request.filter(
+			f => f.ticketNumber == ownProps.navigation.state.params.formDraftId
+		)[0].friends
 	};
 };
 
-export default connect(mapStateToProps)(SubmitForm);
+const mapDispatchToPros = dispatch => {
+	return {
+		submitComplete: t => {
+			dispatch(submitComplete(t));
+			console.log(t);
+		}
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToPros)(SubmitForm);

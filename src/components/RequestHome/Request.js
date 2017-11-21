@@ -17,8 +17,27 @@ import Circle from "react-native-vector-icons/FontAwesome";
 import TrackingBar from "../Bar/TrackingBar";
 
 class Request extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			travelTypeInput: "",
+			destinationInput: "",
+			date: "",
+			date2: "",
+			justificationInput: "",
+			cost1: ""
+		};
+	}
 	render() {
 		const { navigate } = this.props.navigation;
+		const {
+			travelTypeInput,
+			destinationInput,
+			date,
+			date2,
+			justificationInput,
+			cost1
+		} = this.state;
 		const { requestHome, user } = this.props;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
@@ -37,10 +56,10 @@ class Request extends React.Component {
 					) : (
 						<FlatList
 							data={requestHome}
-							keyExtractor={(item, index) => item.id}
+							keyExtractor={(item, index) => item.ref}
 							renderItem={({ item }) => (
 								<ApplicationSingle
-									ref={item.ref}
+									id={item.id}
 									formId={item.ticketNumber}
 									formDraftId={item.ticketNumber}
 									navigate={navigate}
@@ -60,7 +79,17 @@ class Request extends React.Component {
 
 				<ActionButton
 					buttonColor="#333333"
-					onPress={() => navigate("ProfileForm", { reddit: 0 })}
+					onPress={() => {
+						navigate("ProfileForm", { reddit: 0 }),
+							this.props.setTravelType({
+								destinationInput,
+								travelTypeInput,
+								date,
+								date2,
+								justificationInput,
+								cost1
+							});
+					}}
 				/>
 			</View>
 		);
@@ -94,7 +123,7 @@ const ApplicationSingle = ({
 					<Text style={styles.destinationDraftText}>[Draft] {destination}</Text>
 					<Text style={styles.travelTypeDraftText}>{travelType}</Text>
 					<Text style={{ fontSize: 16, paddingBottom: 4, color: "#000000" }}>
-						{travelFrom} until {travelUntil} 2017
+						{travelFrom} until {travelUntil}
 					</Text>
 				</View>
 

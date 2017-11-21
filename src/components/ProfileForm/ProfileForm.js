@@ -49,8 +49,8 @@ class ProfileForm extends React.Component {
 							title: "Exit",
 							handler: () =>
 								Alert.alert(
-									"Confirm exit without submitting?",
-									"All changes will be lost",
+									"Confirm to Exit?",
+									"Request will be saved as Draft",
 									[
 										{
 											text: "No",

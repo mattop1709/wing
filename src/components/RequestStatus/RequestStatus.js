@@ -6,20 +6,19 @@ import {
 	View,
 	ScrollView,
 	TouchableOpacity,
-	Alert
+	Alert,
+	FlatList
 } from "react-native";
-
-import Delete from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 
 import TrackingBar from "../Bar/TrackingBar";
+import RequestHeader from "../Bar/RequestHeader";
 
 class RequestStatus extends React.Component {
 	render() {
-		const { navigate } = this.props.navigation;
-		const { goBack } = this.props.navigation;
-		const { request1, form1 } = this.props;
+		const { navigate, goBack } = this.props.navigation;
+		const { requestDetails, friendsDetails, userDetails } = this.props;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
 				<NavigationBar
@@ -35,44 +34,31 @@ class RequestStatus extends React.Component {
 					}}
 				/>
 
-				{form1.status === "eeiu" ? (
+				{requestDetails.status === "eeiu" ? (
 					<View style={styles.eeiuTrackingBar}>
 						<Text>Pending EEIU Approval</Text>
 					</View>
 				) : (
-					<TrackingBar status={form1.status} />
+					<TrackingBar status={requestDetails.status} />
 				)}
 
 				<ScrollView style={{ flex: 1, paddingHorizontal: 8 }}>
-					<View style={styles.headerContainer}>
-						<View style={styles.logoBox}>
-							<Text style={styles.logoText}>Logo</Text>
-						</View>
-						<View
-							style={{
-								width: "30%",
-								paddingHorizontal: 8,
-								justifyContent: "center"
-							}}
-						>
-							<Text style={{ fontSize: 12, textAlign: "right" }}>
-								{form1.ref}
-							</Text>
-							<Text style={{ fontSize: 12, textAlign: "right" }}>
-								{form1.timeStamp}
-							</Text>
-						</View>
-					</View>
+					<RequestHeader requestDetails={requestDetails} />
 
-					<TravelDetails request1={request1} form1={form1} />
+					<TravelDetails requestDetails={requestDetails} />
 
-					<ProfileDetails request1={request1} form1={form1} />
+					<ProfileDetails
+						userDetails={userDetails}
+						friendsDetails={friendsDetails}
+					/>
 
-					<CostDetails request1={request1} form1={form1} />
+					<CostDetails requestDetails={requestDetails} />
 
 					<TouchableOpacity
 						onPress={() =>
-							navigate("Comments", { commentId: `${form1.ticketNumber}` })
+							navigate("Comments", {
+								commentId: `${requestDetails.ticketNumber}`
+							})
 						}
 						style={styles.commentContainer}
 					>
@@ -81,15 +67,15 @@ class RequestStatus extends React.Component {
 						</View>
 						<View style={{ paddingLeft: 8 }}>
 							<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>
-								{form1.endorserName}
+								{requestDetails.endorserName}
 							</Text>
-							<Text>{form1.commentTextLatest}</Text>
+							<Text>{requestDetails.commentTextLatest}</Text>
 						</View>
 					</TouchableOpacity>
 
 					<TouchableOpacity
 						onPress={() =>
-							Alert.alert("Warning", "Confirm to delete?", [
+							Alert.alert("Delete Request", "Wish to delete your Request?", [
 								{
 									text: "No"
 								},
@@ -117,7 +103,7 @@ class RequestStatus extends React.Component {
 
 export default RequestStatus;
 
-const TravelDetails = ({ request1, form1 }) => (
+const TravelDetails = ({ requestDetails }) => (
 	<View
 		style={{
 			paddingHorizontal: 8,
@@ -131,7 +117,7 @@ const TravelDetails = ({ request1, form1 }) => (
 			Travel Details
 		</Text>
 		<Text style={{ fontSize: 16, paddingBottom: 24, fontWeight: "bold" }}>
-			{form1.destination}
+			{requestDetails.destination}
 		</Text>
 		<View
 			style={{
@@ -145,7 +131,7 @@ const TravelDetails = ({ request1, form1 }) => (
 					Departure
 				</Text>
 				<Text style={{ fontSize: 16, fontWeight: "bold" }}>
-					{form1.travelFrom} 2016
+					{requestDetails.travelFrom} 2016
 				</Text>
 			</View>
 			<View>
@@ -153,7 +139,7 @@ const TravelDetails = ({ request1, form1 }) => (
 					Arrival
 				</Text>
 				<Text style={{ fontSize: 16, fontWeight: "bold" }}>
-					{form1.travelUntil} 2016
+					{requestDetails.travelUntil} 2016
 				</Text>
 			</View>
 		</View>
@@ -161,18 +147,18 @@ const TravelDetails = ({ request1, form1 }) => (
 			Travel Type
 		</Text>
 		<Text style={{ fontSize: 16, paddingBottom: 24, fontWeight: "bold" }}>
-			{form1.travelType}
+			{requestDetails.travelType}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
 			Justification
 		</Text>
 		<Text style={{ fontSize: 16, lineHeight: 24, fontWeight: "bold" }}>
-			{form1.justificationText}
+			{requestDetails.justificationText}
 		</Text>
 	</View>
 );
 
-const ProfileDetails = ({ request1, form1 }) => (
+const ProfileDetails = ({ friendsDetails, userDetails }) => (
 	<View
 		style={{
 			paddingVertical: 40,
@@ -186,14 +172,30 @@ const ProfileDetails = ({ request1, form1 }) => (
 			Profile Details
 		</Text>
 		<Text style={{ fontSize: 16, paddingBottom: 4, fontWeight: "bold" }}>
-			{form1.requestorName}
+			{userDetails.name}
 		</Text>
-		<Text style={{ fontSize: 16, paddingBottom: 24, color: "#000000" }}>
-			{form1.requestorDivision}
+		<Text style={{ fontSize: 16, paddingBottom: 24 }}>
+			{userDetails.division}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
 			Other Travellers
 		</Text>
+		<FlatList
+			data={friendsDetails}
+			keyExtractor={(item, index) => item.id}
+			renderItem={({ item }) => (
+				<FriendList
+					id={item.id}
+					staffName={item.staffName}
+					staffDivision={item.staffDivision}
+				/>
+			)}
+		/>
+	</View>
+);
+
+const FriendList = ({ staffName, staffDivision }) => (
+	<View>
 		<Text
 			style={{
 				fontSize: 16,
@@ -201,7 +203,7 @@ const ProfileDetails = ({ request1, form1 }) => (
 				fontWeight: "bold"
 			}}
 		>
-			{form1.additionalTravellerName1}
+			{staffName}
 		</Text>
 		<Text
 			style={{
@@ -209,45 +211,12 @@ const ProfileDetails = ({ request1, form1 }) => (
 				paddingBottom: 12
 			}}
 		>
-			{form1.additionalTravellerDivision1}
-		</Text>
-		<Text
-			style={{
-				fontSize: 14,
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{form1.additionalTravellerName2}
-		</Text>
-		<Text
-			style={{
-				fontSize: 16,
-				paddingBottom: 12
-			}}
-		>
-			{form1.additionalTravellerDivision2}
-		</Text>
-		<Text
-			style={{
-				fontSize: 14,
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{form1.additionalTravellerName3}
-		</Text>
-		<Text
-			style={{
-				fontSize: 16
-			}}
-		>
-			{form1.additionalTravellerDivision3}
+			{staffDivision}
 		</Text>
 	</View>
 );
 
-const CostDetails = ({ request1, form1 }) => (
+const CostDetails = ({ requestDetails }) => (
 	<View
 		style={{
 			flexDirection: "row",
@@ -260,22 +229,26 @@ const CostDetails = ({ request1, form1 }) => (
 		}}
 	>
 		<View>
-			{form1.costCategory ? (
+			{requestDetails.costCategory ? (
 				<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
-					Budget {request1.costCategory}
+					Budget {requestDetails.costCategory}
 				</Text>
 			) : (
 				<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
-					Budget {form1.costCentre}
+					Budget {requestDetails.costCentre}
 				</Text>
 			)}
-			<Text style={{ fontSize: 16, fontWeight: "bold" }}>RM{form1.budget}</Text>
+			<Text style={{ fontSize: 16, fontWeight: "bold" }}>
+				RM{requestDetails.budget}
+			</Text>
 		</View>
 		<View>
 			<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
 				Cost
 			</Text>
-			<Text style={{ fontSize: 16, fontWeight: "bold" }}>RM{form1.cost}</Text>
+			<Text style={{ fontSize: 16, fontWeight: "bold" }}>
+				RM{requestDetails.cost}
+			</Text>
 		</View>
 	</View>
 );
@@ -290,23 +263,6 @@ const styles = StyleSheet.create({
 		paddingTop: 16,
 		paddingBottom: 16,
 		alignItems: "center"
-	},
-	headerContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		marginVertical: 32,
-		paddingHorizontal: 8
-	},
-	logoBox: {
-		backgroundColor: "#f27178",
-		paddingHorizontal: 16,
-		paddingVertical: 16,
-		marginLeft: 8
-	},
-	logoText: {
-		paddingTop: 8,
-		fontSize: 18,
-		fontWeight: "bold"
 	},
 	requestDetailsBox: {
 		flex: 1,
