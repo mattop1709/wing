@@ -17,32 +17,13 @@ import Circle from "react-native-vector-icons/FontAwesome";
 import TrackingBar from "../Bar/TrackingBar";
 
 class Request extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			travelTypeInput: "",
-			destinationInput: "",
-			date: "",
-			date2: "",
-			justificationInput: "",
-			cost1: ""
-		};
-	}
 	render() {
 		const { navigate } = this.props.navigation;
-		const {
-			travelTypeInput,
-			destinationInput,
-			date,
-			date2,
-			justificationInput,
-			cost1
-		} = this.state;
 		const { requestHome, user } = this.props;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
 				<View style={{ flex: 1, paddingHorizontal: 8 }}>
-					{user.receiveRequest === "false" ? (
+					{user.submitRequest === "false" ? (
 						<View
 							style={{
 								flex: 1,
@@ -80,15 +61,7 @@ class Request extends React.Component {
 				<ActionButton
 					buttonColor="#333333"
 					onPress={() => {
-						navigate("ProfileForm", { reddit: 0 }),
-							this.props.setTravelType({
-								destinationInput,
-								travelTypeInput,
-								date,
-								date2,
-								justificationInput,
-								cost1
-							});
+						navigate("ProfileForm", { reddit: 0 }), this.props.newRequest();
 					}}
 				/>
 			</View>

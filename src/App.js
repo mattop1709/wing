@@ -4,7 +4,8 @@ import { compose, createStore, applyMiddleware } from "redux";
 import { persistStore, autoRehydrate } from "redux-persist";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
-import Drawer from "./routes/Drawer";
+// import Drawer from "./routes/Drawer";
+import Index from "./routes/Index";
 
 import reducers from "./redux/reducers";
 const store = createStore(reducers, undefined, compose(applyMiddleware(thunk)));
@@ -19,24 +20,24 @@ const store = createStore(reducers, undefined, compose(applyMiddleware(thunk)));
 // // persistStore(store, { storage: AsyncStorage }).purge();
 
 export default class wing extends Component {
-  render() {
-    console.disableYellowBox = true;
-    return (
-      <Provider store={store}>
-        <View style={styles.container}>
-          <StatusBar showHiddenTransition="fade" />
-          <Drawer />
-        </View>
-      </Provider>
-    );
-  }
+	render() {
+		console.disableYellowBox = true;
+		return (
+			<Provider store={store}>
+				<View style={styles.container}>
+					<StatusBar showHiddenTransition="fade" />
+					<Index />
+				</View>
+			</Provider>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    backgroundColor: "#FFFFFF"
-  }
+	container: {
+		flex: 1,
+		// justifyContent: 'center',
+		// alignItems: 'center',
+		backgroundColor: "#FFFFFF"
+	}
 });

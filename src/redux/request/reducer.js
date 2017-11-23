@@ -48,31 +48,25 @@ const initialState = [
 
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case "SET_DESTINATION":
-			return [...state, { ref: "1002", destination: action.data }];
-		case "SET_TRAVEL_TYPE":
-			return [
-				...state,
-				{
-					ref: "1002",
-					status: "Draft",
-					ticketNumber: "2",
-					travelType: action.travelTypeText.travelTypeInput,
-					destination: action.travelTypeText.destinationInput,
-					travelFrom: action.travelTypeText.date,
-					travelUntil: action.travelTypeText.date2,
-					justificationText: action.travelTypeText.justificationInput,
-					cost: action.travelTypeText.cost1
-				}
-			];
 		case "NEW_REQUEST":
 			return [
 				...state,
 				{
-					ref: "1003",
+					ticketNumber: action.ticketNumber,
 					status: "Draft"
 				}
 			];
+		case "SET_DESTINATION":
+			return [...state, { destination: action.text }];
+		case "SET_TRAVEL_TYPE":
+			return [
+				...state.filter(ticketNumber => ticketNumber == 2),
+				{
+					travelType: action.value,
+					status: "Draft"
+				}
+			];
+
 		default:
 			return state;
 	}

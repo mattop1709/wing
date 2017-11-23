@@ -1,24 +1,25 @@
-// export const setDestination = destinationText => {
+// export const setDestination = text => {
+// 	alert(text);
 // 	return {
 // 		type: "SET_DESTINATION",
-// 		destinationText
+// 		text
 // 	};
 // };
 
-export const setTravelType = travelTypeText => {
+export const setTravelType = value => {
 	// alert(travelTypeText.date);
 	return {
 		type: "SET_TRAVEL_TYPE",
-		travelTypeText
+		value
 	};
 };
 
-// export const newRequest = data => {
-// 	return {
-// 		type: "NEW_REQUEST",
-// 		data
-// 	};
-// };
+export const newRequest = ticketNumber => {
+	return {
+		type: "NEW_REQUEST",
+		ticketNumber: 2
+	};
+};
 
 // export const submitComplete = status => {
 // 	if (status == "") {

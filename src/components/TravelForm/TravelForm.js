@@ -18,29 +18,10 @@ import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 
 export default class TravelForm extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			travelTypeInput: "",
-			destinationInput: "",
-			date: "",
-			date2: "",
-			justificationInput: "",
-			cost: ""
-		};
-	}
 	state = { date: "01-11-2017", date2: "01-11-2018" };
 
 	render() {
 		const { navigate, state } = this.props.navigation;
-		const {
-			travelTypeInput,
-			destinationInput,
-			date,
-			date2,
-			justificationInput,
-			cost1
-		} = this.state;
 		const { goBack } = this.props.navigation;
 		const { requestForm } = this.props;
 		let data = [
@@ -94,17 +75,8 @@ export default class TravelForm extends React.Component {
 										},
 										{
 											text: "Yes",
-											onPress: () => {
-												navigate("Request"),
-													this.props.setTravelType({
-														destinationInput,
-														travelTypeInput,
-														date,
-														date2,
-														justificationInput,
-														cost1
-													});
-											},
+											onPress: () => navigate("Request"),
+
 											style: "default"
 										}
 									]
@@ -135,7 +107,7 @@ export default class TravelForm extends React.Component {
 									alignItems: "flex-end"
 								}}
 								placeholder="e.g. Jakarta, Indonesia"
-								onChangeText={text => this.setState({ destinationInput: text })}
+								onChangeText={text => this.props.setDestination(text)}
 								clearButtonMode="always"
 								underlineColorAndroid="rgba(0,0,0,0)"
 							/>
@@ -150,9 +122,7 @@ export default class TravelForm extends React.Component {
 								labelHeight={0}
 								label=""
 								data={data}
-								onChangeText={value =>
-									this.setState({ travelTypeInput: value })
-								}
+								onChangeText={value => this.props.setTravelType(value)}
 							/>
 						</View>
 					</View>
@@ -232,9 +202,7 @@ export default class TravelForm extends React.Component {
 									alignItems: "flex-start"
 								}}
 								placeholder="Provide justification for your travel..."
-								onChangeText={text =>
-									this.setState({ justificationInput: text })
-								}
+								onChangeText={text => null}
 								underlineColorAndroid="rgba(0,0,0,0)"
 								multiline={true}
 							/>

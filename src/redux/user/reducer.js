@@ -3,8 +3,9 @@ const initialState = {
 	staffID: "TM35438",
 	division: "Group Digital Centre",
 	authentication: "true",
-	receiveRequest: "true",
-	receiveTask: "true"
+	submitRequest: "true",
+	receiveTask: "true",
+	authenticated: "true"
 };
 
 export default (state = initialState, action) => {

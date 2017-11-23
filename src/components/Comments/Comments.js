@@ -54,11 +54,10 @@ class Comments extends React.Component {
 				>
 					<View style={styles.textInputBox}>
 						<TextInput
-							style={{ padding: 8, fontSize: 14 }}
+							style={{ padding: 8, fontSize: 14, height: 100 }}
 							placeholder="Type your comment here.."
 							underlineColorAndroid="rgba(0,0,0,0)"
-							autoGrow={false}
-							maxHeight={400}
+							multiline={true}
 						/>
 					</View>
 					<View style={{ justifyContent: "center", marginBottom: 8 }}>
@@ -98,21 +97,6 @@ const ChatInfo = ({ requestDetails }) => (
 		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
 			{requestDetails.travelFrom} until {requestDetails.travelUntil}
 		</Text>
-		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
-			{requestDetails.travelType}
-		</Text>
-		<View style={{ flexDirection: "row", paddingBottom: 4 }}>
-			<Text style={{ fontSize: 14 }}>By:</Text>
-			<Text style={{ paddingLeft: 8, fontSize: 14, color: "green" }}>
-				{requestDetails.requestorName}
-			</Text>
-		</View>
-		<View style={{ flexDirection: "row" }}>
-			<Text style={{ fontSize: 14 }}>Status:</Text>
-			<Text style={{ paddingLeft: 8, fontSize: 14, color: "#f27178" }}>
-				{requestDetails.status}
-			</Text>
-		</View>
 	</View>
 );
 
@@ -136,3 +120,29 @@ const styles = StyleSheet.create({
 		marginBottom: 8
 	}
 });
+
+// const ChatInfo = ({ requestDetails }) => (
+// 	<View style={styles.travelDetailsContainer}>
+// 		<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
+// 			{requestDetails.destination}
+// 		</Text>
+// 		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
+// 			{requestDetails.travelFrom} until {requestDetails.travelUntil}
+// 		</Text>
+// 		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
+// 			{requestDetails.travelType}
+// 		</Text>
+// 		<View style={{ flexDirection: "row", paddingBottom: 4 }}>
+// 			<Text style={{ fontSize: 14 }}>By:</Text>
+// 			<Text style={{ paddingLeft: 8, fontSize: 14, color: "green" }}>
+// 				{requestDetails.requestorName}
+// 			</Text>
+// 		</View>
+// 		<View style={{ flexDirection: "row" }}>
+// 			<Text style={{ fontSize: 14 }}>Status:</Text>
+// 			<Text style={{ paddingLeft: 8, fontSize: 14, color: "#f27178" }}>
+// 				{requestDetails.status}
+// 			</Text>
+// 		</View>
+// 	</View>
+// );
