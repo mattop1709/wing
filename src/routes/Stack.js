@@ -6,7 +6,7 @@ import Menu from "react-native-vector-icons/Ionicons";
 
 import ProfileForm from "../components/ProfileForm";
 import TravelForm from "../components/TravelForm";
-import CostForm from "../components/CostForm/CostForm";
+import CostForm from "../components/CostForm";
 import ApprovalForm from "../components/ApprovalForm";
 import SubmitForm from "../components/SubmitForm";
 import AddFriends from "../components/AddFriends";

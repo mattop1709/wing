@@ -12,7 +12,11 @@ const mapStateToProps = (state, ownProps) => {
 		friendsDetails: state.request.filter(
 			friendsDetail =>
 				friendsDetail.ticketNumber == ownProps.navigation.state.params.formId
-		)[0].friends
+		)[0].friends,
+		comment1: state.request.filter(
+			comment1 =>
+				comment1.ticketNumber == ownProps.navigation.state.params.formId
+		)[0].comments
 	};
 };
 

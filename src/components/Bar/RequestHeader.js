@@ -11,7 +11,7 @@ import {
 
 class RequestHeader extends React.Component {
 	render() {
-		const { requestDetails } = this.props;
+		const { requestDetails, userDetails } = this.props;
 		return (
 			<View style={styles.headerContainer}>
 				<View style={styles.logoBox}>
@@ -19,7 +19,8 @@ class RequestHeader extends React.Component {
 				</View>
 				<View style={styles.infoBox}>
 					<Text style={{ fontSize: 12, textAlign: "right" }}>
-						{requestDetails.ref}
+						WINGS -
+						{requestDetails.ticketNumber}
 					</Text>
 					<Text style={{ fontSize: 12, textAlign: "right" }}>
 						{requestDetails.timeStamp}

@@ -12,18 +12,20 @@ import {
 import Next from "react-native-vector-icons/Entypo";
 import { Dropdown } from "react-native-material-dropdown";
 import DatePicker from "react-native-datepicker";
-import { connect } from "react-redux";
 import Icon from "react-native-vector-icons/EvilIcons";
 // import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import NavigationBar from "react-native-navbar";
 
 export default class TravelForm extends React.Component {
-	state = { date: "01-11-2017", date2: "01-11-2018" };
+	constructor(props) {
+		super(props);
+		this.state = { date: "01-11-2017", date2: "01-11-2018" };
+	}
 
 	render() {
 		const { navigate, state } = this.props.navigation;
 		const { goBack } = this.props.navigation;
-		const { requestForm } = this.props;
+		// const { requestForm } = this.props;
 		let data = [
 			{
 				value: "Training"
@@ -202,7 +204,9 @@ export default class TravelForm extends React.Component {
 									alignItems: "flex-start"
 								}}
 								placeholder="Provide justification for your travel..."
-								onChangeText={text => null}
+								onChangeText={caption =>
+									this.props.setJustificationText(caption)
+								}
 								underlineColorAndroid="rgba(0,0,0,0)"
 								multiline={true}
 							/>
@@ -318,85 +322,3 @@ const FormBar = () => (
 		</View>
 	</View>
 );
-
-// {state.params.reedit == 1 ? (
-// 	<NavigationBar
-// 		style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
-// 		title={{ title: "New Request" }}
-// 		leftButton={{
-// 			title: "Back",
-// 			handler: () => goBack()
-// 		}}
-// 	/>
-// ) : (
-// 	<NavigationBar
-// 		style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
-// 		title={{ title: "New Request" }}
-// 		leftButton={{
-// 			title: "Exit",
-// 			handler: () =>
-// 				Alert.alert(
-// 					"Confirm to Exit?",
-// 					"Request will be saved as Draft",
-// 					[
-// 						{
-// 							text: "No",
-// 							style: "destructive"
-// 						},
-// 						{
-// 							text: "Yes",
-// 							onPress: () => {
-// 								navigate("Request"),
-// 									this.props.setTravelType({
-// 										destinationInput,
-// 										travelTypeInput,
-// 										date,
-// 										date2,
-// 										justificationInput
-// 									});
-// 							},
-// 							style: "default"
-// 						}
-// 					]
-// 				)
-// 		}}
-// 	/>
-// )}
-
-// {state.params.reedit == 1 ? null : (
-// 	<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
-// 		<Text style={{ fontSize: 14, fontWeight: "bold" }}>
-// 			Step 2: Travel Information
-// 		</Text>
-// 	</View>
-// )}
-
-// {state.params.reedit == 1 ? null : (
-// 	<View
-// 		style={{
-// 			flexDirection: "row",
-// 			paddingVertical: 4,
-// 			justifyContent: "center"
-// 		}}
-// 	>
-// 		<TouchableOpacity
-// 			onPress={() => goBack()}
-// 			style={{
-// 				alignItems: "center",
-// 				marginRight: 16,
-// 				borderRadius: 100
-// 			}}
-// 		>
-// 			<Icon name="chevron-left" size={32} color="#000000" />
-// 		</TouchableOpacity>
-// 		<TouchableOpacity
-// 			onPress={() => navigate("CostForm", { reedit: 0 })}
-// 			style={{
-// 				alignItems: "center",
-// 				borderRadius: 100
-// 			}}
-// 		>
-// 			<Icon name="chevron-right" size={32} color="#000000" />
-// 		</TouchableOpacity>
-// 	</View>
-// )}

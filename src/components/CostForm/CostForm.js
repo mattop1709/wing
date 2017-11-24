@@ -26,10 +26,10 @@ class CostForm extends React.Component {
 		const { goBack } = this.props.navigation;
 		let data = [
 			{
-				value: "TM Sponsorship"
+				value: "Cost Centre"
 			},
 			{
-				value: "External Sponsorship"
+				value: "Sponsorship (EEIU)"
 			}
 		];
 
@@ -106,7 +106,7 @@ class CostForm extends React.Component {
 									justifyContent: "center"
 								}}
 								placeholder="State your cost.."
-								onChangeText={number => null}
+								onChangeText={costValue => this.props.setCostValue(costValue)}
 								clearButtonMode="always"
 								underlineColorAndroid="rgba(0,0,0,0)"
 								keyboardType="numeric"
@@ -134,7 +134,9 @@ class CostForm extends React.Component {
 									alignItems: "flex-end"
 								}}
 								placeholder="State your budget.."
-								onChangeText={text22 => null}
+								onChangeText={budgetValue =>
+									this.props.setBudgetValue(budgetValue)
+								}
 								clearButtonMode="always"
 								underlineColorAndroid="rgba(0,0,0,0)"
 								keyboardType="numeric"
@@ -152,7 +154,7 @@ class CostForm extends React.Component {
 								labelHeight={0}
 								label=""
 								data={data}
-								onChangeText={value => null}
+								onChangeText={value => this.props.setCostCategory(value)}
 							/>
 							{this.state.data === "External Sponsorship" && (
 								<Text style={{ fontSize: 12, color: "red" }}>

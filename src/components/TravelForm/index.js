@@ -2,13 +2,14 @@ import { connect } from "react-redux";
 import TravelForm from "./TravelForm";
 import Request from "../RequestHome/Request";
 
-import { setDestination, setTravelType } from "../../redux/request/action";
+import {
+	setDestination,
+	setTravelType,
+	setJustificationText
+} from "../../redux/request/action";
 
 const mapStateToProps = state => {
-	return {
-		requestForm: state.request[0],
-		user: state.user
-	};
+	return {};
 };
 
 const mapDispatchToProps = dispatch => {
@@ -20,6 +21,14 @@ const mapDispatchToProps = dispatch => {
 		setTravelType: value => {
 			dispatch(setTravelType(value));
 			console.log(value);
+		},
+		setTravelFrom: date => {
+			dispatch(setTravelFrom(date));
+			console.log(date);
+		},
+		setJustificationText: caption => {
+			dispatch(setJustificationText(caption));
+			console.log(caption);
 		}
 	};
 };

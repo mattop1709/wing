@@ -1,15 +1,31 @@
 import { connect } from "react-redux";
 import CostForm from "./CostForm";
 
-import { setTravelType } from "../../redux/request/action";
+import {
+	setCostValue,
+	setBudgetValue,
+	setCostCategory
+} from "../../redux/request/action";
+
+const mapStateToProps = state => {
+	return {};
+};
 
 const mapDispatchToProps = dispatch => {
 	return {
-		setTravelType: data1 => {
-			dispatch(setTravelType(data1));
-			console.log(data1);
+		setCostValue: costValue => {
+			dispatch(setCostValue(costValue));
+			console.log(costValue);
+		},
+		setBudgetValue: budgetValue => {
+			dispatch(setBudgetValue(budgetValue));
+			console.log(budgetValue);
+		},
+		setCostCategory: value => {
+			dispatch(setCostCategory(value));
+			console.log(value);
 		}
 	};
 };
 
-export default connect(mapDispatchToProps)(CostForm);
+export default connect(mapStateToProps, mapDispatchToProps)(CostForm);
