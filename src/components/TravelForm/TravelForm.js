@@ -19,9 +19,16 @@ import NavigationBar from "react-native-navbar";
 export default class TravelForm extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { date: "01-11-2017", date2: "01-11-2018" };
+		this.state = { date: "", date2: "" };
 	}
-
+	handleClick(date) {
+		this.setState({ date: date });
+		this.props.setTravelFrom(date);
+	}
+	handleClick1(date) {
+		this.setState({ date2: date });
+		this.props.setTravelUntil(date);
+	}
 	render() {
 		const { navigate, state } = this.props.navigation;
 		const { goBack } = this.props.navigation;
@@ -51,7 +58,7 @@ export default class TravelForm extends React.Component {
 				behavior="padding"
 				style={{ flex: 1, backgroundColor: "#ffffff" }}
 			>
-				{state.params.reedit == 1 ? (
+				{state.params.edit == "true" ? (
 					<NavigationBar
 						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
 						title={{ title: "New Request" }}
@@ -78,7 +85,6 @@ export default class TravelForm extends React.Component {
 										{
 											text: "Yes",
 											onPress: () => navigate("Request"),
-
 											style: "default"
 										}
 									]
@@ -87,7 +93,7 @@ export default class TravelForm extends React.Component {
 					/>
 				)}
 
-				{state.params.reedit == 1 ? null : (
+				{state.params.edit == "true" ? null : (
 					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
 						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
 							Step 2: Travel Information
@@ -108,7 +114,7 @@ export default class TravelForm extends React.Component {
 									paddingBottom: 8,
 									alignItems: "flex-end"
 								}}
-								placeholder="e.g. Jakarta, Indonesia"
+								placeholder={this.props.caption}
 								onChangeText={text => this.props.setDestination(text)}
 								clearButtonMode="always"
 								underlineColorAndroid="rgba(0,0,0,0)"
@@ -136,7 +142,7 @@ export default class TravelForm extends React.Component {
 								style={{ width: 200 }}
 								date={this.state.date}
 								mode="date"
-								format="DD-MM-YYYY"
+								format="LL"
 								minDate="01-01-1990"
 								confirmBtnText="Confirm"
 								cancelBtnText="Cancel"
@@ -152,9 +158,7 @@ export default class TravelForm extends React.Component {
 									}
 									// ... You can check the source to find the other keys.
 								}}
-								onDateChange={date => {
-									this.setState({ date: date });
-								}}
+								onDateChange={date => this.handleClick(date)}
 							/>
 						</View>
 					</View>
@@ -166,7 +170,7 @@ export default class TravelForm extends React.Component {
 								style={{ width: 200 }}
 								date={this.state.date2}
 								mode="date"
-								format="DD-MM-YYYY"
+								format="LL"
 								minDate="01-01-1990"
 								confirmBtnText="Confirm"
 								cancelBtnText="Cancel"
@@ -182,9 +186,7 @@ export default class TravelForm extends React.Component {
 									}
 									// ... You can check the source to find the other keys.
 								}}
-								onDateChange={date => {
-									this.setState({ date2: date });
-								}}
+								onDateChange={date => this.handleClick1(date)}
 							/>
 						</View>
 					</View>
@@ -213,7 +215,7 @@ export default class TravelForm extends React.Component {
 						</View>
 					</View>
 				</ScrollView>
-				{state.params.reedit == 1 ? null : (
+				{state.params.edit == "true" ? null : (
 					<View
 						style={{
 							flexDirection: "row",
@@ -232,7 +234,7 @@ export default class TravelForm extends React.Component {
 							<Icon name="chevron-left" size={32} color="#000000" />
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() => navigate("CostForm", { reedit: 0 })}
+							onPress={() => navigate("CostForm", { edit: "false" })}
 							style={{
 								alignItems: "center",
 								borderRadius: 100

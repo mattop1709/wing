@@ -38,7 +38,7 @@ class CostForm extends React.Component {
 				behavior="padding"
 				style={{ flex: 1, backgroundColor: "#ffffff" }}
 			>
-				{state.params.reedit == 1 ? (
+				{state.params.edit == "true" ? (
 					<NavigationBar
 						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
 						title={{ title: "New Request" }}
@@ -72,7 +72,7 @@ class CostForm extends React.Component {
 						}}
 					/>
 				)}
-				{state.params.reedit == 1 ? null : (
+				{state.params.edit == "true" ? null : (
 					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
 						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
 							Step 3: Cost Information
@@ -183,7 +183,7 @@ class CostForm extends React.Component {
 					</View>
 				</ScrollView>
 
-				{state.params.reedit == 1 ? null : (
+				{state.params.edit == "true" ? null : (
 					<View
 						style={{
 							flexDirection: "row",
@@ -202,7 +202,7 @@ class CostForm extends React.Component {
 							<Icon name="chevron-left" size={32} color="#000000" />
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() => navigate("ApprovalForm", { reedit: 0 })}
+							onPress={() => navigate("ApprovalForm", { edit: "false" })}
 							style={{
 								alignItems: "center",
 								borderRadius: 100

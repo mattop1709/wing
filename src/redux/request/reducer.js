@@ -1,7 +1,7 @@
 const initialState = [
 	{
 		ticketNumber: "1001",
-		status: "Nominate",
+		status: "Submit",
 		notification: "new",
 		timeStamp: "1 Jan 2017, 8.00am",
 		destination: "Singapore",
@@ -22,6 +22,8 @@ const initialState = [
 		costCentre: "BMCE02",
 		dialogBox: "Hi",
 		commentTextLatest: "Ali, What is your name?",
+		friendId1Name: "Mohammad Hafiz bin Burhan",
+		friendId1Division: "Group Digital Centre",
 		comments: [
 			{
 				senderId: "1",
@@ -36,16 +38,6 @@ const initialState = [
 				commentText: "Get the boot, into the mommy house",
 				timeStamp: "14 September 2017, 4.17pm"
 			}
-		],
-		friends: [
-			{
-				staffName: "Engku Fariez bin Engku Azahan",
-				staffDivision: "Group Digital Centre"
-			},
-			{
-				staffName: "Nur Izzati binti Amir Amzah",
-				staffDivision: "Group Procurement"
-			}
 		]
 	}
 ];
@@ -54,7 +46,9 @@ export default (state = initialState, action) => {
 	switch (action.type) {
 		case "NEW_REQUEST":
 			return [
-				Object.assign(state, {
+				...state,
+				Object.assign({
+					ticketNumber: action.ticketNumber,
 					status: action.status
 				})
 			];
@@ -72,6 +66,7 @@ export default (state = initialState, action) => {
 					travelFrom: action.date
 				})
 			];
+
 		case "SET_JUSTIFICATION_TEXT":
 			return [
 				Object.assign(...state, {
@@ -96,9 +91,37 @@ export default (state = initialState, action) => {
 					costCategory: action.value
 				})
 			];
+		case "SET_TRAVEL_UNTIL":
+			return [
+				Object.assign(...state, {
+					travelUntil: action.date2
+				})
+			];
 		case "SUBMIT_REQUEST":
-			return [Object.assign(...state)];
+			return [
+				Object.assign(...state, {
+					status: action.status
+				})
+			];
+		case "ADD_FRIEND_INFO":
+			return [
+				Object.assign(...state, {
+					friendId1Name: action.friendId1Name,
+					friendId1Division: action.friendId1Division
+				})
+			];
 		default:
 			return state;
 	}
 };
+
+// friends: [
+// 	{
+// 		staffName: "Engku Fariez bin Engku Azahan",
+// 		staffDivision: "Group Digital Centre"
+// 	},
+// 	{
+// 		staffName: "Nur Izzati binti Amir Amzah",
+// 		staffDivision: "Group Procurement"
+// 	}
+// ]

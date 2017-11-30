@@ -61,7 +61,7 @@ class Request extends React.Component {
 				<ActionButton
 					buttonColor="#333333"
 					onPress={() => {
-						navigate("ProfileForm", { reddit: 0 }), this.props.newRequest();
+						navigate("ProfileForm", { edit: "false" }), this.props.newRequest();
 					}}
 				/>
 			</View>
@@ -74,6 +74,7 @@ export default Request;
 const ApplicationSingle = ({
 	ref,
 	destination,
+	ticketNumber,
 	travelFrom,
 	travelUntil,
 	travelType,
@@ -85,10 +86,13 @@ const ApplicationSingle = ({
 	formDraftId
 }) => (
 	<View style={styles.applicationCardBox}>
-		{status === "Draft" ? (
+		{status == "Draft" ? (
 			<TouchableOpacity
 				onPress={() =>
-					navigate("SubmitForm", { formDraftId: `${formDraftId}` })
+					navigate("SubmitForm", {
+						formDraftId: `${formDraftId}`,
+						saved: "true"
+					})
 				}
 				style={{ backgroundColor: "#dcdcdc", borderRadius: 8 }}
 			>
@@ -122,7 +126,7 @@ const ApplicationSingle = ({
 							<Text
 								style={{ fontSize: 16, paddingBottom: 4, color: "#cf0832" }}
 							>
-								{travelFrom} until {travelUntil} 2017
+								{travelFrom} until {travelUntil}
 							</Text>
 						</View>
 						<View>
@@ -134,7 +138,7 @@ const ApplicationSingle = ({
 						<Text style={styles.destinationText}>{destination}</Text>
 						<Text style={styles.travelTypeText}>{travelType}</Text>
 						<Text style={{ fontSize: 16, paddingBottom: 4, color: "#808080" }}>
-							{travelFrom} until {travelUntil} 2017
+							{travelFrom} until {travelUntil}
 						</Text>
 					</View>
 				)}

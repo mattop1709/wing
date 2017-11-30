@@ -12,10 +12,11 @@ export const setTravelType = value => {
 	};
 };
 
-export const newRequest = status => {
+export const newRequest = (ticketNumber, status) => {
 	// let newTicket = "1000";
 	return {
 		type: "NEW_REQUEST",
+		ticketNumber: "999",
 		status: "Draft"
 	};
 };
@@ -48,27 +49,37 @@ export const setCostCategory = value => {
 	};
 };
 
-export const submitRequest = text => {
+export const submitRequest = (status, timeStamp) => {
+	// var date = new Date();
 	return {
-		type: "SUBMIT_REQUEST"
+		type: "SUBMIT_REQUEST",
+		status: "Submit",
+		timeStamp
 	};
 };
 
-// export const setTravelFrom = date => {
-// 	// alert(date);
-// 	return {
-// 		type: "SET_TRAVEL_FROM",
-// 		date
-// 	};
-// };
+export const setTravelFrom = date => {
+	return {
+		type: "SET_TRAVEL_FROM",
+		date
+	};
+};
 
-// export const submitComplete = status => {
-// 	if (status == "") {
-// 		return {
-// 			type: "SUBMIT_DONE",
-// 			status
-// 		};
-// 	} else {
-// 		return { type: "TEST" };
-// 	}
-// };
+export const setTravelUntil = date2 => {
+	return {
+		type: "SET_TRAVEL_UNTIL",
+		date2
+	};
+};
+
+export const newFriendId = (friendId1Name, friendId1Division) => {
+	alert(friendId1Division);
+	return (dispatch, getState) => {
+		const { addFriend } = getState();
+		dispatch({
+			type: "ADD_FRIEND_INFO",
+			friendId1Name: addFriend.staffName,
+			friendId1Division: addFriend.staffDivision
+		});
+	};
+};

@@ -131,7 +131,7 @@ const TravelDetails = ({ requestDetails }) => (
 					Departure
 				</Text>
 				<Text style={{ fontSize: 16, fontWeight: "bold" }}>
-					{requestDetails.travelFrom} 2016
+					{requestDetails.travelFrom}
 				</Text>
 			</View>
 			<View>
@@ -139,7 +139,7 @@ const TravelDetails = ({ requestDetails }) => (
 					Arrival
 				</Text>
 				<Text style={{ fontSize: 16, fontWeight: "bold" }}>
-					{requestDetails.travelUntil} 2016
+					{requestDetails.travelUntil}
 				</Text>
 			</View>
 		</View>

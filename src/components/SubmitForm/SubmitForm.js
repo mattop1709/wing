@@ -6,58 +6,56 @@ import {
 	TouchableOpacity,
 	Alert,
 	ScrollView,
-	StatusBar,
 	FlatList
 } from "react-native";
 import NavigationBar from "react-native-navbar";
 import Send from "react-native-vector-icons/Ionicons";
 
+import RequestHeader from "../Bar/RequestHeader";
+
 class SubmitForm extends React.Component {
 	render() {
-		const { navigate } = this.props.navigation;
-		const { goBack } = this.props.navigation;
+		const { navigate, goBack, state } = this.props.navigation;
 		const { userDetails, requestDetails, friendsDetails } = this.props;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-				<StatusBar
-					backgroundColor="black"
-					setBackgroundColor="#f27178"
-					barStyle="dark-content"
-				/>
-				<NavigationBar
-					style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
-					title={{ title: "Confirmation" }}
-					leftButton={{
-						title: "Exit",
-						handler: () =>
-							Alert.alert(
-								"Confirm to Exit?",
-								"Request will be saved as Draft",
-								[
-									({
-										text: "No",
-										style: "destructive"
-									},
-									{
-										text: "Yes",
-										onPress: () => navigate("Request"),
-										style: "default"
-									})
-								]
-							)
-					}}
-				/>
+				{state.params.saved == "false" ? (
+					<NavigationBar
+						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
+						title={{ title: "Confirmation" }}
+						leftButton={{
+							title: "Exit",
+							handler: () =>
+								Alert.alert(
+									"Confirm to Exit?",
+									"Request will be saved as Draft",
+									[
+										({
+											text: "No",
+											style: "destructive"
+										},
+										{
+											text: "Yes",
+											onPress: () => navigate("Request"),
+											style: "default"
+										})
+									]
+								)
+						}}
+					/>
+				) : (
+					<NavigationBar
+						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
+						title={{ title: "Confirmation" }}
+						leftButton={{
+							title: "Exit",
+							handler: () => goBack()
+						}}
+					/>
+				)}
 
 				<ScrollView style={{ flex: 1, paddingHorizontal: 8 }}>
-					<View style={styles.headerContainer}>
-						<View style={{}}>
-							<Text style={styles.logoBox}>Logo</Text>
-						</View>
-						<View style={{ paddingHorizontal: 8, justifyContent: "center" }}>
-							<Text style={{ fontSize: 12 }}>{requestDetails.ref}</Text>
-							<Text style={{ fontSize: 12 }}>{requestDetails.timeStamp}</Text>
-						</View>
-					</View>
+					<RequestHeader requestDetails={requestDetails} />
 
 					<TravelDetails navigate={navigate} requestDetails={requestDetails} />
 
@@ -87,8 +85,7 @@ class SubmitForm extends React.Component {
 								{
 									text: "Yes",
 									onPress: () => {
-										navigate("Request"),
-											this.props.submitComplete(requestDetails.status);
+										navigate("Request"), this.props.submitRequest();
 									},
 									style: "default"
 								}
@@ -113,7 +110,12 @@ const TravelDetails = ({ navigate, requestDetails }) => (
 				Travel Details
 			</Text>
 			<TouchableOpacity
-				onPress={() => navigate("TravelForm", { reedit: 1 })}
+				onPress={() =>
+					navigate("TravelForm", {
+						edit: "true",
+						ticketNumber: `${requestDetails.ticketNumber}`
+					})
+				}
 				style={{ paddingBottom: 8 }}
 			>
 				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
@@ -123,7 +125,7 @@ const TravelDetails = ({ navigate, requestDetails }) => (
 			{requestDetails.destination}
 		</Text>
 		<Text style={{ fontSize: 14, paddingBottom: 8 }}>
-			{requestDetails.travelFrom} until {requestDetails.travelUntil} 2016
+			{requestDetails.travelFrom} until {requestDetails.travelUntil}
 		</Text>
 		<Text style={{ fontSize: 14, paddingBottom: 8 }}>
 			{requestDetails.travelType}
@@ -149,7 +151,7 @@ const ProfileDetails = ({
 				Profile Details
 			</Text>
 			<TouchableOpacity
-				onPress={() => navigate("ProfileForm", { reedit: 1 })}
+				onPress={() => navigate("ProfileForm", { edit: "true" })}
 				style={{ paddingBottom: 8 }}
 			>
 				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
@@ -203,7 +205,7 @@ const ApproverDetails = ({ requestDetails, navigate }) => (
 				Approvers Details
 			</Text>
 			<TouchableOpacity
-				onPress={() => navigate("ApprovalForm", { reedit: 1 })}
+				onPress={() => navigate("ApprovalForm", { edit: "true" })}
 				style={{ paddingBottom: 8 }}
 			>
 				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
@@ -231,7 +233,7 @@ const CostDetails = ({ requestDetails, navigate }) => (
 				Cost Details
 			</Text>
 			<TouchableOpacity
-				onPress={() => navigate("CostForm", { reedit: 1 })}
+				onPress={() => navigate("CostForm", { edit: "true" })}
 				style={{ paddingBottom: 8 }}
 			>
 				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>

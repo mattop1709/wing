@@ -12,9 +12,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		newRequest: status => {
-			dispatch(newRequest(status));
-			console.log(status);
+		newRequest: ticketNumber => {
+			dispatch(newRequest(ticketNumber));
+			console.log(ticketNumber);
 		}
 	};
 };

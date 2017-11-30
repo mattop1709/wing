@@ -11,8 +11,14 @@ import {
 import Send from "react-native-vector-icons/MaterialIcons";
 import NavigationBar from "react-native-navbar";
 
-const ListSingle = ({ staffName, staffDivision, goBack }) => (
-	<TouchableOpacity onPress={() => goBack()} style={styles.contactBox}>
+const ListSingle = ({ staffName, staffDivision, goBack, newFriendId }) => (
+	<TouchableOpacity
+		onPress={() => {
+			goBack();
+			newFriendId(staffName, staffDivision);
+		}}
+		style={styles.contactBox}
+	>
 		<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
 			{staffName}
 		</Text>
@@ -21,10 +27,32 @@ const ListSingle = ({ staffName, staffDivision, goBack }) => (
 );
 
 class AddPerson extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { displayedFriends: {} };
+		this.handleChange = this.handleChange.bind(this);
+	}
+	componentDidMount() {
+		this.setState({ displayedFriends: this.props.add });
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({ displayedFriends: nextProps.add });
+	}
+	handleChange(text) {
+		const lowerText = text.toLowerCase();
+		const searchFriends = this.props.add.filter(friend => {
+			return (
+				friend.staffName.toLowerCase().includes(lowerText) ||
+				(typeof friend.staffDivision == "string" &&
+					friend.staffDivision.toLowerCase().includes(lowerText))
+			);
+		});
+		this.setState({ displayedFriends: searchFriends });
+	}
 	render() {
-		const { goBack } = this.props.navigation;
-		const { navigate } = this.props.navigation;
-		const { add } = this.props;
+		const { navigate, goBack } = this.props.navigation;
+		const { add, newFriendId } = this.props;
+		const { displayedFriends } = this.state;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
 				<NavigationBar
@@ -46,17 +74,18 @@ class AddPerson extends React.Component {
 						placeholder="Type name here.."
 						clearButtonMode="always"
 						underlineColorAndroid="rgba(0,0,0,0)"
+						onChangeText={text => this.handleChange(text)}
 					/>
 				</View>
 
 				<ScrollView style={styles.friendListContainer}>
 					<FlatList
-						data={add}
+						data={displayedFriends}
 						keyExtractor={(item, index) => item.id}
 						renderItem={({ item }) => (
 							<ListSingle
 								navigate={navigate}
-								goBack={goBack}
+								newFriendId={newFriendId}
 								staffName={item.staffName}
 								staffDivision={item.staffDivision}
 							/>

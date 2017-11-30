@@ -5,6 +5,8 @@ import Request from "../RequestHome/Request";
 import {
 	setDestination,
 	setTravelType,
+	setTravelFrom,
+	setTravelUntil,
 	setJustificationText
 } from "../../redux/request/action";
 
@@ -25,6 +27,10 @@ const mapDispatchToProps = dispatch => {
 		setTravelFrom: date => {
 			dispatch(setTravelFrom(date));
 			console.log(date);
+		},
+		setTravelUntil: date2 => {
+			dispatch(setTravelUntil(date2));
+			console.log(date2);
 		},
 		setJustificationText: caption => {
 			dispatch(setJustificationText(caption));

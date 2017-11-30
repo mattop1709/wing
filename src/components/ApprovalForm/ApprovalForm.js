@@ -54,7 +54,7 @@ class ApprovalForm extends React.Component {
 				behavior="padding"
 				style={{ flex: 1, backgroundColor: "#ffffff" }}
 			>
-				{state.params.reedit == 1 ? (
+				{state.params.edit == "true" ? (
 					<NavigationBar
 						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
 						title={{ title: "New Request" }}
@@ -89,13 +89,14 @@ class ApprovalForm extends React.Component {
 					/>
 				)}
 
-				{state.params.reedit == 1 ? null : (
+				{state.params.edit == "true" ? null : (
 					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
 						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
 							Step 4: Approver Information
 						</Text>
 					</View>
 				)}
+
 				<FormBar />
 
 				<ScrollView style={{ flex: 1 }}>
@@ -124,7 +125,7 @@ class ApprovalForm extends React.Component {
 					/>
 				</ScrollView>
 
-				{state.params.reedit == 1 ? null : (
+				{state.params.edit == "true" ? null : (
 					<View
 						style={{
 							flexDirection: "row",
@@ -145,8 +146,8 @@ class ApprovalForm extends React.Component {
 						<TouchableOpacity
 							onPress={() =>
 								navigate("SubmitForm", {
-									reedit: 0,
-									formDraftId: 1
+									edit: "false",
+									formDraftId: `${approverDetails.ticketNumber}`
 								})
 							}
 							style={{
