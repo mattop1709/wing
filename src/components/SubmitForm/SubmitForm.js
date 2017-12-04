@@ -14,6 +14,11 @@ import Send from "react-native-vector-icons/Ionicons";
 import RequestHeader from "../Bar/RequestHeader";
 
 class SubmitForm extends React.Component {
+	// handleSubmitButton(e) {
+	// 	const date = Date.now();
+	// 	const timeStamp1 = "100";
+	// 	this.props.submitRequest(this.timeStamp1);
+	// }
 	render() {
 		const { navigate, goBack, state } = this.props.navigation;
 		const { userDetails, requestDetails, friendsDetails } = this.props;
@@ -30,7 +35,7 @@ class SubmitForm extends React.Component {
 									"Confirm to Exit?",
 									"Request will be saved as Draft",
 									[
-										({
+										{
 											text: "No",
 											style: "destructive"
 										},
@@ -38,7 +43,7 @@ class SubmitForm extends React.Component {
 											text: "Yes",
 											onPress: () => navigate("Request"),
 											style: "default"
-										})
+										}
 									]
 								)
 						}}

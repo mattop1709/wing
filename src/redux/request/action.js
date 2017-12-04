@@ -49,12 +49,14 @@ export const setCostCategory = value => {
 	};
 };
 
-export const submitRequest = (status, timeStamp) => {
-	// var date = new Date();
+export const submitRequest = status => {
+	// const date = Date.now();
+	// const timeStamp1 = Math.floor(date / 1000);
+	// const formattedTimeStamp = timeStamp1();
 	return {
 		type: "SUBMIT_REQUEST",
 		status: "Submit",
-		timeStamp
+		timeStamp: Date.time
 	};
 };
 

@@ -146,7 +146,7 @@ class ApprovalForm extends React.Component {
 						<TouchableOpacity
 							onPress={() =>
 								navigate("SubmitForm", {
-									edit: "false",
+									saved: "false",
 									formDraftId: `${approverDetails.ticketNumber}`
 								})
 							}

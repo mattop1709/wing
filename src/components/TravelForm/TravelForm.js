@@ -16,10 +16,17 @@ import Icon from "react-native-vector-icons/EvilIcons";
 // import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import NavigationBar from "react-native-navbar";
 
+// import FormBar from "../Bar/FormBar";
+
 export default class TravelForm extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { date: "", date2: "" };
+		this.state = {
+			date: "",
+			date2: "",
+			text: "e.g. Jakarta, Indonesia",
+			caption: "Provide justification for your travel..."
+		};
 	}
 	handleClick(date) {
 		this.setState({ date: date });
@@ -108,16 +115,10 @@ export default class TravelForm extends React.Component {
 					>
 						<Text style={{ fontSize: 12, paddingBottom: 8 }}>Destination</Text>
 						<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
-							<TextInput
-								style={{
-									fontSize: 16,
-									paddingBottom: 8,
-									alignItems: "flex-end"
-								}}
-								placeholder={this.props.caption}
+							<TravelFormComponentTextInput
+								value={this.state.text}
 								onChangeText={text => this.props.setDestination(text)}
-								clearButtonMode="always"
-								underlineColorAndroid="rgba(0,0,0,0)"
+								multiline={false}
 							/>
 						</View>
 					</View>
@@ -127,8 +128,6 @@ export default class TravelForm extends React.Component {
 						<View style={{ borderColor: "#c4c4c4" }}>
 							<Dropdown
 								placeholder="e.g. Training"
-								labelHeight={0}
-								label=""
 								data={data}
 								onChangeText={value => this.props.setTravelType(value)}
 							/>
@@ -137,82 +136,29 @@ export default class TravelForm extends React.Component {
 
 					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
 						<Text style={{ fontSize: 12, paddingVertical: 16 }}>From</Text>
-						<View style={{ borderColor: "#c4c4c4" }}>
-							<DatePicker
-								style={{ width: 200 }}
-								date={this.state.date}
-								mode="date"
-								format="LL"
-								minDate="01-01-1990"
-								confirmBtnText="Confirm"
-								cancelBtnText="Cancel"
-								customStyles={{
-									dateIcon: {
-										position: "absolute",
-										left: 0,
-										top: 4,
-										marginLeft: 0
-									},
-									dateInput: {
-										marginLeft: 36
-									}
-									// ... You can check the source to find the other keys.
-								}}
-								onDateChange={date => this.handleClick(date)}
-							/>
-						</View>
+						<TravelFormComponentDate
+							value={this.state.date}
+							onDateChange={date => this.handleClick(date)}
+						/>
 					</View>
 
-					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+					<View style={{ paddingHorizontal: 16, paddingBottom: 24 }}>
 						<Text style={{ fontSize: 12, paddingVertical: 16 }}>Until</Text>
-						<View style={{ borderColor: "#c4c4c4" }}>
-							<DatePicker
-								style={{ width: 200 }}
-								date={this.state.date2}
-								mode="date"
-								format="LL"
-								minDate="01-01-1990"
-								confirmBtnText="Confirm"
-								cancelBtnText="Cancel"
-								customStyles={{
-									dateIcon: {
-										position: "absolute",
-										left: 0,
-										top: 4,
-										marginLeft: 0
-									},
-									dateInput: {
-										marginLeft: 36
-									}
-									// ... You can check the source to find the other keys.
-								}}
-								onDateChange={date => this.handleClick1(date)}
-							/>
-						</View>
+						<TravelFormComponentDate
+							value={this.state.date2}
+							onDateChange={date => this.handleClick1(date)}
+						/>
 					</View>
 
 					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-						<Text style={{ fontSize: 12, paddingVertical: 16 }}>
-							Justification for Travelling
-						</Text>
-						<View>
-							<TextInput
-								style={{
-									borderBottomWidth: 1,
-									borderColor: "#c4c4c4",
-									fontSize: 16,
-									paddingVertical: 8,
-									height: 100,
-									alignItems: "flex-start"
-								}}
-								placeholder="Provide justification for your travel..."
-								onChangeText={caption =>
-									this.props.setJustificationText(caption)
-								}
-								underlineColorAndroid="rgba(0,0,0,0)"
-								multiline={true}
-							/>
-						</View>
+						<Text style={{ fontSize: 12 }}>Justification for Travelling</Text>
+						<TravelFormComponentTextInput
+							value={this.state.caption}
+							onChangeText={caption => this.props.setJustificationText(caption)}
+							multiline={true}
+							numberofLines={5}
+							heightForm={100}
+						/>
 					</View>
 				</ScrollView>
 				{state.params.edit == "true" ? null : (
@@ -324,3 +270,53 @@ const FormBar = () => (
 		</View>
 	</View>
 );
+
+class TravelFormComponentTextInput extends React.Component {
+	render() {
+		return (
+			<TextInput
+				style={{
+					fontSize: 16,
+					paddingBottom: 8,
+					alignItems: "flex-end",
+					height: this.props.heightForm
+				}}
+				placeholder={this.props.value}
+				onChangeText={value => this.props.onChangeText(value)}
+				clearButtonMode="always"
+				underlineColorAndroid="rgba(0,0,0,0)"
+				multiline={true}
+				numberofLines={5}
+				autoGrow={true}
+			/>
+		);
+	}
+}
+
+class TravelFormComponentDate extends React.Component {
+	render() {
+		return (
+			<DatePicker
+				style={{ width: 200 }}
+				date={this.props.value}
+				mode="date"
+				format="LL"
+				minDate="01-01-1990"
+				confirmBtnText="Confirm"
+				cancelBtnText="Cancel"
+				customStyles={{
+					dateIcon: {
+						position: "absolute",
+						left: 0,
+						top: 4,
+						marginLeft: 0
+					},
+					dateInput: {
+						marginLeft: 36
+					}
+				}}
+				onDateChange={value => this.props.onDateChange(value)}
+			/>
+		);
+	}
+}

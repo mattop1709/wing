@@ -100,7 +100,8 @@ export default (state = initialState, action) => {
 		case "SUBMIT_REQUEST":
 			return [
 				Object.assign(...state, {
-					status: action.status
+					status: action.status,
+					timeStamp: action.timeStamp
 				})
 			];
 		case "ADD_FRIEND_INFO":

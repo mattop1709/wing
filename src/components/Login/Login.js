@@ -8,6 +8,20 @@ import {
 } from "react-native";
 
 class LoginScreen extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			staffID: "",
+			authentication: ""
+		};
+	}
+	userLogin(e) {
+		const staffID = this.state.staffID;
+		const password = this.state.authentication;
+		if (staffID == "TM35438" && password == "bbS1992") {
+			return this.props.login(this.state.staffID, this.state.authentication);
+		} else alert("Wrong Staff ID or password");
+	}
 	render() {
 		return (
 			<View style={{ flex: 1 }}>
@@ -19,18 +33,25 @@ class LoginScreen extends React.Component {
 					<View style={{ paddingHorizontal: 70 }}>
 						<TextInput
 							style={styles.staffIdBox}
+							value={this.state.staffID}
 							placeholder="Staff ID"
 							clearButtonMode="always"
 							underlineColorAndroid="rgba(0,0,0,0)"
+							onChangeText={text => this.setState({ staffID: text })}
 						/>
 						<TextInput
 							style={styles.staffIdBox}
+							value={this.state.authentication}
 							placeholder="Password"
 							clearButtonMode="always"
 							secureTextEntry={true}
+							onChangeText={text => this.setState({ authentication: text })}
 						/>
 
-						<TouchableOpacity style={styles.loginBox}>
+						<TouchableOpacity
+							onPress={e => this.userLogin(e)}
+							style={styles.loginBox}
+						>
 							<Text style={{ fontSize: 16 }}>Login</Text>
 						</TouchableOpacity>
 					</View>

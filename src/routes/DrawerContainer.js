@@ -2,7 +2,13 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import DrawerIcon from "react-native-vector-icons/Entypo";
 
+import { connect } from "react-redux";
+import { logout } from "../redux/user/action";
+
 class DrawerContainer extends React.Component {
+	userLogout() {
+		this.props.logout();
+	}
 	render() {
 		const { navigate } = this.props.navigation;
 		return (
@@ -84,7 +90,10 @@ class DrawerContainer extends React.Component {
 									text: "No"
 								},
 								{
-									text: "Yes"
+									text: "Yes",
+									onPress: () => {
+										this.userLogout();
+									}
 								}
 							])
 						}
@@ -98,4 +107,17 @@ class DrawerContainer extends React.Component {
 	}
 }
 
-export default DrawerContainer;
+const mapStateToProps = state => {
+	return {};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		logout: () => {
+			dispatch(logout());
+			console.log();
+		}
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContainer);

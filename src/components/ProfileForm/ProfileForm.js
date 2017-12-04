@@ -14,14 +14,7 @@ import {
 import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 
-// const AdditionalTravellerSingle = ({ staffName, staffDivision }) => (
-// 	<View>
-// 		<Text style={{ fontSize: 16, paddingBottom: 4, color: "#000000" }}>
-// 			{staffName}
-// 		</Text>
-// 		<Text style={{ paddingBottom: 12, color: "#000000" }}>{staffDivision}</Text>
-// 	</View>
-// );
+// import FormBar from "../Bar/FormBar";
 
 class ProfileForm extends React.Component {
 	constructor(props) {
@@ -125,7 +118,29 @@ class ProfileForm extends React.Component {
 				<FormBar />
 
 				<ScrollView style={{ flex: 1 }}>
-					<ProfileDetails user={user} />
+					<View>
+						<View
+							style={{
+								paddingHorizontal: 16,
+								paddingBottom: 16,
+								paddingTop: 24
+							}}
+						>
+							<Text style={{ fontSize: 12, paddingBottom: 16 }}>Name</Text>
+							<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
+								<ProfileFormComponentTextInput value={user.name} />
+							</View>
+						</View>
+
+						<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+							<Text style={{ fontSize: 12, paddingVertical: 16 }}>
+								Division
+							</Text>
+							<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
+								<ProfileFormComponentTextInput value={user.division} />
+							</View>
+						</View>
+					</View>
 
 					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
 						<Text style={{ fontSize: 12, paddingVertical: 16 }}>
@@ -204,6 +219,73 @@ class ProfileForm extends React.Component {
 
 export default ProfileForm;
 
+class ProfileFormComponentTextInput extends React.Component {
+	render() {
+		return (
+			<TextInput
+				style={{
+					fontSize: 16,
+					paddingBottom: 8,
+					alignItems: "flex-end"
+				}}
+				placeholder={this.props.value}
+				clearButtonMode="always"
+				underlineColorAndroid="rgba(0,0,0,0)"
+			/>
+		);
+	}
+}
+
+const styles = StyleSheet.create({
+	formBarContainer: {
+		flexDirection: "row",
+		justifyContent: "space-around",
+		paddingTop: 8,
+		borderTopWidth: 1,
+		borderBottomWidth: 1,
+		borderColor: "#c4c4c4"
+	},
+	navigationContainer: {
+		flexDirection: "row",
+		paddingVertical: 4,
+		justifyContent: "center"
+	},
+	leftNavigationBox: {
+		alignItems: "center",
+		marginRight: 16,
+		borderRadius: 100
+	},
+	rightNavigationBox: {
+		alignItems: "center",
+		borderRadius: 100
+	},
+	addFriendsText: {
+		fontSize: 14,
+		paddingVertical: 4,
+		color: "#f44242"
+	}
+});
+
+// <FlatList
+// 	data={friendDetails}
+// 	keyExtractor={(item, index) => item.id}
+// 	renderItem={({ item }) => (
+// 		<AdditionalTravellerSingle
+// 			staffName={item.staffName}
+// 			staffDivision={item.staffDivision}
+// 		/>
+// 	)}
+// />
+
+// const AdditionalTravellerSingle = ({ staffName, staffDivision }) => (
+// 	<View>
+// 		<Text style={{ fontSize: 16, paddingBottom: 4, color: "#000000" }}>
+// 			{staffName}
+// 		</Text>
+// 		<Text style={{ paddingBottom: 12, color: "#000000" }}>{staffDivision}</Text>
+// 	</View>
+// );
+
 const FormBar = () => (
 	<View style={styles.formBarContainer}>
 		<View
@@ -270,86 +352,3 @@ const FormBar = () => (
 		</View>
 	</View>
 );
-
-const ProfileDetails = ({ user }) => (
-	<View>
-		<View
-			style={{
-				paddingHorizontal: 16,
-				paddingBottom: 16,
-				paddingTop: 24
-			}}
-		>
-			<Text style={{ fontSize: 12, paddingBottom: 16 }}>Name</Text>
-			<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
-				<TextInput
-					style={{
-						fontSize: 16,
-						paddingBottom: 8,
-						alignItems: "flex-end"
-					}}
-					placeholder={user.name}
-					underlineColorAndroid="rgba(0,0,0,0)"
-					value={user.name}
-				/>
-			</View>
-		</View>
-
-		<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-			<Text style={{ fontSize: 12, paddingVertical: 16 }}>Division</Text>
-			<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
-				<TextInput
-					style={{
-						fontSize: 16,
-						paddingBottom: 8,
-						alignItems: "flex-end"
-					}}
-					placeholder="e.g. Group Finance"
-					underlineColorAndroid="rgba(0,0,0,0)"
-					value={user.division}
-				/>
-			</View>
-		</View>
-	</View>
-);
-
-const styles = StyleSheet.create({
-	formBarContainer: {
-		flexDirection: "row",
-		justifyContent: "space-around",
-		paddingTop: 8,
-		borderTopWidth: 1,
-		borderBottomWidth: 1,
-		borderColor: "#c4c4c4"
-	},
-	navigationContainer: {
-		flexDirection: "row",
-		paddingVertical: 4,
-		justifyContent: "center"
-	},
-	leftNavigationBox: {
-		alignItems: "center",
-		marginRight: 16,
-		borderRadius: 100
-	},
-	rightNavigationBox: {
-		alignItems: "center",
-		borderRadius: 100
-	},
-	addFriendsText: {
-		fontSize: 14,
-		paddingVertical: 4,
-		color: "#f44242"
-	}
-});
-
-// <FlatList
-// 	data={friendDetails}
-// 	keyExtractor={(item, index) => item.id}
-// 	renderItem={({ item }) => (
-// 		<AdditionalTravellerSingle
-// 			staffName={item.staffName}
-// 			staffDivision={item.staffDivision}
-// 		/>
-// 	)}
-// />

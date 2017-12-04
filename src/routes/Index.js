@@ -1,6 +1,6 @@
 import React from "react";
 import Drawer from "./Drawer";
-import Login from "../components/Login/Login";
+import Login from "../components/Login";
 
 import { connect } from "react-redux";
 
