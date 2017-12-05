@@ -25,8 +25,13 @@ export default class TravelForm extends React.Component {
 			date: "",
 			date2: "",
 			text: "e.g. Jakarta, Indonesia",
-			caption: "Provide justification for your travel..."
+			caption: "Provide justification for your travel...",
+			height: 0
 		};
+	}
+	handleJustification(caption) {
+		this.setState({ caption });
+		this.props.setJustificationText(caption);
 	}
 	handleClick(date) {
 		this.setState({ date: date });
@@ -152,12 +157,19 @@ export default class TravelForm extends React.Component {
 
 					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
 						<Text style={{ fontSize: 12 }}>Justification for Travelling</Text>
-						<TravelFormComponentTextInput
-							value={this.state.caption}
-							onChangeText={caption => this.props.setJustificationText(caption)}
+						<TextInput
 							multiline={true}
-							numberofLines={5}
-							heightForm={100}
+							onChangeText={caption => this.handleJustification(caption)}
+							onContentSizeChange={event => {
+								this.setState({ height: event.nativeEvent.contentSize.height });
+							}}
+							style={[
+								{ underlineColorAndroid: "rgba(0,0,0,0)" },
+								{
+									height: Math.max(35, this.state.height),
+									underlineColorAndroid: "rgba(0,0,0,0)"
+								}
+							]}
 						/>
 					</View>
 				</ScrollView>
@@ -320,3 +332,11 @@ class TravelFormComponentDate extends React.Component {
 		);
 	}
 }
+
+// <TravelFormComponentTextInput
+// 	value={this.state.caption}
+// 	onChangeText={caption => this.props.setJustificationText(caption)}
+// 	multiline={true}
+// 	numberofLines={5}
+// 	heightForm={this.state.heightForm}
+// />

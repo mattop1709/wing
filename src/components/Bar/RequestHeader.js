@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	Alert
 } from "react-native";
+import moment from "moment";
 
 class RequestHeader extends React.Component {
 	render() {
@@ -19,11 +20,10 @@ class RequestHeader extends React.Component {
 				</View>
 				<View style={styles.infoBox}>
 					<Text style={{ fontSize: 12, textAlign: "right" }}>
-						WINGS -
 						{requestDetails.ticketNumber}
 					</Text>
 					<Text style={{ fontSize: 12, textAlign: "right" }}>
-						{requestDetails.timeStamp}
+						{moment(requestDetails.timeStamp).format("llll")}
 					</Text>
 				</View>
 			</View>

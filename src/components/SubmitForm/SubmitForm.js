@@ -16,8 +16,9 @@ import RequestHeader from "../Bar/RequestHeader";
 class SubmitForm extends React.Component {
 	// handleSubmitButton(e) {
 	// 	const date = Date.now();
-	// 	const timeStamp1 = "100";
-	// 	this.props.submitRequest(this.timeStamp1);
+	// 	const dateNew = Math.floor(date / 1000);
+	// 	const timeStamp = dateNew.ToString();
+	// 	this.props.submitRequest();
 	// }
 	render() {
 		const { navigate, goBack, state } = this.props.navigation;

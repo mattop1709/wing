@@ -14,9 +14,27 @@ export const setTravelType = value => {
 
 export const newRequest = (ticketNumber, status) => {
 	// let newTicket = "1000";
+	// const ticket = Math.floor(Date.now() / 100000000);
+	const generateTicket = function() {
+		return (
+			"WINGS" +
+			"-" +
+			Math.random()
+				.toString(36)
+				.substr(2, 5)
+				.toUpperCase()
+		);
+	};
+	const ticket =
+		"WINGS" +
+		"-" +
+		Math.random()
+			.toString(36)
+			.substr(2, 5)
+			.toUpperCase();
 	return {
 		type: "NEW_REQUEST",
-		ticketNumber: "999",
+		ticketNumber: ticket,
 		status: "Draft"
 	};
 };
@@ -51,12 +69,29 @@ export const setCostCategory = value => {
 
 export const submitRequest = status => {
 	// const date = Date.now();
-	// const timeStamp1 = Math.floor(date / 1000);
-	// const formattedTimeStamp = timeStamp1();
+	// if (!Date.now) {
+	// 	Date.now = function now() {
+	// 		return new Date().getTimezoneOffset().toString();
+	// 	};
+	// }
+	// const date1 = new Date();
+	function convertUTCDateToLocalDate(date) {
+		const newDate = new Date(
+			date.getTime() + date.getTimezoneOffset() * 60 * 1000
+		);
+
+		const offset = date.getTimezoneOffset() / 60;
+		const hours = date.getHours();
+
+		newDate.setHours(hours + offset + 8);
+
+		return newDate;
+	}
+	const dateSubmit = convertUTCDateToLocalDate(new Date());
 	return {
 		type: "SUBMIT_REQUEST",
 		status: "Submit",
-		timeStamp: Date.time
+		timeStamp: dateSubmit
 	};
 };
 
