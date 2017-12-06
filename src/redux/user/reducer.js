@@ -5,7 +5,7 @@ const initialState = {
 	authentication: "bbS1992",
 	submitRequest: "true",
 	receiveTask: "true",
-	authenticated: "true"
+	authenticated: "false"
 };
 
 export default (state = initialState, action) => {

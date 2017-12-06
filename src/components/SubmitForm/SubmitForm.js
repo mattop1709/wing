@@ -14,12 +14,6 @@ import Send from "react-native-vector-icons/Ionicons";
 import RequestHeader from "../Bar/RequestHeader";
 
 class SubmitForm extends React.Component {
-	// handleSubmitButton(e) {
-	// 	const date = Date.now();
-	// 	const dateNew = Math.floor(date / 1000);
-	// 	const timeStamp = dateNew.ToString();
-	// 	this.props.submitRequest();
-	// }
 	render() {
 		const { navigate, goBack, state } = this.props.navigation;
 		const { userDetails, requestDetails, friendsDetails } = this.props;

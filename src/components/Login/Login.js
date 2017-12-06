@@ -18,7 +18,7 @@ class LoginScreen extends React.Component {
 	userLogin(e) {
 		const staffID = this.state.staffID;
 		const password = this.state.authentication;
-		if (staffID == "TM35438" && password == "bbS1992") {
+		if (staffID == "TM35438" && password == "123456") {
 			return this.props.login(this.state.staffID, this.state.authentication);
 		} else alert("Wrong Staff ID or password");
 	}
