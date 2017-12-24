@@ -13,3 +13,10 @@ export const logout = () => {
 		type: "LOGOUT"
 	};
 };
+
+export const addRequestId = () => {
+	return {
+		type: "ADD_REQUEST_ID",
+		ticketNumber
+	};
+};

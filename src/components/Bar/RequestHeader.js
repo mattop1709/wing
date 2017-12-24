@@ -20,7 +20,7 @@ class RequestHeader extends React.Component {
 				</View>
 				<View style={styles.infoBox}>
 					<Text style={{ fontSize: 12, textAlign: "right" }}>
-						{requestDetails.ticketNumber}
+						{requestDetails.id}
 					</Text>
 					<Text style={{ fontSize: 12, textAlign: "right" }}>
 						{moment(requestDetails.timeStamp).format("llll")}

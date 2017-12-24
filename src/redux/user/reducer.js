@@ -1,11 +1,17 @@
 const initialState = {
 	name: "Mohammad Hafiz bin Burhan",
 	staffID: "TM35438",
-	division: "Group Digital Centre",
+	division: "IT & Network Technology",
 	authentication: "bbS1992",
-	submitRequest: "true",
-	receiveTask: "true",
-	authenticated: "false"
+	submitRequest: true,
+	receiveTask: true,
+	authenticated: true,
+	approval: [],
+	requests: [
+		{
+			ticketNumber: ""
+		}
+	]
 };
 
 export default (state = initialState, action) => {
@@ -24,6 +30,8 @@ export default (state = initialState, action) => {
 				staffID: "",
 				authentication: ""
 			};
+		case "ADD_REQUEST_ID":
+			return [...state, Object.assign({}, state, {})];
 		default:
 			return state;
 	}

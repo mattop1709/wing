@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
 import TravelForm from "./TravelForm";
-import Request from "../RequestHome/Request";
 
 import {
 	setDestination,
@@ -11,30 +10,32 @@ import {
 } from "../../redux/request/action";
 
 const mapStateToProps = state => {
-	return {};
+	return {
+		requestDetails: state.request[0]
+	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
-		setDestination: text => {
-			dispatch(setDestination(text));
-			console.log(text);
+		setDestination: destinationText => {
+			dispatch(setDestination(destinationText));
+			console.log(destinationText);
 		},
 		setTravelType: value => {
 			dispatch(setTravelType(value));
 			console.log(value);
 		},
-		setTravelFrom: date => {
-			dispatch(setTravelFrom(date));
-			console.log(date);
+		setTravelFrom: dateFrom => {
+			dispatch(setTravelFrom(dateFrom));
+			console.log(dateFrom);
 		},
-		setTravelUntil: date2 => {
-			dispatch(setTravelUntil(date2));
-			console.log(date2);
+		setTravelUntil: dateUntil => {
+			dispatch(setTravelUntil(dateUntil));
+			console.log(dateUntil);
 		},
-		setJustificationText: caption => {
-			dispatch(setJustificationText(caption));
-			console.log(caption);
+		setJustificationText: justificationText => {
+			dispatch(setJustificationText(justificationText));
+			console.log(justificationText);
 		}
 	};
 };

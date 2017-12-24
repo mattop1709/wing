@@ -2,10 +2,10 @@ import { connect } from "react-redux";
 import RequestHeader from "./RequestHeader";
 
 const mapStateToProps = (state, ownProps) => {
+	const formId = ownProps.navigation.state.params.formId,
 	return {
-		formId: ownProps.navigation.state.params.formId,
 		requestDetails: state.request.filter(
-			f => f.ticketNumber == ownProps.navigation.state.params.formId
+			f => f.id === formId
 		)[0]
 	};
 };

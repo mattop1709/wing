@@ -5,16 +5,17 @@ import { newRequest } from "../../redux/request/action";
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		requestHome: state.request,
-		user: state.user
+		requestDetails: state.request,
+		user: state.user,
+		taskDetails: state.task
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
-		newRequest: ticketNumber => {
-			dispatch(newRequest(ticketNumber));
-			console.log(ticketNumber);
+		newRequest: user => {
+			dispatch(newRequest(user));
+			console.log(user);
 		}
 	};
 };

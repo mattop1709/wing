@@ -1,3 +1,4 @@
+// exist to replicate state from GEMS
 const initialState = [
 	{
 		ref: "1",
@@ -7,6 +8,16 @@ const initialState = [
 	{
 		ref: "2",
 		staffName: "Nur Izzati binti Amir Amzah",
+		staffDivision: "Group Procurement"
+	},
+	{
+		ref: "3",
+		staffName: "Choo Chia Pooh",
+		staffDivision: "Group Brand and Communicatin"
+	},
+	{
+		ref: "4",
+		staffName: "Roaida binti Abdullah",
 		staffDivision: "Group Procurement"
 	}
 ];

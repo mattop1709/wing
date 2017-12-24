@@ -8,7 +8,9 @@ import {
 } from "../../redux/request/action";
 
 const mapStateToProps = state => {
-	return {};
+	return {
+		requestDetails: state.request[0]
+	};
 };
 
 const mapDispatchToProps = dispatch => {

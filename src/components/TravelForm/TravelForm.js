@@ -13,8 +13,8 @@ import Next from "react-native-vector-icons/Entypo";
 import { Dropdown } from "react-native-material-dropdown";
 import DatePicker from "react-native-datepicker";
 import Icon from "react-native-vector-icons/EvilIcons";
-// import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import NavigationBar from "react-native-navbar";
+import moment from "moment";
 
 // import FormBar from "../Bar/FormBar";
 
@@ -22,29 +22,33 @@ export default class TravelForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			date: "",
-			date2: "",
-			text: "e.g. Jakarta, Indonesia",
-			caption: "Provide justification for your travel...",
-			height: 0
+			dateFrom: "",
+			dateUntil: "",
+			destinationText: "",
+			justificationText: "Provide justification for your travel...",
+			height: 0,
+			edited: false
 		};
 	}
-	handleJustification(caption) {
-		this.setState({ caption });
-		this.props.setJustificationText(caption);
+	handleDestination(destinationText) {
+		this.setState({ destinationText: destinationText });
+		this.props.setDestination(destinationText);
 	}
-	handleClick(date) {
-		this.setState({ date: date });
+	handleJustification(justificationText) {
+		this.setState({ justificationText });
+		this.props.setJustificationText(justificationText);
+	}
+	handleDateFrom(date) {
+		this.setState({ dateFrom: date });
 		this.props.setTravelFrom(date);
 	}
-	handleClick1(date) {
-		this.setState({ date2: date });
+	handleDateUntil(date) {
+		this.setState({ dateUntil: date });
 		this.props.setTravelUntil(date);
 	}
 	render() {
-		const { navigate, state } = this.props.navigation;
-		const { goBack } = this.props.navigation;
-		// const { requestForm } = this.props;
+		const { navigate, state, goBack } = this.props.navigation;
+		const { formDraftId, requestDetails } = this.props;
 		let data = [
 			{
 				value: "Training"
@@ -65,18 +69,34 @@ export default class TravelForm extends React.Component {
 				value: "Sales visit"
 			}
 		];
+		const destinationEdit = state.params.edit
+			? `${requestDetails.destination}`
+			: null;
+		const travelTypeEdit = state.params.edit
+			? `${requestDetails.travelType}`
+			: false;
+		const dateFromEdit = state.params.edit
+			? `${requestDetails.travelFrom}`
+			: this.state.dateFrom;
+		const dateUntilEdit = state.params.edit
+			? `${requestDetails.travelUntil}`
+			: this.state.dateUntil;
+		const justificationTextEdit = state.params.edit
+			? `${requestDetails.justificationText}`
+			: null;
 		return (
 			<KeyboardAvoidingView
 				behavior="padding"
 				style={{ flex: 1, backgroundColor: "#ffffff" }}
 			>
-				{state.params.edit == "true" ? (
+				{state.params.edit == true ? (
 					<NavigationBar
 						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
 						title={{ title: "New Request" }}
 						leftButton={{
 							title: "Back",
-							handler: () => goBack()
+							handler: () =>
+								navigate("SubmitForm", { formDraftId: `${requestDetails.id}` })
 						}}
 					/>
 				) : (
@@ -105,7 +125,7 @@ export default class TravelForm extends React.Component {
 					/>
 				)}
 
-				{state.params.edit == "true" ? null : (
+				{state.params.edit == true ? null : (
 					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
 						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
 							Step 2: Travel Information
@@ -120,10 +140,19 @@ export default class TravelForm extends React.Component {
 					>
 						<Text style={{ fontSize: 12, paddingBottom: 8 }}>Destination</Text>
 						<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
-							<TravelFormComponentTextInput
-								value={this.state.text}
-								onChangeText={text => this.props.setDestination(text)}
+							<TextInput
+								style={{
+									fontSize: 16,
+									paddingBottom: 8,
+									alignItems: "flex-end"
+								}}
+								value={destinationEdit}
+								placeholder="e.g. Jakarta, Indonesia"
+								underlineColorAndroid={"transparent"}
 								multiline={false}
+								onChangeText={destinationText =>
+									this.handleDestination(destinationText)
+								}
 							/>
 						</View>
 					</View>
@@ -132,6 +161,7 @@ export default class TravelForm extends React.Component {
 						<Text style={{ fontSize: 12, paddingVertical: 8 }}>Type</Text>
 						<View style={{ borderColor: "#c4c4c4" }}>
 							<Dropdown
+								value={travelTypeEdit}
 								placeholder="e.g. Training"
 								data={data}
 								onChangeText={value => this.props.setTravelType(value)}
@@ -142,29 +172,37 @@ export default class TravelForm extends React.Component {
 					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
 						<Text style={{ fontSize: 12, paddingVertical: 16 }}>From</Text>
 						<TravelFormComponentDate
-							value={this.state.date}
-							onDateChange={date => this.handleClick(date)}
+							value={dateFromEdit}
+							onDateChange={date => this.handleDateFrom(date)}
 						/>
 					</View>
 
 					<View style={{ paddingHorizontal: 16, paddingBottom: 24 }}>
 						<Text style={{ fontSize: 12, paddingVertical: 16 }}>Until</Text>
 						<TravelFormComponentDate
-							value={this.state.date2}
-							onDateChange={date => this.handleClick1(date)}
+							value={dateUntilEdit}
+							onDateChange={date => this.handleDateUntil(date)}
 						/>
 					</View>
 
 					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
 						<Text style={{ fontSize: 12 }}>Justification for Travelling</Text>
 						<TextInput
+							value={justificationTextEdit}
+							placeholder={this.state.justificationText}
 							multiline={true}
-							onChangeText={caption => this.handleJustification(caption)}
+							underlineColorAndroid={"transparent"}
+							onChangeText={justificationText =>
+								this.handleJustification(justificationText)
+							}
 							onContentSizeChange={event => {
 								this.setState({ height: event.nativeEvent.contentSize.height });
 							}}
 							style={[
-								{ underlineColorAndroid: "rgba(0,0,0,0)" },
+								{
+									underlineColorAndroid: "rgba(0,0,0,0)",
+									borderBottomWidth: 1
+								},
 								{
 									height: Math.max(35, this.state.height),
 									underlineColorAndroid: "rgba(0,0,0,0)"
@@ -173,7 +211,7 @@ export default class TravelForm extends React.Component {
 						/>
 					</View>
 				</ScrollView>
-				{state.params.edit == "true" ? null : (
+				{state.params.edit == true ? null : (
 					<View
 						style={{
 							flexDirection: "row",
@@ -192,7 +230,7 @@ export default class TravelForm extends React.Component {
 							<Icon name="chevron-left" size={32} color="#000000" />
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() => navigate("CostForm", { edit: "false" })}
+							onPress={() => navigate("CostForm", { edit: false })}
 							style={{
 								alignItems: "center",
 								borderRadius: 100
@@ -283,28 +321,6 @@ const FormBar = () => (
 	</View>
 );
 
-class TravelFormComponentTextInput extends React.Component {
-	render() {
-		return (
-			<TextInput
-				style={{
-					fontSize: 16,
-					paddingBottom: 8,
-					alignItems: "flex-end",
-					height: this.props.heightForm
-				}}
-				placeholder={this.props.value}
-				onChangeText={value => this.props.onChangeText(value)}
-				clearButtonMode="always"
-				underlineColorAndroid="rgba(0,0,0,0)"
-				multiline={true}
-				numberofLines={5}
-				autoGrow={true}
-			/>
-		);
-	}
-}
-
 class TravelFormComponentDate extends React.Component {
 	render() {
 		return (
@@ -312,7 +328,7 @@ class TravelFormComponentDate extends React.Component {
 				style={{ width: 200 }}
 				date={this.props.value}
 				mode="date"
-				format="LL"
+				format="L"
 				minDate="01-01-1990"
 				confirmBtnText="Confirm"
 				cancelBtnText="Cancel"
@@ -332,11 +348,3 @@ class TravelFormComponentDate extends React.Component {
 		);
 	}
 }
-
-// <TravelFormComponentTextInput
-// 	value={this.state.caption}
-// 	onChangeText={caption => this.props.setJustificationText(caption)}
-// 	multiline={true}
-// 	numberofLines={5}
-// 	heightForm={this.state.heightForm}
-// />

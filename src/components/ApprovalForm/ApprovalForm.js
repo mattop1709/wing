@@ -22,7 +22,7 @@ class ApprovalForm extends React.Component {
 	}
 	render() {
 		const { navigate, state, goBack } = this.props.navigation;
-		const { approverDetails } = this.props;
+		const { approverDetails, formDraftId } = this.props;
 		let data = [
 			{
 				value: "AGM and below"
@@ -54,13 +54,14 @@ class ApprovalForm extends React.Component {
 				behavior="padding"
 				style={{ flex: 1, backgroundColor: "#ffffff" }}
 			>
-				{state.params.edit == "true" ? (
+				{state.params.edit == true ? (
 					<NavigationBar
 						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
 						title={{ title: "New Request" }}
 						leftButton={{
 							title: "Back",
-							handler: () => goBack()
+							handler: () =>
+								navigate("SubmitForm", { formDraftId: `${approverDetails.id}` })
 						}}
 					/>
 				) : (
@@ -89,7 +90,7 @@ class ApprovalForm extends React.Component {
 					/>
 				)}
 
-				{state.params.edit == "true" ? null : (
+				{state.params.edit == true ? null : (
 					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
 						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
 							Step 4: Approver Information
@@ -125,7 +126,7 @@ class ApprovalForm extends React.Component {
 					/>
 				</ScrollView>
 
-				{state.params.edit == "true" ? null : (
+				{state.params.edit == true ? null : (
 					<View
 						style={{
 							flexDirection: "row",
@@ -146,8 +147,8 @@ class ApprovalForm extends React.Component {
 						<TouchableOpacity
 							onPress={() =>
 								navigate("SubmitForm", {
-									saved: "false",
-									formDraftId: `${approverDetails.ticketNumber}`
+									saved: false,
+									formDraftId: `${approverDetails.id}`
 								})
 							}
 							style={{

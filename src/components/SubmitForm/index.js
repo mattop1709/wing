@@ -4,14 +4,14 @@ import SubmitForm from "./SubmitForm";
 import { submitRequest } from "../../redux/request/action";
 
 const mapStateToProps = (state, ownProps) => {
+	const formDraftId = ownProps.navigation.state.params.formDraftId;
 	return {
 		userDetails: state.user,
-		formDraftId: ownProps.navigation.state.params.formDraftId,
 		requestDetails: state.request.filter(
-			requestDetail =>
-				requestDetail.ticketNumber ==
-				ownProps.navigation.state.params.formDraftId
-		)[0]
+			requestDetail => requestDetail.id == formDraftId
+		)[0],
+		friendsInfo: state.friends
+		// requestDetails: state.request[0]
 	};
 };
 

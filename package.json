@@ -32,5 +32,17 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "description": "Development",
+  "main": "index.android.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattop1709/wing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattop1709/wing/issues"
+  },
+  "homepage": "https://github.com/mattop1709/wing#readme"
 }

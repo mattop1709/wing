@@ -83,7 +83,9 @@ const DisplayedPage = ({ navigate, page, approverDetails }) => {
 	return (
 		<View>
 			<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-				<TouchableOpacity onPress={() => navigate(screen)}>
+				<TouchableOpacity
+					onPress={() => navigate(screen, { nominator1: true })}
+				>
 					<Text style={{ fontSize: 12, paddingVertical: 20, color: "#f44242" }}>
 						+ Add Nominator 1 ({nominator1Name})
 					</Text>
@@ -97,7 +99,9 @@ const DisplayedPage = ({ navigate, page, approverDetails }) => {
 			</View>
 
 			<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-				<TouchableOpacity onPress={() => navigate(screen)}>
+				<TouchableOpacity
+					onPress={() => navigate(screen, { nominator2: true })}
+				>
 					<Text style={{ fontSize: 12, paddingVertical: 20, color: "#f44242" }}>
 						+ Add Nominator 2 ({nominator2Name})
 					</Text>
@@ -105,13 +109,13 @@ const DisplayedPage = ({ navigate, page, approverDetails }) => {
 
 				<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
 					<Text style={{ color: "grey", paddingBottom: 8 }}>
-						{approverDetails.nominatorName}
+						{approverDetails.nominator2Name}
 					</Text>
 				</View>
 			</View>
 
 			<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-				<TouchableOpacity onPress={() => navigate(screen)}>
+				<TouchableOpacity onPress={() => navigate(screen, { endorser: true })}>
 					<Text style={{ fontSize: 12, paddingVertical: 20, color: "#f44242" }}>
 						+ Add Endorser ({endorserName})
 					</Text>
@@ -125,7 +129,7 @@ const DisplayedPage = ({ navigate, page, approverDetails }) => {
 			</View>
 
 			<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-				<TouchableOpacity onPress={() => navigate(screen)}>
+				<TouchableOpacity onPress={() => navigate(screen, { approver: true })}>
 					<Text style={{ fontSize: 12, paddingVertical: 20, color: "#f44242" }}>
 						+ Add Approver ({approverName})
 					</Text>

@@ -7,8 +7,16 @@ import { Provider } from "react-redux";
 // import Drawer from "./routes/Drawer";
 import Index from "./routes/Index";
 
-import reducers from "./redux/reducers";
-const store = createStore(reducers, undefined, compose(applyMiddleware(thunk)));
+import wingApp from "./redux/reducers";
+const store = createStore(wingApp, undefined, compose(applyMiddleware(thunk)));
+
+// console.log(store.getState());
+//
+// const unsubscribe = store.subscribe(() => console.log(store.getState()));
+// //
+// // store.dispatch(addComment());
+// //
+// unsubscribe();
 
 // const store = createStore(
 //   reducer,
@@ -41,3 +49,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF"
 	}
 });
+
+// import { createStore } from "redux";
+// import wingApp from "./redux/request/reducer";
+//
+// let store = createStore(wingApp, window.STATE_FROM_SERVER);

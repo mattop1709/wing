@@ -6,12 +6,18 @@ import guideline from "./guideline/reducer";
 import user from "./user/reducer";
 import request from "./request/reducer";
 import task from "./task/reducer";
+import friends from "./friends/reducer";
+import comments from "./comments/reducer";
 
-export default combineReducers({
+const wingApp = combineReducers({
 	activityLog,
 	addFriend,
 	user,
-	request,
 	task,
-	guideline
+	guideline,
+	request,
+	friends,
+	comments
 });
+
+export default wingApp;

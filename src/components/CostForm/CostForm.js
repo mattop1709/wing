@@ -18,12 +18,22 @@ class CostForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: ""
+			data: "",
+			costValue: "",
+			budgetValue: ""
 		};
 	}
+	handleCost(costValue) {
+		this.setState({ costValue: costValue });
+		this.props.setCostValue(costValue);
+	}
+	handleBudget(budgetValue) {
+		this.setState({ budgetValue: budgetValue });
+		this.props.setBudgetValue(budgetValue);
+	}
 	render() {
-		const { navigate, state } = this.props.navigation;
-		const { goBack } = this.props.navigation;
+		const { navigate, state, goBack } = this.props.navigation;
+		const { requestDetails, formDraftId } = this.props;
 		let data = [
 			{
 				value: "Cost Centre"
@@ -32,19 +42,27 @@ class CostForm extends React.Component {
 				value: "Sponsorship (EEIU)"
 			}
 		];
-
+		const costEdit = state.params.edit ? `${requestDetails.cost}` : null;
+		const budgetEdit = state.params.edit ? `${requestDetails.budget}` : null;
+		const costCategoryEdit = state.params.edit
+			? `${requestDetails.costCategory}`
+			: false;
+		const costCentreEdit = state.params.edit
+			? `${requestDetails.costCentre}`
+			: null;
 		return (
 			<KeyboardAvoidingView
 				behavior="padding"
 				style={{ flex: 1, backgroundColor: "#ffffff" }}
 			>
-				{state.params.edit == "true" ? (
+				{state.params.edit == true ? (
 					<NavigationBar
 						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
 						title={{ title: "New Request" }}
 						leftButton={{
 							title: "Back",
-							handler: () => goBack()
+							handler: () =>
+								navigate("SubmitForm", { formDraftId: `${requestDetails.id}` })
 						}}
 					/>
 				) : (
@@ -72,7 +90,7 @@ class CostForm extends React.Component {
 						}}
 					/>
 				)}
-				{state.params.edit == "true" ? null : (
+				{state.params.edit == true ? null : (
 					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
 						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
 							Step 3: Cost Information
@@ -105,8 +123,9 @@ class CostForm extends React.Component {
 									alignItems: "flex-end",
 									justifyContent: "center"
 								}}
+								value={costEdit}
 								placeholder="State your cost.."
-								onChangeText={costValue => this.props.setCostValue(costValue)}
+								onChangeText={costValue => this.handleCost(costValue)}
 								clearButtonMode="always"
 								underlineColorAndroid="rgba(0,0,0,0)"
 								keyboardType="numeric"
@@ -133,10 +152,9 @@ class CostForm extends React.Component {
 									paddingLeft: 8,
 									alignItems: "flex-end"
 								}}
+								value={budgetEdit}
 								placeholder="State your budget.."
-								onChangeText={budgetValue =>
-									this.props.setBudgetValue(budgetValue)
-								}
+								onChangeText={budgetValue => this.handleBudget(budgetValue)}
 								clearButtonMode="always"
 								underlineColorAndroid="rgba(0,0,0,0)"
 								keyboardType="numeric"
@@ -150,15 +168,16 @@ class CostForm extends React.Component {
 						</Text>
 						<View style={{ borderColor: "#c4c4c4" }}>
 							<Dropdown
+								value={costCategoryEdit}
 								placeholder="e.g. TM Sponsorship"
 								labelHeight={0}
 								label=""
 								data={data}
 								onChangeText={value => this.props.setCostCategory(value)}
 							/>
-							{this.state.data === "External Sponsorship" && (
+							{this.state.data === "Sponsorship (EEIU)" && (
 								<Text style={{ fontSize: 12, color: "red" }}>
-									Required EEUI Approval
+									Required EEIU Approval
 								</Text>
 							)}
 						</View>
@@ -175,6 +194,7 @@ class CostForm extends React.Component {
 									paddingBottom: 8,
 									alignItems: "flex-end"
 								}}
+								value={costCentreEdit}
 								placeholder="e.g. BMCE02"
 								clearButtonMode="always"
 								underlineColorAndroid="rgba(0,0,0,0)"
@@ -183,7 +203,7 @@ class CostForm extends React.Component {
 					</View>
 				</ScrollView>
 
-				{state.params.edit == "true" ? null : (
+				{state.params.edit == true ? null : (
 					<View
 						style={{
 							flexDirection: "row",
@@ -202,7 +222,7 @@ class CostForm extends React.Component {
 							<Icon name="chevron-left" size={32} color="#000000" />
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() => navigate("ApprovalForm", { edit: "false" })}
+							onPress={() => navigate("ApprovalForm", { edit: false })}
 							style={{
 								alignItems: "center",
 								borderRadius: 100

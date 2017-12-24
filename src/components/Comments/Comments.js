@@ -12,11 +12,21 @@ import {
 import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import Send from "react-native-vector-icons/MaterialIcons";
 import NavigationBar from "react-native-navbar";
+import moment from "moment";
 
 class Comments extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { height: 0, texts: "" };
+		this._handlePress = this._handlePress.bind(this);
+	}
+	_handlePress(texts, comments) {
+		this.setState({ comments: texts });
+	}
 	render() {
 		const { goBack } = this.props.navigation;
 		const { requestDetails, commentDetails } = this.props;
+		const { name } = this.props.userDetails;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
 				<NavigationBar
@@ -54,14 +64,23 @@ class Comments extends React.Component {
 				>
 					<View style={styles.textInputBox}>
 						<TextInput
-							style={{ padding: 8, fontSize: 14, height: 100 }}
 							placeholder="Type your comment here.."
-							underlineColorAndroid="rgba(0,0,0,0)"
+							underlineColorAndroid="transparent"
 							multiline={true}
+							onChangeText={this._handlePress}
+							onContentSizeChange={event => {
+								this.setState({ height: event.nativeEvent.contentSize.height });
+							}}
+							style={{
+								padding: 8,
+								fontSize: 14,
+								height: Math.max(35, this.state.height),
+								underlineColorAndroid: "transparent"
+							}}
 						/>
 					</View>
 					<View style={{ justifyContent: "center", marginBottom: 8 }}>
-						<TouchableOpacity onPress={() => null}>
+						<TouchableOpacity onPress={() => this.props.addComment()}>
 							<Send name="send" size={24} color="#000000" />
 						</TouchableOpacity>
 					</View>
@@ -85,7 +104,11 @@ const ChatSingle = ({ id, senderName, commentText, timeStamp }) => (
 	>
 		<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>{senderName}</Text>
 		<Text style={{ paddingBottom: 4, lineHeight: 24 }}>{commentText}</Text>
-		<Text style={{ fontSize: 12, color: "#c4c4c4" }}>{timeStamp}</Text>
+		<Text style={{ fontSize: 12, color: "#c4c4c4" }}>
+			{moment(timeStamp)
+				.startOf("minute")
+				.fromNow()}
+		</Text>
 	</View>
 );
 

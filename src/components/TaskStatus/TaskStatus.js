@@ -6,7 +6,8 @@ import {
 	View,
 	ScrollView,
 	TouchableOpacity,
-	Alert
+	Alert,
+	FlatList
 } from "react-native";
 import Icon from "react-native-vector-icons/EvilIcons";
 import Send from "react-native-vector-icons/MaterialIcons";
@@ -14,9 +15,83 @@ import NavigationBar from "react-native-navbar";
 
 class TaskStatus extends React.Component {
 	render() {
-		const { navigate } = this.props.navigation;
-		const { goBack } = this.props.navigation;
-		const { taskDetails } = this.props;
+		const { navigate, goBack } = this.props.navigation;
+		const {
+			taskDetails,
+			friendsDetails,
+			userDetails,
+			eeiuApprove,
+			nominatorApprove,
+			nominator2Approve,
+			endorserApprove,
+			approverApprove
+		} = this.props;
+		let checkAuth;
+		if (
+			taskDetails.nominatorName == userDetails.name ||
+			taskDetails.nominator2Name == userDetails.name
+		) {
+			checkAuth = "Nominate";
+		} else if (taskDetails.endorserName == userDetails.name) {
+			checkAuth = "Endorse";
+		} else if (
+			taskDetails.approverName == userDetails.name ||
+			taskDetails.eeiuName == userDetails.name
+		) {
+			checkAuth = "Approve";
+		}
+		let taskAuth;
+		if (
+			taskDetails.nominatorName == userDetails.name &&
+			taskDetails.eeiuApproved == false
+		) {
+			taskAuth = true;
+		} else if (
+			taskDetails.nominator2Name == userDetails.name &&
+			taskDetails.nominatorApproved == false
+		) {
+			taskAuth = true;
+		} else if (
+			taskDetails.endorserName == userDetails.name &&
+			taskDetails.nominator2Approved == false
+		) {
+			taskAuth = true;
+		} else if (
+			taskDetails.approverName == userDetails.name &&
+			taskDetails.endorserApproved == false
+		) {
+			taskAuth = true;
+		}
+		// let taskDone;
+		// if (
+		// 	taskDetails.eeiuName == userDetails.name &&
+		// 	taskDetails.eeiuApproved == true
+		// ) {
+		// 	taskDone = true;
+		// } else if (
+		// 	taskDetails.nominatorName == userDetails.name &&
+		// 	taskDetails.nominatorApproved == true
+		// ) {
+		// 	taskDone = true;
+		// } else if (
+		// 	taskDetails.nominator2Name == userDetails.name &&
+		// 	taskDetails.nominator2Approved == true
+		// ) {
+		// 	taskDone = true;
+		// } else if (
+		// 	taskDetails.endorserName == userDetails.name &&
+		// 	taskDetails.endorserApproved == true
+		// ) {
+		// 	taskDone == true;
+		// } else if (
+		// 	taskDetails.approverName == userDetails.name &&
+		// 	taskDetails.approverApproved == true
+		// ) {
+		// 	taskDone == true;
+		// } else taskDone = false;
+		const status = taskAuth
+			? "Pending for approval from others"
+			: "Pending for your approval";
 		return (
 			<View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
 				<NavigationBar
@@ -30,9 +105,7 @@ class TaskStatus extends React.Component {
 
 				<ScrollView style={{ flex: 1, backgroundColor: "#ffffff" }}>
 					<View style={styles.captionContainer}>
-						<Text style={{ fontWeight: "bold" }}>
-							Request Form is pending for your approval
-						</Text>
+						<Text style={{ fontWeight: "bold" }}>{status}</Text>
 					</View>
 					<View style={styles.headerContainer}>
 						<View style={styles.logoBox}>
@@ -48,7 +121,10 @@ class TaskStatus extends React.Component {
 						</View>
 					</View>
 
-					<ProfileDetails taskDetails={taskDetails} />
+					<ProfileDetails
+						taskDetails={taskDetails}
+						friendsDetails={friendsDetails}
+					/>
 
 					<TravelDetails taskDetails={taskDetails} />
 
@@ -74,7 +150,19 @@ class TaskStatus extends React.Component {
 					</TouchableOpacity>
 				</ScrollView>
 
-				<CalltoAction navigate={navigate} />
+				{taskAuth === true ? null : (
+					<CalltoAction
+						navigate={navigate}
+						checkAuth={checkAuth}
+						taskDetails={taskDetails}
+						userDetails={userDetails}
+						eeiuApprove={eeiuApprove}
+						nominatorApprove={nominatorApprove}
+						nominator2Approve={nominator2Approve}
+						endorserApprove={endorserApprove}
+						approverApprove={approverApprove}
+					/>
+				)}
 			</View>
 		);
 	}
@@ -82,7 +170,7 @@ class TaskStatus extends React.Component {
 
 export default TaskStatus;
 
-const ProfileDetails = ({ taskDetails }) => (
+const ProfileDetails = ({ taskDetails, friendsDetails }) => (
 	<View
 		style={{
 			paddingBottom: 40,
@@ -104,6 +192,23 @@ const ProfileDetails = ({ taskDetails }) => (
 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
 			Other Travellers
 		</Text>
+
+		<FlatList
+			data={friendsDetails}
+			keyExtractor={(item, index) => item.id}
+			renderItem={({ item }) => (
+				<FriendList
+					id={item.id}
+					staffName={item.staffName}
+					staffDivision={item.staffDivision}
+				/>
+			)}
+		/>
+	</View>
+);
+
+const FriendList = ({ staffName, staffDivision }) => (
+	<View>
 		<Text
 			style={{
 				fontSize: 16,
@@ -111,7 +216,7 @@ const ProfileDetails = ({ taskDetails }) => (
 				fontWeight: "bold"
 			}}
 		>
-			{taskDetails.additionalTravellerName1}
+			{staffName}
 		</Text>
 		<Text
 			style={{
@@ -119,40 +224,7 @@ const ProfileDetails = ({ taskDetails }) => (
 				paddingBottom: 12
 			}}
 		>
-			{taskDetails.additionalTravellerDivision1}
-		</Text>
-		<Text
-			style={{
-				fontSize: 16,
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{taskDetails.additionalTravellerName2}
-		</Text>
-		<Text
-			style={{
-				fontSize: 16,
-				paddingBottom: 12
-			}}
-		>
-			{taskDetails.additionalTravellerDivision2}
-		</Text>
-		<Text
-			style={{
-				fontSize: 16,
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{taskDetails.additionalTravellerName3}
-		</Text>
-		<Text
-			style={{
-				fontSize: 16
-			}}
-		>
-			{taskDetails.additionalTravellerDivision3}
+			{staffDivision}
 		</Text>
 	</View>
 );
@@ -249,7 +321,17 @@ const CostDetails = ({ taskDetails }) => (
 	</View>
 );
 
-const CalltoAction = ({ navigate }) => (
+const CalltoAction = ({
+	navigate,
+	checkAuth,
+	taskDetails,
+	userDetails,
+	eeiuApprove,
+	nominatorApprove,
+	nominator2Approve,
+	endorserApprove,
+	approverApprove
+}) => (
 	<View
 		style={{
 			flexDirection: "row",
@@ -266,7 +348,7 @@ const CalltoAction = ({ navigate }) => (
 						style: "default"
 					},
 					{
-						text: "Reject",
+						text: "Revert",
 						onPress: () => navigate("Task"),
 						style: "default"
 					}
@@ -289,7 +371,18 @@ const CalltoAction = ({ navigate }) => (
 					},
 					{
 						text: "Confirm",
-						onPress: () => navigate("Task"),
+						onPress: e => {
+							if (taskDetails.eeiuName == userDetails.name) {
+								eeiuApprove(e);
+							} else if (taskDetails.nominatorName == userDetails.name) {
+								nominatorApprove(e);
+							} else if (taskDetails.nominator2Name == userDetails.name) {
+								nominator2Approve(e);
+							} else if (taskDetails.endorserName == userDetails.name) {
+								endorserApprove(e);
+							} else approverApprove(e);
+							navigate("Task");
+						},
 						style: "default"
 					}
 				])
@@ -309,7 +402,7 @@ const CalltoAction = ({ navigate }) => (
 					fontSize: 16
 				}}
 			>
-				Approve
+				{checkAuth}
 			</Text>
 		</TouchableOpacity>
 	</View>

@@ -15,6 +15,16 @@ import NavigationBar from "react-native-navbar";
 import TrackingBar from "../Bar/TrackingBar";
 import RequestHeader from "../Bar/RequestHeader";
 
+// {
+// 	requestDetails.status === "eeiu" ? (
+// 		<View style={styles.eeiuTrackingBar}>
+// 			<Text>Pending EEIU Approval</Text>
+// 		</View>
+// 	) : (
+// 		<TrackingBar status={requestDetails.status} />
+// 	);
+// }
+
 class RequestStatus extends React.Component {
 	render() {
 		const { navigate, goBack } = this.props.navigation;
@@ -34,21 +44,13 @@ class RequestStatus extends React.Component {
 					}}
 				/>
 
-				{requestDetails.status === "eeiu" ? (
-					<View style={styles.eeiuTrackingBar}>
-						<Text>Pending EEIU Approval</Text>
-					</View>
-				) : (
-					<TrackingBar status={requestDetails.status} />
-				)}
-
 				<ScrollView style={{ flex: 1, paddingHorizontal: 8 }}>
 					<RequestHeader requestDetails={requestDetails} />
 
 					<TravelDetails requestDetails={requestDetails} />
 
 					<ProfileDetails
-						userDetails={userDetails}
+						requestDetails={requestDetails}
 						friendsDetails={friendsDetails}
 					/>
 
@@ -158,7 +160,7 @@ const TravelDetails = ({ requestDetails }) => (
 	</View>
 );
 
-const ProfileDetails = ({ friendsDetails, userDetails }) => (
+const ProfileDetails = ({ friendsDetails, requestDetails }) => (
 	<View
 		style={{
 			paddingVertical: 40,
@@ -172,10 +174,10 @@ const ProfileDetails = ({ friendsDetails, userDetails }) => (
 			Profile Details
 		</Text>
 		<Text style={{ fontSize: 16, paddingBottom: 4, fontWeight: "bold" }}>
-			{userDetails.name}
+			{requestDetails.requestorName}
 		</Text>
 		<Text style={{ fontSize: 16, paddingBottom: 24 }}>
-			{userDetails.division}
+			{requestDetails.requestorDivision}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
 			Other Travellers

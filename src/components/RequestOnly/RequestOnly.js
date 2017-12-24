@@ -13,9 +13,7 @@ import Menu from "react-native-vector-icons/Ionicons";
 import ActionButton from "react-native-action-button";
 import Circle from "react-native-vector-icons/FontAwesome";
 
-// import TrackingBar from "../Bar/TrackingBar";
-
-import HomeHeader from "../Bar/HomeHeader";
+// import HomeHeader from "../Bar/HomeHeader";
 
 // const RequestEmpty = (
 // 	<View
@@ -43,9 +41,6 @@ class CardSingle extends React.Component {
 				saved: true
 			});
 	}
-	handlePressTask(navigate) {
-		navigateTo = navigate("TaskStatus", { taskId: `${this.props.taskId}` });
-	}
 	renderText(text, size, type, gap) {
 		return (
 			<Text style={{ paddingBottom: gap, fontSize: size, fontWeight: type }}>
@@ -66,11 +61,7 @@ class CardSingle extends React.Component {
 		const draft = this.props.status == "Draft" ? "[Draft]" : null;
 		return (
 			<TouchableOpacity
-				onPress={() => {
-					if ((data = this.props.requestDetails)) {
-						this.handlePressRequest(navigate);
-					} else this.handlePressTask(navigate);
-				}}
+				onPress={() => this.handlePressRequest(navigate)}
 				style={[
 					{ backgroundColor: "#ffffff", borderRadius: 8, marginTop: 8 },
 					this.props.status == "Draft" && {
@@ -126,9 +117,7 @@ class CardSingle extends React.Component {
 							(this.props.type = ""),
 							(this.props.gap = 14)
 						)}
-						<View
-							style={{ flexDirection: "row", justifyContent: "space-around" }}
-						>
+						<View style={{ flexDirection: "row" }}>
 							{this.renderIcon(
 								(this.props.caption = "5 days"),
 								(this.props.thumbnail = "calendar")
@@ -158,25 +147,12 @@ class CardSingle extends React.Component {
 	}
 }
 
-//known as Home
-class Request extends React.Component {
+class RequestOnly extends React.Component {
 	renderCaption(text) {
 		return (
 			<Text style={{ paddingHorizontal: 16, paddingTop: 8, fontSize: 12 }}>
 				{(value = text)}
 			</Text>
-		);
-	}
-	renderText(integer, text) {
-		return (
-			<View style={{ flex: 0.2, alignItems: "center" }}>
-				<Text style={{ paddingBottom: 0, fontSize: 18, fontWeight: "bold" }}>
-					{(value = integer)}
-				</Text>
-				<Text style={{ paddingBottom: 4, fontSize: 10, textAlign: "center" }}>
-					{(value = text)}
-				</Text>
-			</View>
 		);
 	}
 	render() {
@@ -186,94 +162,32 @@ class Request extends React.Component {
 			user.submitRequest === false ? null : "PENDING REQUEST";
 		const captionTask = user.receiveTask === false ? null : "PENDING APPROVAL";
 		return (
-			<View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
-				<ScrollView>
-					<HomeHeader user={user} />
-					<View
-						style={{
-							backgroundColor: "white",
-							marginHorizontal: 24,
-							paddingVertical: 8,
-							flexDirection: "row",
-							justifyContent: "space-around",
-							borderBottomLeftRadius: 4,
-							borderBottomRightRadius: 4
-						}}
-					>
-						{this.renderText(
-							(this.props.integer = 10),
-							(this.props.text = "TOTAL REQUEST ")
-						)}
-						{this.renderText(
-							(this.props.integer = 2),
-							(this.props.text = "PENDING REQUEST ")
-						)}
-						{this.renderText(
-							(this.props.integer = 1),
-							(this.props.text = "PENDING APPROVAL ")
-						)}
-						{this.renderText(
-							(this.props.integer = 2),
-							(this.props.text = "DRAFT REQUEST ")
-						)}
-					</View>
-					<View style={{ paddingHorizontal: 8 }}>
-						{this.renderCaption((this.props.text = captionRequest))}
-						<FlatList
-							data={requestDetails}
-							keyExtractor={(item, index) => item.id}
-							renderItem={({ item }) => (
-								<CardSingle
-									formId={item.id}
-									formDraftId={item.id}
-									navigate={navigate}
-									requestDetails={requestDetails}
-									destination={item.destination}
-									travelFrom={item.travelFrom}
-									travelUntil={item.travelUntil}
-									travelType={item.travelType}
-									status={item.status}
-									notification={item.notification}
-								/>
-							)}
+			<ScrollView
+				style={{ flex: 1, backgroundColor: "#f3f3f3", paddingHorizontal: 8 }}
+			>
+				{this.renderCaption((this.props.text = captionRequest))}
+				<FlatList
+					data={requestDetails}
+					keyExtractor={(item, index) => item.id}
+					renderItem={({ item }) => (
+						<CardSingle
+							formId={item.id}
+							formDraftId={item.id}
+							navigate={navigate}
+							requestDetails={requestDetails}
+							destination={item.destination}
+							travelFrom={item.travelFrom}
+							travelUntil={item.travelUntil}
+							travelType={item.travelType}
+							status={item.status}
+							notification={item.notification}
 						/>
-
-						{this.renderCaption((this.props.text = captionTask))}
-						<FlatList
-							data={taskDetails}
-							keyExtractor={(item, index) => item.id}
-							renderItem={({ item }) => (
-								<CardSingle
-									formId={item.id}
-									formDraftId={item.id}
-									navigate={navigate}
-									destination={item.destination}
-									travelFrom={item.travelFrom}
-									travelUntil={item.travelUntil}
-									travelType={item.travelType}
-									status={item.status}
-									notification={item.notification}
-								/>
-							)}
-						/>
-					</View>
-				</ScrollView>
-				<ActionButton
-					buttonColor="#333333"
-					onPress={() => {
-						navigate("ProfileForm", {
-							edit: false,
-							formDraftId: `${formDraftId}`
-						}),
-							this.props.newRequest({ user });
-					}}
+					)}
 				/>
-			</View>
+			</ScrollView>
 		);
 		// }
 	}
 }
 
-export default Request;
-
-// const styles = StyleSheet.create({});
+export default RequestOnly;

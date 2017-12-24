@@ -16,10 +16,10 @@ import RequestHeader from "../Bar/RequestHeader";
 class SubmitForm extends React.Component {
 	render() {
 		const { navigate, goBack, state } = this.props.navigation;
-		const { userDetails, requestDetails, friendsDetails } = this.props;
+		const { userDetails, requestDetails, friendsInfo } = this.props;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-				{state.params.saved == "false" ? (
+				{state.params.saved == false ? (
 					<NavigationBar
 						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
 						title={{ title: "Confirmation" }}
@@ -63,7 +63,7 @@ class SubmitForm extends React.Component {
 						userDetails={userDetails}
 						requestDetails={requestDetails}
 						navigate={navigate}
-						friendsDetails={friendsDetails}
+						friendsInfo={friendsInfo}
 					/>
 
 					<ApproverDetails
@@ -112,8 +112,8 @@ const TravelDetails = ({ navigate, requestDetails }) => (
 			<TouchableOpacity
 				onPress={() =>
 					navigate("TravelForm", {
-						edit: "true",
-						ticketNumber: `${requestDetails.ticketNumber}`
+						edit: true,
+						formDraftId: `${requestDetails.ticketNumber}`
 					})
 				}
 				style={{ paddingBottom: 8 }}
@@ -142,7 +142,7 @@ const TravelDetails = ({ navigate, requestDetails }) => (
 const ProfileDetails = ({
 	userDetails,
 	requestDetails,
-	friendsDetails,
+	friendsInfo,
 	navigate
 }) => (
 	<View style={{ paddingHorizontal: 8, paddingBottom: 32 }}>
@@ -151,23 +151,23 @@ const ProfileDetails = ({
 				Profile Details
 			</Text>
 			<TouchableOpacity
-				onPress={() => navigate("ProfileForm", { edit: "true" })}
+				onPress={() => navigate("ProfileForm", { edit: true })}
 				style={{ paddingBottom: 8 }}
 			>
 				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
 			</TouchableOpacity>
 		</View>
 		<Text style={{ fontSize: 20, paddingBottom: 4, fontWeight: "bold" }}>
-			{userDetails.name}
+			{requestDetails.requestorName}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 16 }}>
-			{userDetails.division}
+			{requestDetails.requestorDivision}
 		</Text>
 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#c4c4c4" }}>
 			Additional Travellers
 		</Text>
 		<FlatList
-			data={friendsDetails}
+			data={friendsInfo}
 			keyExtractor={(item, index) => item.id}
 			renderItem={({ item }) => (
 				<FriendList
@@ -205,7 +205,7 @@ const ApproverDetails = ({ requestDetails, navigate }) => (
 				Approvers Details
 			</Text>
 			<TouchableOpacity
-				onPress={() => navigate("ApprovalForm", { edit: "true" })}
+				onPress={() => navigate("ApprovalForm", { edit: true })}
 				style={{ paddingBottom: 8 }}
 			>
 				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
@@ -214,7 +214,11 @@ const ApproverDetails = ({ requestDetails, navigate }) => (
 		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
 			{requestDetails.nominatorName}
 		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Nominator</Text>
+		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Nominator 1</Text>
+		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
+			{requestDetails.nominator2Name}
+		</Text>
+		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Nominator 2</Text>
 		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
 			{requestDetails.endorserName}
 		</Text>
@@ -233,7 +237,7 @@ const CostDetails = ({ requestDetails, navigate }) => (
 				Cost Details
 			</Text>
 			<TouchableOpacity
-				onPress={() => navigate("CostForm", { edit: "true" })}
+				onPress={() => navigate("CostForm", { edit: true })}
 				style={{ paddingBottom: 8 }}
 			>
 				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>

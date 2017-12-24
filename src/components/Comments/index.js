@@ -1,16 +1,24 @@
 import { connect } from "react-redux";
 import Comments from "./Comments";
 
+import { addComment } from "../../redux/comments/action";
+
 const mapStateToProps = (state, ownProps) => {
+	const commentId = ownProps.navigation.state.params.commentId;
 	return {
-		commentId: ownProps.navigation.state.params.commentId,
-		requestDetails: state.request.filter(
-			f => f.ticketNumber == ownProps.navigation.state.params.commentId
-		)[0],
-		commentDetails: state.request.filter(
-			f => f.ticketNumber == ownProps.navigation.state.params.commentId
-		)[0].comments
+		requestDetails: state.request.filter(f => f.ticketNumber == commentId)[0],
+		userDetails: state.user,
+		commentDetails: state.comments
 	};
 };
 
-export default connect(mapStateToProps)(Comments);
+const mapDispatchToProps = dispatch => {
+	return {
+		addComment: author => {
+			dispatch(addComment(author));
+			console.log(author);
+		}
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comments);

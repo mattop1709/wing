@@ -1,20 +1,4 @@
-export const setDestination = text => {
-	return {
-		type: "SET_DESTINATION",
-		text
-	};
-};
-
-export const setTravelType = value => {
-	return {
-		type: "SET_TRAVEL_TYPE",
-		value
-	};
-};
-
-export const newRequest = (ticketNumber, status) => {
-	// let newTicket = "1000";
-	// const ticket = Math.floor(Date.now() / 100000000);
+export const newRequest = user => {
 	const generateTicket = function() {
 		return (
 			"WINGS" +
@@ -32,17 +16,37 @@ export const newRequest = (ticketNumber, status) => {
 			.toString(36)
 			.substr(2, 5)
 			.toUpperCase();
-	return {
-		type: "NEW_REQUEST",
-		ticketNumber: ticket,
-		status: "Draft"
+	return (dispatch, getState) => {
+		const userInfoName = getState().user.name;
+		const userInfoDivision = getState().user.division;
+		dispatch({
+			type: "NEW_REQUEST",
+			ticketNumber: ticket,
+			requestorName: userInfoName,
+			requestorDivision: userInfoDivision,
+			status: "Draft"
+		});
 	};
 };
 
-export const setJustificationText = caption => {
+export const setDestination = destinationText => {
+	return {
+		type: "SET_DESTINATION",
+		destinationText
+	};
+};
+
+export const setTravelType = value => {
+	return {
+		type: "SET_TRAVEL_TYPE",
+		value
+	};
+};
+
+export const setJustificationText = justificationText => {
 	return {
 		type: "SET_JUSTIFICATION_TEXT",
-		caption
+		justificationText
 	};
 };
 
@@ -67,14 +71,49 @@ export const setCostCategory = value => {
 	};
 };
 
+export const setTravelFrom = dateFrom => {
+	return {
+		type: "SET_TRAVEL_FROM",
+		dateFrom
+	};
+};
+
+export const setTravelUntil = dateUntil => {
+	return {
+		type: "SET_TRAVEL_UNTIL",
+		dateUntil
+	};
+};
+
+export const addNominator = staffName => {
+	return {
+		type: "ADD_NOMINATOR_NAME",
+		staffName
+	};
+};
+
+export const addNominator2 = staffName => {
+	return {
+		type: "ADD_NOMINATOR_2_NAME",
+		staffName
+	};
+};
+
+export const addEndorser = staffName => {
+	return {
+		type: "ADD_ENDORSER_NAME",
+		staffName
+	};
+};
+
+export const addApprover = staffName => {
+	return {
+		type: "ADD_APPROVER_NAME",
+		staffName
+	};
+};
+
 export const submitRequest = status => {
-	// const date = Date.now();
-	// if (!Date.now) {
-	// 	Date.now = function now() {
-	// 		return new Date().getTimezoneOffset().toString();
-	// 	};
-	// }
-	// const date1 = new Date();
 	function convertUTCDateToLocalDate(date) {
 		const newDate = new Date(
 			date.getTime() + date.getTimezoneOffset() * 60 * 1000
@@ -92,31 +131,5 @@ export const submitRequest = status => {
 		type: "SUBMIT_REQUEST",
 		status: "Submit",
 		timeStamp: dateSubmit
-	};
-};
-
-export const setTravelFrom = date => {
-	return {
-		type: "SET_TRAVEL_FROM",
-		date
-	};
-};
-
-export const setTravelUntil = date2 => {
-	return {
-		type: "SET_TRAVEL_UNTIL",
-		date2
-	};
-};
-
-export const newFriendId = (friendId1Name, friendId1Division) => {
-	alert(friendId1Division);
-	return (dispatch, getState) => {
-		const { addFriend } = getState();
-		dispatch({
-			type: "ADD_FRIEND_INFO",
-			friendId1Name: addFriend.staffName,
-			friendId1Division: addFriend.staffDivision
-		});
 	};
 };

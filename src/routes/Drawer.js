@@ -8,21 +8,21 @@ import ActivityLog from "../components/Activity";
 import DrawerContainer from "./DrawerContainer";
 
 class Home extends React.Component {
-  static navigationOptions = {};
+	static navigationOptions = {};
 }
 
 const Drawer = DrawerNavigator(
-  {
-    Stack: {
-      screen: Stack,
-      navigationOptions: {
-        drawerLabel: "Home"
-      }
-    }
-  },
-  {
-    contentComponent: DrawerContainer
-  }
+	{
+		Stack: {
+			screen: Stack,
+			navigationOptions: {
+				drawerLabel: "Home"
+			}
+		}
+	},
+	{
+		contentComponent: DrawerContainer
+	}
 );
 
 export default Drawer;

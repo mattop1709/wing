@@ -33,7 +33,7 @@ class DrawerContainer extends React.Component {
 						alignItems: "center"
 					}}
 				>
-					<Text style={{ alignText: "center", paddingBottom: 4 }}>
+					<Text style={{ textAlign: "center", paddingBottom: 4 }}>
 						Mohammad Hafiz bin Burhan
 					</Text>
 					<Text>Group Digital Centre</Text>

@@ -17,69 +17,28 @@ import NavigationBar from "react-native-navbar";
 // import FormBar from "../Bar/FormBar";
 
 class ProfileForm extends React.Component {
-	constructor(props) {
-		super(props);
-		const ds = new ListView.DataSource({
-			rowHasChanged: (r1, r2) => r1 !== r2
-		});
-		this.state = {
-			dataSource: ds.cloneWithRows([]),
-			staffName: ""
-			// staffDivision: ""
-		};
-		this._handleDeleteButtonPress = this._handleDeleteButtonPress.bind(this);
-		this._handleTextChange1 = this._handleTextChange1.bind(this);
-		// this._handleTextChange2 = this._handleTextChange2.bind(this);
-	}
-	_handleSendButtonPress = () => {
-		const textArray = this.state.dataSource._dataBlob.s1;
-		textArray.push(this.state.staffName);
-		this.setState(() => ({
-			dataSource: this.state.dataSource.cloneWithRows(textArray),
-			staffName: ""
-			// staffDivision: ""
-		}));
-	};
-	_handleDeleteButtonPress = id => {
-		this.setState(a => {
-			const newItem = a.dataSource._dataBlob.s1.filter(
-				(item, i) => parseInt(id) !== i
-			);
-			return {
-				dataSource: this.state.dataSource.cloneWithRows(newItem)
-			};
-		});
-	};
-	_handleTextChange1 = text1 => {
-		const staffName = text1;
-		this.setState(() => ({
-			staffName
-		}));
-	};
-	// _handleTextChange2 = text2 => {
-	// 	const staffDivision = text2;
-	// 	this.setState(() => ({
-	// 		staffDivision
-	// 	}));
-	// };
-	// _handleClickAddPerson = AddFriends => {
-	// 	this.props.navigation.navigate("AddFriends");
-	// };
 	render() {
 		const { navigate, state, goBack } = this.props.navigation;
-		const { user, friend1, friendDetails, requestForm } = this.props;
+		const {
+			user,
+			friendsInformation,
+			formDraftId,
+			requestDetails,
+			removeFriends
+		} = this.props;
 		return (
 			<KeyboardAvoidingView
 				behavior="padding"
 				style={{ flex: 1, backgroundColor: "#ffffff" }}
 			>
-				{state.params.edit == "true" ? (
+				{state.params.edit == true ? (
 					<NavigationBar
 						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
 						title={{ title: "New Request" }}
 						leftButton={{
 							title: "Back",
-							handler: () => goBack()
+							handler: () =>
+								navigate("SubmitForm", { formDraftId: `${requestDetails.id}` })
 						}}
 					/>
 				) : (
@@ -108,7 +67,7 @@ class ProfileForm extends React.Component {
 					/>
 				)}
 
-				{state.params.edit == "true" ? null : (
+				{state.params.edit == true ? null : (
 					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
 						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
 							Step 1: Profile Information
@@ -146,66 +105,35 @@ class ProfileForm extends React.Component {
 						<Text style={{ fontSize: 12, paddingVertical: 16 }}>
 							Other Travellers
 						</Text>
-						<View>
-							<ListView
-								dataSource={this.state.dataSource}
-								renderRow={(rowData, sectionID, rowID) => {
-									const handleDelete = () => {
-										return this._handleDeleteButtonPress(rowID);
-									};
-									return (
-										<View
-											style={{
-												flexDirection: "row",
-												justifyContent: "space-between",
-												paddingBottom: 16
-											}}
-										>
-											<View style={{ flex: 0.9 }}>
-												<Text
-													style={{
-														fontSize: 14,
-														paddingBottom: 4,
-														color: "#000000"
-													}}
-												>
-													{rowData}
-												</Text>
-											</View>
-											<TouchableOpacity
-												onPress={handleDelete}
-												style={{ justifyContent: "center" }}
-											>
-												<Icon name="close-o" color="#000000" size={24} />
-											</TouchableOpacity>
-										</View>
-									);
-								}}
-							/>
-							<View style={{ flex: 1 }}>
-								<TextInput
-									placeholder="Type your name"
-									onChangeText={this._handleTextChange1}
-									text1={this.state.staffName}
+
+						<FlatList
+							data={friendsInformation}
+							keyExtractor={(item, index) => item.id}
+							renderItem={({ item }) => (
+								<AdditionalTravellerSingle
+									id={item.id}
+									staffName={item.staffName}
+									staffDivision={item.staffDivision}
+									removeFriends={removeFriends}
 								/>
-							</View>
-							<TouchableOpacity
-								style={{ justifyContent: "center" }}
-								onPress={this._handleSendButtonPress}
-							>
-								<Text style={styles.addFriendsText}>+ Add</Text>
-							</TouchableOpacity>
-						</View>
+							)}
+						/>
+						<TouchableOpacity
+							style={{ justifyContent: "center" }}
+							onPress={() => navigate("AddFriends", { friends: true })}
+						>
+							<Text style={styles.addFriendsText}>+ Add Friends</Text>
+						</TouchableOpacity>
 					</View>
 				</ScrollView>
 
-				{state.params.edit == "true" ? null : (
+				{state.params.edit == true ? null : (
 					<View style={styles.navigationContainer}>
 						<View style={styles.leftNavigationBox}>
 							<Icon name="chevron-left" size={32} color="#000000" />
 						</View>
 						<TouchableOpacity
-							onPress={() => navigate("TravelForm", { edit: "false" })}
+							onPress={() => navigate("TravelForm", { edit: false })}
 							style={styles.rightNavigationBox}
 						>
 							<Icon name="chevron-right" size={32} color="#000000" />
@@ -228,13 +156,37 @@ class ProfileFormComponentTextInput extends React.Component {
 					paddingBottom: 8,
 					alignItems: "flex-end"
 				}}
-				placeholder={this.props.value}
+				value={this.props.value}
 				clearButtonMode="always"
 				underlineColorAndroid="rgba(0,0,0,0)"
 			/>
 		);
 	}
 }
+
+const AdditionalTravellerSingle = ({
+	id,
+	staffName,
+	staffDivision,
+	removeFriends
+}) => (
+	<View style={{ flexDirection: "row" }}>
+		<View style={{ flex: 1 }}>
+			<Text style={{ fontSize: 16, paddingBottom: 4, color: "#000000" }}>
+				{staffName}
+			</Text>
+			<Text style={{ paddingBottom: 12, color: "#000000" }}>
+				{staffDivision}
+			</Text>
+		</View>
+		<TouchableOpacity
+			onPress={id => removeFriends(id)}
+			style={{ justifyContent: "center" }}
+		>
+			<Icon name="minus" color="#000000" size={24} />
+		</TouchableOpacity>
+	</View>
+);
 
 const styles = StyleSheet.create({
 	formBarContainer: {
@@ -265,26 +217,6 @@ const styles = StyleSheet.create({
 		color: "#f44242"
 	}
 });
-
-// <FlatList
-// 	data={friendDetails}
-// 	keyExtractor={(item, index) => item.id}
-// 	renderItem={({ item }) => (
-// 		<AdditionalTravellerSingle
-// 			staffName={item.staffName}
-// 			staffDivision={item.staffDivision}
-// 		/>
-// 	)}
-// />
-
-// const AdditionalTravellerSingle = ({ staffName, staffDivision }) => (
-// 	<View>
-// 		<Text style={{ fontSize: 16, paddingBottom: 4, color: "#000000" }}>
-// 			{staffName}
-// 		</Text>
-// 		<Text style={{ paddingBottom: 12, color: "#000000" }}>{staffDivision}</Text>
-// 	</View>
-// );
 
 const FormBar = () => (
 	<View style={styles.formBarContainer}>
@@ -352,3 +284,109 @@ const FormBar = () => (
 		</View>
 	</View>
 );
+
+// navigate("AddFriends", { friends: true })
+
+// <ListView
+// 	dataSource={this.state.dataSource}
+// 	renderRow={(rowData, sectionID, rowID) => {
+// 		const handleDelete = () => {
+// 			return this._handleDeleteButtonPress(rowID);
+// 		};
+// 		return (
+// 			<View
+// 				style={{
+// 					flexDirection: "row",
+// 					justifyContent: "space-between",
+// 					paddingBottom: 16
+// 				}}
+// 			>
+// 				<View style={{ flex: 0.9 }}>
+// 					<Text
+// 						style={{
+// 							fontSize: 14,
+// 							paddingBottom: 4,
+// 							color: "#000000"
+// 						}}
+// 					>
+// 						{rowData}
+// 					</Text>
+// 				</View>
+// 				<TouchableOpacity
+// 					onPress={handleDelete}
+// 					style={{ justifyContent: "center" }}
+// 				>
+// 					<Icon name="close-o" color="#000000" size={24} />
+// 				</TouchableOpacity>
+// 			</View>
+// 		);
+// 	}}
+// />
+// <View style={{ flex: 1 }}>
+// 	<TextInput
+// 		placeholder="Type your name"
+// 		onChangeText={this._handleTextChange1}
+// 		text1={this.state.staffName}
+// 	/>
+// </View>
+
+// <FlatList
+// 	data={friend2}
+// 	keyExtractor={(item, index) => item.id}
+// 	renderItem={({ item }) => (
+// 		<AdditionalTravellerSingle
+// 			ref={item.ref}
+// 			staffName={item.staffName}
+// 			staffDivision={item.staffDivision}
+// 		/>
+// 	)}
+// />
+
+// constructor(props) {
+// 	super(props);
+// 	const ds = new ListView.DataSource({
+// 		rowHasChanged: (r1, r2) => r1 !== r2
+// 	});
+// 	this.state = {
+// 		dataSource: ds.cloneWithRows([]),
+// 		staffName: ""
+// 		// staffDivision: ""
+// 	};
+// 	this._handleDeleteButtonPress = this._handleDeleteButtonPress.bind(this);
+// 	this._handleTextChange1 = this._handleTextChange1.bind(this);
+// 	// this._handleTextChange2 = this._handleTextChange2.bind(this);
+// }
+// _handleSendButtonPress = () => {
+// 	const textArray = this.state.dataSource._dataBlob.s1;
+// 	textArray.push(this.state.staffName);
+// 	this.setState(() => ({
+// 		dataSource: this.state.dataSource.cloneWithRows(textArray),
+// 		staffName: ""
+// 		// staffDivision: ""
+// 	}));
+// };
+// _handleDeleteButtonPress = id => {
+// 	this.setState(a => {
+// 		const newItem = a.dataSource._dataBlob.s1.filter(
+// 			(item, i) => parseInt(id) !== i
+// 		);
+// 		return {
+// 			dataSource: this.state.dataSource.cloneWithRows(newItem)
+// 		};
+// 	});
+// };
+// _handleTextChange1 = text1 => {
+// 	const staffName = text1;
+// 	this.setState(() => ({
+// 		staffName
+// 	}));
+// };
+// _handleTextChange2 = text2 => {
+// 	const staffDivision = text2;
+// 	this.setState(() => ({
+// 		staffDivision
+// 	}));
+// };
+// _handleClickAddPerson = AddFriends => {
+// 	this.props.navigation.navigate("AddFriends");
+// };

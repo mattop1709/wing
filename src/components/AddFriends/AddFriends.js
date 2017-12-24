@@ -11,20 +11,43 @@ import {
 import Send from "react-native-vector-icons/MaterialIcons";
 import NavigationBar from "react-native-navbar";
 
-const ListSingle = ({ staffName, staffDivision, goBack, newFriendId }) => (
-	<TouchableOpacity
-		onPress={() => {
-			goBack();
-			newFriendId(staffName, staffDivision);
-		}}
-		style={styles.contactBox}
-	>
-		<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
-			{staffName}
-		</Text>
-		<Text>{staffDivision}</Text>
-	</TouchableOpacity>
-);
+class ListSingle extends React.Component {
+	render() {
+		const {
+			staffName,
+			staffDivision,
+			state,
+			goBack,
+			addNominator,
+			addNominator2,
+			addEndorser,
+			addApprover,
+			addFriends
+		} = this.props;
+		return (
+			<TouchableOpacity
+				onPress={() => {
+					if (state.params.nominator1 == true) {
+						addNominator(staffName);
+					} else if (state.params.nominator2 == true) {
+						addNominator2(staffName);
+					} else if (state.params.endorser == true) {
+						addEndorser(staffName);
+					} else if (state.params.approver == true) {
+						addApprover(staffName);
+					} else addFriends(staffName, staffDivision);
+					goBack();
+				}}
+				style={styles.contactBox}
+			>
+				<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
+					{staffName}
+				</Text>
+				<Text>{staffDivision}</Text>
+			</TouchableOpacity>
+		);
+	}
+}
 
 class AddPerson extends React.Component {
 	constructor(props) {
@@ -50,8 +73,15 @@ class AddPerson extends React.Component {
 		this.setState({ displayedFriends: searchFriends });
 	}
 	render() {
-		const { navigate, goBack } = this.props.navigation;
-		const { add, newFriendId } = this.props;
+		const { goBack, state } = this.props.navigation;
+		const {
+			add,
+			addNominator,
+			addNominator2,
+			addEndorser,
+			addApprover,
+			addFriends
+		} = this.props;
 		const { displayedFriends } = this.state;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
@@ -61,7 +91,9 @@ class AddPerson extends React.Component {
 					title={{ title: "Add Friends" }}
 					leftButton={{
 						title: "Back",
-						handler: () => goBack()
+						handler: () => {
+							goBack();
+						}
 					}}
 				/>
 
@@ -84,10 +116,15 @@ class AddPerson extends React.Component {
 						keyExtractor={(item, index) => item.id}
 						renderItem={({ item }) => (
 							<ListSingle
-								navigate={navigate}
-								newFriendId={newFriendId}
+								addNominator={addNominator}
+								addNominator2={addNominator2}
+								addEndorser={addEndorser}
+								addApprover={addApprover}
+								addFriends={addFriends}
 								staffName={item.staffName}
 								staffDivision={item.staffDivision}
+								goBack={goBack}
+								state={state}
 							/>
 						)}
 					/>

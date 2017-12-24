@@ -22,10 +22,11 @@ const Stack = StackNavigator({
 	Tabs: {
 		screen: Tabs,
 		navigationOptions: ({ navigation }) => ({
+			// header: null
 			headerStyle: {
 				backgroundColor: "#ff954f"
 			},
-			headerTitle: "Home",
+			headerTitle: "Wings",
 			headerTitleStyle: {
 				color: "white"
 			},
