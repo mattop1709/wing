@@ -21,9 +21,9 @@ const mapDispatchToProps = dispatch => {
 			dispatch(setDestination(destinationText));
 			console.log(destinationText);
 		},
-		setTravelType: value => {
-			dispatch(setTravelType(value));
-			console.log(value);
+		setTravelType: travelText => {
+			dispatch(setTravelType(travelText));
+			console.log(travelText);
 		},
 		setTravelFrom: dateFrom => {
 			dispatch(setTravelFrom(dateFrom));

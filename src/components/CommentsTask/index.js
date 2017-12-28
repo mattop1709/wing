@@ -2,14 +2,10 @@ import { connect } from "react-redux";
 import CommentsTask from "./CommentsTask";
 
 const mapStateToProps = (state, ownProps) => {
+	const commentTaskId = ownProps.navigation.state.params.commentTaskId;
 	return {
-		commentTaskId: ownProps.navigation.state.params.commentTaskId,
-		taskInfo: state.task.filter(
-			t1 => t1.ticketNumber == ownProps.navigation.state.params.commentTaskId
-		)[0],
-		commentDetails: state.task.filter(
-			t1 => t1.ticketNumber == ownProps.navigation.state.params.commentTaskId
-		)[0].comments
+		taskInfo: state.task.filter(t1 => t1.id === commentTaskId)[0],
+		commentDetails: state.task.filter(t1 => t1.id === commentTaskId)[0].comments
 	};
 };
 

@@ -10,12 +10,12 @@ import {
 } from "../../redux/task/action";
 
 const mapStateToProps = (state, ownProps) => {
-	// const taskId = ownProps.navigation.state.params.taskId;
+	const taskId = ownProps.navigation.state.params.taskId;
 	return {
-		// taskDetails: state.task.filter(t => t.ticketNumber == taskId)[0],
+		taskDetails: state.task.filter(taskDetail => taskDetail.id == taskId)[0],
+		userDetails: state.user
 		// friendsDetails: state.task.filter(t => t.ticketNumber == taskId)[0].friends,
-		userDetails: state.user,
-		taskDetails: state.task[0]
+		// taskDetails: state.task[0]
 	};
 };
 

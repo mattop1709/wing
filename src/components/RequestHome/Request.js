@@ -13,8 +13,6 @@ import Menu from "react-native-vector-icons/Ionicons";
 import ActionButton from "react-native-action-button";
 import Circle from "react-native-vector-icons/FontAwesome";
 
-// import TrackingBar from "../Bar/TrackingBar";
-
 import HomeHeader from "../Bar/HomeHeader";
 
 // const RequestEmpty = (
@@ -29,6 +27,20 @@ import HomeHeader from "../Bar/HomeHeader";
 // 		<Text>Click on the Action Button to Start!</Text>
 // 	</View>
 // );
+
+function Texts({ text, size, type, gap }) {
+	return (
+		<Text style={{ paddingBottom: gap, fontSize: size, fontWeight: type }}>
+			{(value = text)}
+		</Text>
+	);
+}
+
+function Captions(text) {
+	<Text style={{ paddingHorizontal: 16, paddingTop: 8, fontSize: 12 }}>
+		{(value = text)}
+	</Text>;
+}
 
 class CardSingle extends React.Component {
 	handlePressRequest(navigate) {
@@ -46,18 +58,24 @@ class CardSingle extends React.Component {
 	handlePressTask(navigate) {
 		navigateTo = navigate("TaskStatus", { taskId: `${this.props.taskId}` });
 	}
+	handleNotification(notification) {
+		if (notification === "new")
+			return (
+				<View style={{ paddingRight: 4 }}>
+					<Circle name="circle" size={10} color="red" />
+				</View>
+			);
+	}
 	renderText(text, size, type, gap) {
-		return (
-			<Text style={{ paddingBottom: gap, fontSize: size, fontWeight: type }}>
-				{(value = text)}
-			</Text>
-		);
+		return <Texts text={text} size={size} type={type} gap={gap} />;
 	}
 	renderIcon(caption, thumbnail) {
 		return (
-			<View style={{ flexDirection: "row", paddingRight: 8 }}>
-				<Icon name={thumbnail} size={20} color="#c4c4c4" />
-				{this.renderText((this.props.text = caption), (this.props.size = 12))}
+			<View style={{ flex: 0.3 }}>
+				<View style={{ flexDirection: "row", paddingRight: 8 }}>
+					<Icon name={thumbnail} size={18} color="#c4c4c4" />
+					<Text style={{ fontSize: 12 }}>{(value = caption)}</Text>
+				</View>
 			</View>
 		);
 	}
@@ -72,32 +90,14 @@ class CardSingle extends React.Component {
 					} else this.handlePressTask(navigate);
 				}}
 				style={[
-					{ backgroundColor: "#ffffff", borderRadius: 8, marginTop: 8 },
-					this.props.status == "Draft" && {
-						backgroundColor: "#dcdcdc",
-						borderRadius: 8,
-						marginTop: 8
-					}
+					styles.submitCardStyle,
+					this.props.status == "Draft" && styles.draftCardStyle
 				]}
 			>
 				<View
 					style={[
-						{
-							flexDirection: "row",
-							paddingVertical: 8,
-							borderLeftWidth: 5,
-							borderColor: "green",
-							marginVertical: 1,
-							marginLeft: 2
-						},
-						this.props.requestDetails && {
-							flexDirection: "row",
-							paddingVertical: 8,
-							borderLeftWidth: 5,
-							borderColor: "blue",
-							marginVertical: 1,
-							marginLeft: 2
-						}
+						styles.taskCardStyle,
+						this.props.requestDetails && styles.requestCardStyle
 					]}
 				>
 					<View
@@ -111,7 +111,7 @@ class CardSingle extends React.Component {
 						<View style={{ flexDirection: "row" }}>
 							{this.renderText(
 								(this.props.text = draft),
-								(this.props.size = 16),
+								(this.props.size = 12),
 								(this.props.type = "bold")
 							)}
 							{this.renderText(
@@ -127,7 +127,7 @@ class CardSingle extends React.Component {
 							(this.props.gap = 14)
 						)}
 						<View
-							style={{ flexDirection: "row", justifyContent: "space-around" }}
+							style={{ flexDirection: "row", justifyContent: "space-between" }}
 						>
 							{this.renderIcon(
 								(this.props.caption = "5 days"),
@@ -152,6 +152,7 @@ class CardSingle extends React.Component {
 					>
 						{this.renderText((this.props.text = travelFrom))}
 					</View>
+					{this.handleNotification(notification)}
 				</View>
 			</TouchableOpacity>
 		);
@@ -183,23 +184,13 @@ class Request extends React.Component {
 		const { navigate } = this.props.navigation;
 		const { requestDetails, user, formDraftId, taskDetails } = this.props;
 		const captionRequest =
-			user.submitRequest === false ? null : "PENDING REQUEST";
-		const captionTask = user.receiveTask === false ? null : "PENDING APPROVAL";
+			user.submitRequest == true ? "PENDING REQUEST" : null;
+		const captionTask = user.receiveTask == true ? "PENDING APPROVAL" : null;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
 				<ScrollView>
 					<HomeHeader user={user} />
-					<View
-						style={{
-							backgroundColor: "white",
-							marginHorizontal: 24,
-							paddingVertical: 8,
-							flexDirection: "row",
-							justifyContent: "space-around",
-							borderBottomLeftRadius: 4,
-							borderBottomRightRadius: 4
-						}}
-					>
+					<View style={styles.dashboardContainer}>
 						{this.renderText(
 							(this.props.integer = 10),
 							(this.props.text = "TOTAL REQUEST ")
@@ -217,7 +208,7 @@ class Request extends React.Component {
 							(this.props.text = "DRAFT REQUEST ")
 						)}
 					</View>
-					<View style={{ paddingHorizontal: 8 }}>
+					<View style={{ paddingHorizontal: 8, paddingBottom: 16 }}>
 						{this.renderCaption((this.props.text = captionRequest))}
 						<FlatList
 							data={requestDetails}
@@ -246,6 +237,7 @@ class Request extends React.Component {
 								<CardSingle
 									formId={item.id}
 									formDraftId={item.id}
+									taskId={item.id}
 									navigate={navigate}
 									destination={item.destination}
 									travelFrom={item.travelFrom}
@@ -270,10 +262,45 @@ class Request extends React.Component {
 				/>
 			</View>
 		);
-		// }
 	}
 }
 
 export default Request;
 
-// const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	requestCardStyle: {
+		flexDirection: "row",
+		paddingVertical: 8,
+		borderLeftWidth: 5,
+		borderColor: "blue",
+		marginVertical: 1,
+		marginLeft: 2
+	},
+	taskCardStyle: {
+		flexDirection: "row",
+		paddingVertical: 8,
+		borderLeftWidth: 5,
+		borderColor: "green",
+		marginVertical: 1,
+		marginLeft: 2
+	},
+	submitCardStyle: {
+		backgroundColor: "#ffffff",
+		borderRadius: 8,
+		marginTop: 8
+	},
+	draftCardStyle: {
+		backgroundColor: "#dcdcdc",
+		borderRadius: 8,
+		marginTop: 8
+	},
+	dashboardContainer: {
+		backgroundColor: "white",
+		marginHorizontal: 24,
+		paddingVertical: 8,
+		flexDirection: "row",
+		justifyContent: "space-around",
+		borderBottomLeftRadius: 4,
+		borderBottomRightRadius: 4
+	}
+});

@@ -5,13 +5,7 @@ const initialState = {
 	authentication: "bbS1992",
 	submitRequest: true,
 	receiveTask: true,
-	authenticated: true,
-	approval: [],
-	requests: [
-		{
-			ticketNumber: ""
-		}
-	]
+	authenticated: true
 };
 
 export default (state = initialState, action) => {
@@ -19,16 +13,21 @@ export default (state = initialState, action) => {
 		case "LOGIN":
 			return {
 				...state,
-				authenticated: "true",
+				authenticated: true,
 				staffID: "",
 				authentication: ""
 			};
 		case "LOGOUT":
 			return {
 				...state,
-				authenticated: "false",
+				authenticated: false,
 				staffID: "",
 				authentication: ""
+			};
+		case "SUBMIT_REQUEST":
+			return {
+				...state,
+				submitRequest: action.submit
 			};
 		case "ADD_REQUEST_ID":
 			return [...state, Object.assign({}, state, {})];

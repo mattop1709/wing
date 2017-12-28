@@ -41,6 +41,14 @@ class CardSingle extends React.Component {
 				saved: true
 			});
 	}
+	handleNotification(notification) {
+		if (notification === "new")
+			return (
+				<View style={{ paddingRight: 4 }}>
+					<Circle name="circle" size={10} color="red" />
+				</View>
+			);
+	}
 	renderText(text, size, type, gap) {
 		return (
 			<Text style={{ paddingBottom: gap, fontSize: size, fontWeight: type }}>
@@ -141,6 +149,7 @@ class CardSingle extends React.Component {
 					>
 						{this.renderText((this.props.text = travelFrom))}
 					</View>
+					{this.handleNotification(notification)}
 				</View>
 			</TouchableOpacity>
 		);

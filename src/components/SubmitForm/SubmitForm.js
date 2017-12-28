@@ -13,84 +13,286 @@ import Send from "react-native-vector-icons/Ionicons";
 
 import RequestHeader from "../Bar/RequestHeader";
 
+const ProfileInfo = ({ staffName, staffDivision }) => (
+	<View
+		style={{
+			backgroundColor: "#ffffff",
+			paddingVertical: 16,
+			paddingHorizontal: 24,
+			marginBottom: 0.5,
+			borderRadius: 4
+		}}
+	>
+		<Text
+			style={{
+				paddingBottom: 4,
+				fontWeight: "bold"
+			}}
+		>
+			{staffName}
+		</Text>
+		<Text>{staffDivision}</Text>
+	</View>
+);
+
+function DateBox({ caption, date }) {
+	return (
+		<View style={{ flex: 0.4, backgroundColor: "orange" }}>
+			<View
+				style={{
+					backgroundColor: "#ee7202",
+					alignItems: "center"
+				}}
+			>
+				<Text style={{ fontSize: 12, paddingVertical: 8 }}>
+					{(value = caption)}
+				</Text>
+			</View>
+			<View style={{ paddingVertical: 24, alignItems: "center" }}>
+				<Text style={{ fontSize: 16 }}>{(value = date)}</Text>
+			</View>
+		</View>
+	);
+}
+
+function Box({ heading, name }) {
+	return (
+		<View
+			style={{
+				paddingBottom: 8,
+				marginBottom: 16,
+				borderBottomWidth: 0.5,
+				borderColor: "#dcdcdc"
+			}}
+		>
+			<Text style={{ fontSize: 12, paddingBottom: 8 }}>
+				{(value = heading)}
+			</Text>
+			<Text>{(value = name)}</Text>
+		</View>
+	);
+}
+
 class SubmitForm extends React.Component {
+	handlePressDelete(goBack) {
+		return Alert.alert("Delete Request", "Wish to delete your Request?", [
+			{
+				text: "No"
+			},
+			{
+				text: "Yes",
+				style: "destructive",
+				onPress: () => goBack()
+			}
+		]);
+	}
+	handlePress(navigate, state, goBack) {
+		if (state.params.saved !== true) {
+			Alert.alert("Confirm to Exit?", "Request will be saved as Draft", [
+				{
+					text: "No",
+					style: "destructive"
+				},
+				{
+					text: "Yes",
+					onPress: () => navigate("Home"),
+					style: "default"
+				}
+			]);
+		} else navigateTo = navigate("Home");
+	}
+	handleSubmit(navigate) {
+		Alert.alert("Submit Request", "Ready to submit the request?", [
+			{
+				text: "No",
+				style: "destructive"
+			},
+			{
+				text: "Yes",
+				onPress: () => {
+					navigate("Request"),
+						this.props.submitRequest(),
+						this.props.userSubmit();
+				},
+				style: "default"
+			}
+		]);
+	}
+	renderDateBox(caption, date) {
+		return <DateBox caption={caption} date={date} />;
+	}
+	renderBox(heading, name) {
+		return <Box heading={heading} name={name} />;
+	}
 	render() {
 		const { navigate, goBack, state } = this.props.navigation;
 		const { userDetails, requestDetails, friendsInfo } = this.props;
+		const status = state.params.saved == true ? "Back" : "Exit";
+		const leftButtonConfig = {
+			title: [status],
+			handler: () => {
+				this.handlePress(navigate, state, goBack);
+			}
+		};
 		return (
-			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-				{state.params.saved == false ? (
-					<NavigationBar
-						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
-						title={{ title: "Confirmation" }}
-						leftButton={{
-							title: "Exit",
-							handler: () =>
-								Alert.alert(
-									"Confirm to Exit?",
-									"Request will be saved as Draft",
-									[
-										{
-											text: "No",
-											style: "destructive"
-										},
-										{
-											text: "Yes",
-											onPress: () => navigate("Request"),
-											style: "default"
-										}
-									]
-								)
-						}}
-					/>
-				) : (
-					<NavigationBar
-						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
-						title={{ title: "Confirmation" }}
-						leftButton={{
-							title: "Exit",
-							handler: () => goBack()
-						}}
-					/>
-				)}
+			<View style={{ flex: 1 }}>
+				<NavigationBar
+					style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
+					title={{ title: "Confirmation" }}
+					leftButton={leftButtonConfig}
+				/>
 
-				<ScrollView style={{ flex: 1, paddingHorizontal: 8 }}>
-					<RequestHeader requestDetails={requestDetails} />
+				<ScrollView style={{ flex: 1, paddingHorizontal: 16 }}>
+					<View style={styles.headingStyle}>
+						<Text style={styles.headingText1}>DESCRIPTION</Text>
+						<View style={{ flexDirection: "row", paddingVertical: 8 }}>
+							<TouchableOpacity
+								onPress={() =>
+									navigate("TravelForm", {
+										edit: true,
+										formDraftId: `${requestDetails.id}`
+									})
+								}
+							>
+								<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={() => this.handlePressDelete(goBack)}>
+								<Text style={{ fontSize: 12, color: "red" }}>DELETE</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
 
-					<TravelDetails navigate={navigate} requestDetails={requestDetails} />
+					<View style={styles.boxContainer}>
+						<Text
+							style={{ fontSize: 16, fontWeight: "bold", paddingBottom: 2 }}
+						>
+							{requestDetails.destination}
+						</Text>
+						<Text style={{ fontSize: 16, paddingBottom: 2 }}>
+							{requestDetails.travelType}
+						</Text>
+						<Text style={styles.descriptionText}>
+							{requestDetails.justificationText}
+						</Text>
+						<View style={styles.dateBoxStyle}>
+							{this.renderDateBox(
+								(this.props.caption = "DEPARTURE"),
+								(this.props.date = requestDetails.travelFrom)
+							)}
+							{this.renderDateBox(
+								(this.props.caption = "ARRIVAL"),
+								(this.props.date = requestDetails.travelUntil)
+							)}
+						</View>
+					</View>
 
-					<ProfileDetails
-						userDetails={userDetails}
-						requestDetails={requestDetails}
-						navigate={navigate}
-						friendsInfo={friendsInfo}
-					/>
+					<View style={styles.headingStyle}>
+						<Text style={styles.headingText}>PROFILE</Text>
+						<View>
+							<TouchableOpacity
+								onPress={() =>
+									navigate("ProfileForm", {
+										edit: true,
+										formDraftId: `${requestDetails.id}`
+									})
+								}
+							>
+								<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
 
-					<ApproverDetails
-						requestDetails={requestDetails}
-						navigate={navigate}
-					/>
+					<View style={{ marginBottom: 8 }}>
+						<ProfileInfo
+							staffName={userDetails.name}
+							staffDivision={userDetails.division}
+						/>
+						<FlatList
+							data={friendsInfo}
+							keyExtractor={(item, index) => item.id}
+							renderItem={({ item }) => (
+								<ProfileInfo
+									id={item.id}
+									staffName={item.staffName}
+									staffDivision={item.staffDivision}
+								/>
+							)}
+						/>
+					</View>
 
-					<CostDetails requestDetails={requestDetails} navigate={navigate} />
+					<View style={styles.headingStyle}>
+						<Text style={styles.headingText}>COSTING</Text>
+						<View>
+							<TouchableOpacity
+								onPress={() =>
+									navigate("CostForm", {
+										edit: true,
+										formDraftId: `${requestDetails.id}`
+									})
+								}
+							>
+								<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+
+					<View style={styles.boxContainer}>
+						{this.renderBox(
+							(this.props.heading = "Cost"),
+							(this.props.name = "RM" + " " + requestDetails.cost)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Budget"),
+							(this.props.name = "RM" + " " + requestDetails.budget)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Cost Category"),
+							(this.props.name = requestDetails.costCategory)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Cost Centre"),
+							(this.props.name = requestDetails.costCentre)
+						)}
+					</View>
+
+					<View style={styles.headingStyle}>
+						<Text style={styles.headingText}>APPROVER</Text>
+						<View>
+							<TouchableOpacity
+								onPress={() =>
+									navigate("ApproverForm", {
+										edit: true,
+										formDraftId: `${requestDetails.id}`
+									})
+								}
+							>
+								<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+					<View style={styles.boxContainer}>
+						{this.renderBox(
+							(this.props.heading = "Nominator 1"),
+							(this.props.name = requestDetails.nominatorName)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Nominator 2"),
+							(this.props.name = requestDetails.nominator2Name)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Endorser"),
+							(this.props.name = requestDetails.endorserName)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Approver"),
+							(this.props.name = requestDetails.approverName)
+						)}
+					</View>
 				</ScrollView>
 
 				<View style={{ backgroundColor: "#f3f3f3" }}>
 					<TouchableOpacity
-						onPress={() =>
-							Alert.alert("Submit Request", "Ready to submit the request?", [
-								{
-									text: "No",
-									style: "destructive"
-								},
-								{
-									text: "Yes",
-									onPress: () => {
-										navigate("Request"), this.props.submitRequest();
-									},
-									style: "default"
-								}
-							])
-						}
+						onPress={() => this.handleSubmit(navigate)}
 						style={styles.submitButton}
 					>
 						<Text style={styles.submitButtonText}>Submit</Text>
@@ -103,190 +305,7 @@ class SubmitForm extends React.Component {
 
 export default SubmitForm;
 
-const TravelDetails = ({ navigate, requestDetails }) => (
-	<View style={{ paddingHorizontal: 8, paddingBottom: 40 }}>
-		<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-			<Text style={{ fontSize: 12, paddingBottom: 12, color: "#f27178" }}>
-				Travel Details
-			</Text>
-			<TouchableOpacity
-				onPress={() =>
-					navigate("TravelForm", {
-						edit: true,
-						formDraftId: `${requestDetails.ticketNumber}`
-					})
-				}
-				style={{ paddingBottom: 8 }}
-			>
-				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
-			</TouchableOpacity>
-		</View>
-		<Text style={{ fontSize: 16, paddingBottom: 8, fontWeight: "bold" }}>
-			{requestDetails.destination}
-		</Text>
-		<Text style={{ fontSize: 14, paddingBottom: 8 }}>
-			{requestDetails.travelFrom} until {requestDetails.travelUntil}
-		</Text>
-		<Text style={{ fontSize: 14, paddingBottom: 8 }}>
-			{requestDetails.travelType}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#c4c4c4" }}>
-			Description
-		</Text>
-		<Text style={{ fontSize: 14, lineHeight: 24, textAlign: "justify" }}>
-			{requestDetails.justificationText}
-		</Text>
-	</View>
-);
-
-const ProfileDetails = ({
-	userDetails,
-	requestDetails,
-	friendsInfo,
-	navigate
-}) => (
-	<View style={{ paddingHorizontal: 8, paddingBottom: 32 }}>
-		<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-			<Text style={{ fontSize: 12, paddingBottom: 8, color: "#f27178" }}>
-				Profile Details
-			</Text>
-			<TouchableOpacity
-				onPress={() => navigate("ProfileForm", { edit: true })}
-				style={{ paddingBottom: 8 }}
-			>
-				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
-			</TouchableOpacity>
-		</View>
-		<Text style={{ fontSize: 20, paddingBottom: 4, fontWeight: "bold" }}>
-			{requestDetails.requestorName}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 16 }}>
-			{requestDetails.requestorDivision}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#c4c4c4" }}>
-			Additional Travellers
-		</Text>
-		<FlatList
-			data={friendsInfo}
-			keyExtractor={(item, index) => item.id}
-			renderItem={({ item }) => (
-				<FriendList
-					id={item.id}
-					staffName={item.staffName}
-					staffDivision={item.staffDivision}
-				/>
-			)}
-		/>
-	</View>
-);
-
-const FriendList = ({ staffName, staffDivision }) => (
-	<View>
-		<Text
-			style={{
-				paddingLeft: 8,
-				fontSize: 14,
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{staffName}
-		</Text>
-		<Text style={{ paddingLeft: 8, fontSize: 12, paddingBottom: 12 }}>
-			{staffDivision}
-		</Text>
-	</View>
-);
-
-const ApproverDetails = ({ requestDetails, navigate }) => (
-	<View style={{ paddingHorizontal: 8, paddingBottom: 32 }}>
-		<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-			<Text style={{ fontSize: 12, paddingBottom: 8, color: "#f27178" }}>
-				Approvers Details
-			</Text>
-			<TouchableOpacity
-				onPress={() => navigate("ApprovalForm", { edit: true })}
-				style={{ paddingBottom: 8 }}
-			>
-				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
-			</TouchableOpacity>
-		</View>
-		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
-			{requestDetails.nominatorName}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Nominator 1</Text>
-		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
-			{requestDetails.nominator2Name}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Nominator 2</Text>
-		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
-			{requestDetails.endorserName}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Endorser</Text>
-		<Text style={{ fontSize: 14, paddingBottom: 4, fontWeight: "bold" }}>
-			{requestDetails.approverName}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 12 }}>Approver</Text>
-	</View>
-);
-
-const CostDetails = ({ requestDetails, navigate }) => (
-	<View style={{ paddingBottom: 40, paddingHorizontal: 8 }}>
-		<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-			<Text style={{ fontSize: 12, paddingBottom: 8, color: "#f27178" }}>
-				Cost Details
-			</Text>
-			<TouchableOpacity
-				onPress={() => navigate("CostForm", { edit: true })}
-				style={{ paddingBottom: 8 }}
-			>
-				<Text style={{ fontSize: 12, color: "green" }}>Edit</Text>
-			</TouchableOpacity>
-		</View>
-		<View
-			style={{
-				flexDirection: "row",
-				justifyContent: "space-between",
-				paddingBottom: 8,
-				borderBottomWidth: 0.5,
-				borderColor: "#c4c4c4"
-			}}
-		>
-			<Text style={{ color: "grey" }}>
-				Budget - {requestDetails.costCategory}
-			</Text>
-			<Text style={{ paddingRight: 8, color: "grey" }}>
-				{requestDetails.budget}
-			</Text>
-		</View>
-		<View
-			style={{
-				flexDirection: "row",
-				justifyContent: "space-between",
-				paddingVertical: 8
-			}}
-		>
-			<Text style={{ fontSize: 18 }}>TOTAL</Text>
-			<Text style={{ paddingRight: 8, fontSize: 18, fontWeight: "bold" }}>
-				{requestDetails.cost}
-			</Text>
-		</View>
-	</View>
-);
-
 const styles = StyleSheet.create({
-	headerContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		marginTop: 24,
-		marginBottom: 40
-	},
-	logoBox: {
-		backgroundColor: "#f27178",
-		paddingHorizontal: 16,
-		paddingVertical: 16,
-		marginLeft: 8
-	},
 	submitButton: {
 		alignItems: "center",
 		borderRadius: 100,
@@ -297,5 +316,38 @@ const styles = StyleSheet.create({
 	submitButtonText: {
 		paddingVertical: 16,
 		paddingHorizontal: 32
+	},
+	headingStyle: {
+		flexDirection: "row",
+		justifyContent: "space-between"
+	},
+	headingText: {
+		fontSize: 12,
+		paddingBottom: 8,
+		paddingHorizontal: 8
+	},
+	headingText1: {
+		fontSize: 12,
+		paddingVertical: 8,
+		paddingHorizontal: 8
+	},
+	boxContainer: {
+		paddingHorizontal: 24,
+		paddingTop: 16,
+		paddingBottom: 8,
+		backgroundColor: "#ffffff",
+		borderRadius: 4,
+		marginBottom: 8
+	},
+	dateBoxStyle: {
+		flexDirection: "row",
+		justifyContent: "center",
+		paddingBottom: 16
+	},
+	descriptionText: {
+		textAlign: "justify",
+		fontSize: 14,
+		paddingBottom: 16,
+		lineHeight: 22
 	}
 });

@@ -20,3 +20,10 @@ export const addRequestId = () => {
 		ticketNumber
 	};
 };
+
+// export const userSubmit = () => {
+// 	return {
+// 		type: "SUBMIT_REQUEST",
+// 		submit: true
+// 	};
+// };

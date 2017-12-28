@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import SubmitForm from "./SubmitForm";
 
 import { submitRequest } from "../../redux/request/action";
+import { userSubmit } from "../../redux/user/action";
 
 const mapStateToProps = (state, ownProps) => {
 	const formDraftId = ownProps.navigation.state.params.formDraftId;

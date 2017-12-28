@@ -2,12 +2,40 @@ const initialState = [
 	{
 		id: "1001",
 		completed: true,
-		status: "Submit",
+		status: "Approve",
 		notification: "new",
 		timeStamp: "1 Jan 2017, 8.00am",
 		destination: "Singapore",
 		travelFrom: "1/1/2017",
 		travelUntil: "31/1/2017",
+		travelType: "Site Survey",
+		justificationText:
+			"I would like to Experience the ka-cing ka-cing while experiencing the magnificent of Alain Ducasse Le Louis XV Dinner",
+		requestorName: "Mohammad Hafiz bin Burhan",
+		requestorDivision: "Group Brand and Communication",
+		cost: "12000",
+		budget: "34000",
+		costCategory: "EEIU",
+		costCentre: "BMCE02",
+		dialogBox: "Hi",
+		commentTextLatest: "Ali, What is your name?",
+		friendId1Name: "Mohammad Hafiz bin Burhan",
+		friendId1Division: "Group Digital Centre",
+		eeiuName: "Abu bin Awang",
+		nominatorName: "Jusoh bin Ali",
+		nominator2Name: "Check Check, Rock Rock",
+		endorserName: "Ali bin Awang",
+		approverName: "Kabil bin Ali"
+	},
+	{
+		id: "1002",
+		completed: true,
+		status: "EEIU",
+		notification: "new",
+		timeStamp: "1 Sept 2017, 8.00am",
+		destination: "West Bank",
+		travelFrom: "2/2/2017",
+		travelUntil: "31/3/2017",
 		travelType: "Site Survey",
 		justificationText:
 			"I would like to Experience the ka-cing ka-cing while experiencing the magnificent of Alain Ducasse Le Louis XV Dinner",
@@ -50,7 +78,7 @@ export default (state = initialState, action) => {
 		case "SET_TRAVEL_TYPE":
 			return [
 				Object.assign(...state, {
-					travelType: action.value
+					travelType: action.travelText
 				})
 			];
 
@@ -90,7 +118,12 @@ export default (state = initialState, action) => {
 					costCategory: action.value
 				})
 			];
-
+		case "SET_COST_CENTRE":
+			return [
+				Object.assign(...state, {
+					costCentre: action.costCentreText
+				})
+			];
 		case "ADD_NOMINATOR_NAME":
 			return [
 				Object.assign(...state, {

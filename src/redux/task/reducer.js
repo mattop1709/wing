@@ -1,6 +1,6 @@
 const initialState = [
 	{
-		ticketNumber: "1001",
+		id: "1001",
 		completed: true,
 		status: "Submit",
 		notification: "new",
@@ -43,6 +43,65 @@ const initialState = [
 				senderId: "2",
 				senderName: "Mohammad Hafiz bin Burhan",
 				commentText: "Get the boot, into the mommy house",
+				timeStamp: "14 September 2017, 4.17pm"
+			}
+		],
+		friends: [
+			{
+				ref: "1",
+				staffName: "Engku Fariez bin Engku Azahan",
+				staffDivision: "Group Strategy"
+			},
+			{
+				ref: "2",
+				staffName: "Ali Muhd Wasil bin Ali Absar",
+				staffDivision: "Group Brand & Communication"
+			}
+		]
+	},
+	{
+		id: "1002",
+		completed: true,
+		status: "Endorse",
+		notification: "new",
+		timeStamp: "11 Feb 2017, 7.25pm",
+		destination: "Monaco",
+		travelFrom: "11 Sept",
+		travelUntil: "17 Sept",
+		travelType: "Site Survey",
+		justificationText:
+			"I would like to Experience the ka-cing ka-cing while experiencing the magnificent of Alain Ducasse Le Louis XV Dinner",
+		requestorName: "Ali Muhd Wasil bin Ali Absar bin Al Amin",
+		requestorDivision: "Group Brand and Communication",
+		eeiuName: "Abu bin Awang",
+		eeiuApproved: false,
+		nominatorName: "Salam bin Awang",
+		nominatorApproved: false,
+		nominator2Name: "Check Check, Rock Rock",
+		nominator2Approved: true,
+		endorserName: "Mohammad Hafiz bin Burhan",
+		endorserApproved: false,
+		approverName: "Kabil bin Ali",
+		approverApproved: false,
+		cost: "12000",
+		budget: "34000",
+		costCategory: "EEIU",
+		costCentre: "BMCE02",
+		dialogBox: "Hi",
+		commentTextLatest: "Ali, What is your name?",
+		friendId1Name: "Mohammad Hafiz bin Burhan",
+		friendId1Division: "Group Digital Centre",
+		comments: [
+			{
+				senderId: "1",
+				senderName: "Ali Muhd Wasil bin Ali Absar",
+				commentText: "Hi Ho Lets Go",
+				timeStamp: "13 September 2017, 3.20pm"
+			},
+			{
+				senderId: "2",
+				senderName: "Mohammad Hafiz bin Burhan",
+				commentText: "TDNT",
 				timeStamp: "14 September 2017, 4.17pm"
 			}
 		],

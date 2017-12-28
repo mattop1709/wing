@@ -15,88 +15,219 @@ import NavigationBar from "react-native-navbar";
 import TrackingBar from "../Bar/TrackingBar";
 import RequestHeader from "../Bar/RequestHeader";
 
-// {
-// 	requestDetails.status === "eeiu" ? (
-// 		<View style={styles.eeiuTrackingBar}>
-// 			<Text>Pending EEIU Approval</Text>
-// 		</View>
-// 	) : (
-// 		<TrackingBar status={requestDetails.status} />
-// 	);
-// }
+const ProfileInfo = ({ staffName, staffDivision }) => (
+	<View
+		style={{
+			backgroundColor: "#ffffff",
+			paddingVertical: 16,
+			paddingHorizontal: 24,
+			marginBottom: 0.5,
+			borderRadius: 4
+		}}
+	>
+		<Text
+			style={{
+				paddingBottom: 4,
+				fontWeight: "bold"
+			}}
+		>
+			{staffName}
+		</Text>
+		<Text>{staffDivision}</Text>
+	</View>
+);
+
+function DateBox({ caption, date }) {
+	return (
+		<View style={{ flex: 0.4, backgroundColor: "orange" }}>
+			<View
+				style={{
+					backgroundColor: "#ee7202",
+					alignItems: "center"
+				}}
+			>
+				<Text style={{ fontSize: 12, paddingVertical: 8 }}>
+					{(value = caption)}
+				</Text>
+			</View>
+			<View style={{ paddingVertical: 24, alignItems: "center" }}>
+				<Text style={{ fontSize: 16 }}>{(value = date)}</Text>
+			</View>
+		</View>
+	);
+}
+
+function Box({ heading, name }) {
+	return (
+		<View
+			style={{
+				paddingBottom: 8,
+				marginBottom: 16,
+				borderBottomWidth: 0.5,
+				borderColor: "#dcdcdc"
+			}}
+		>
+			<Text style={{ fontSize: 12, paddingBottom: 8 }}>
+				{(value = heading)}
+			</Text>
+			<Text>{(value = name)}</Text>
+		</View>
+	);
+}
 
 class RequestStatus extends React.Component {
+	handlePressDelete(goBack) {
+		return Alert.alert("Delete Request", "Wish to delete your Request?", [
+			{
+				text: "No"
+			},
+			{
+				text: "Yes",
+				style: "destructive",
+				onPress: () => goBack()
+			}
+		]);
+	}
+	handlePressComment(navigate, requestDetails) {
+		navigate("Comments", {
+			commentId: `${requestDetails.id}`
+		});
+	}
+	renderDateBox(caption, date) {
+		return <DateBox caption={caption} date={date} />;
+	}
+	renderBox(heading, name) {
+		return <Box heading={heading} name={name} />;
+	}
 	render() {
 		const { navigate, goBack } = this.props.navigation;
 		const { requestDetails, friendsDetails, userDetails } = this.props;
+		const leftButtonConfig = {
+			title: "Back",
+			handler: () => goBack()
+		};
+		const statusTracking =
+			requestDetails.status === "EEIU" ? (
+				<View style={styles.eeiuTrackingBar}>
+					<Text>Pending EEIU Approval</Text>
+				</View>
+			) : (
+				<TrackingBar status={requestDetails.status} />
+			);
 		return (
-			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
+			<View style={{ flex: 1 }}>
 				<NavigationBar
-					style={{
-						borderColor: "#c4c4c4",
-						borderBottomWidth: 1,
-						marginBottom: 16
-					}}
+					style={styles.headerBar}
 					title={{ title: "Request Status" }}
-					leftButton={{
-						title: "Back",
-						handler: () => goBack()
-					}}
+					leftButton={leftButtonConfig}
 				/>
 
-				<ScrollView style={{ flex: 1, paddingHorizontal: 8 }}>
-					<RequestHeader requestDetails={requestDetails} />
-
-					<TravelDetails requestDetails={requestDetails} />
-
-					<ProfileDetails
-						requestDetails={requestDetails}
-						friendsDetails={friendsDetails}
-					/>
-
-					<CostDetails requestDetails={requestDetails} />
-
-					<TouchableOpacity
-						onPress={() =>
-							navigate("Comments", {
-								commentId: `${requestDetails.ticketNumber}`
-							})
-						}
-						style={styles.commentContainer}
+				<ScrollView style={{ flex: 1, paddingHorizontal: 16 }}>
+					<View
+						style={{ flexDirection: "row", justifyContent: "space-between" }}
 					>
-						<View style={{ justifyContent: "center" }}>
-							<Icon name="comment" size={32} color="#000000" />
+						<Text style={styles.headingText1}>DESCRIPTION</Text>
+						<View style={{ paddingVertical: 8 }}>
+							<TouchableOpacity onPress={() => this.handlePressDelete(goBack)}>
+								<Text style={{ fontSize: 12, color: "red" }}>DELETE</Text>
+							</TouchableOpacity>
 						</View>
-						<View style={{ paddingLeft: 8 }}>
-							<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>
-								{requestDetails.endorserName}
-							</Text>
-							<Text>{requestDetails.commentTextLatest}</Text>
-						</View>
-					</TouchableOpacity>
-
-					<TouchableOpacity
-						onPress={() =>
-							Alert.alert("Delete Request", "Wish to delete your Request?", [
-								{
-									text: "No"
-								},
-								{
-									text: "Yes",
-									style: "destructive",
-									onPress: () => goBack()
-								}
-							])
-						}
-						style={{
-							paddingVertical: 24,
-							alignItems: "center"
-						}}
-					>
-						<Text style={{ fontSize: 12, color: "#c4c4c4", color: "red" }}>
-							Delete This Request
+					</View>
+					<View style={styles.boxContainer}>
+						<Text
+							style={{ fontSize: 16, fontWeight: "bold", paddingBottom: 2 }}
+						>
+							{requestDetails.destination}
 						</Text>
-					</TouchableOpacity>
+						<Text style={{ fontSize: 16, paddingBottom: 2 }}>
+							{requestDetails.travelType}
+						</Text>
+						<Text style={styles.descriptionText}>
+							{requestDetails.justificationText}
+						</Text>
+						<View style={styles.dateBoxStyle}>
+							{this.renderDateBox(
+								(this.props.caption = "DEPARTURE"),
+								(this.props.date = requestDetails.travelFrom)
+							)}
+							{this.renderDateBox(
+								(this.props.caption = "ARRIVAL"),
+								(this.props.date = requestDetails.travelUntil)
+							)}
+						</View>
+					</View>
+					<Text style={styles.headingText}>STATUS</Text>
+					<View style={styles.boxContainer}>{statusTracking}</View>
+
+					<Text style={styles.headingText}>PROFILE</Text>
+					<View style={{ marginBottom: 8 }}>
+						<ProfileInfo
+							staffName={userDetails.name}
+							staffDivision={userDetails.division}
+						/>
+						<FlatList
+							data={friendsDetails}
+							keyExtractor={(item, index) => item.id}
+							renderItem={({ item }) => (
+								<ProfileInfo
+									id={item.id}
+									staffName={item.staffName}
+									staffDivision={item.staffDivision}
+								/>
+							)}
+						/>
+					</View>
+					<Text style={styles.headingText}>COSTING</Text>
+					<View style={styles.boxContainer}>
+						{this.renderBox(
+							(this.props.heading = "Cost"),
+							(this.props.name = requestDetails.cost)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Budget"),
+							(this.props.name = requestDetails.budget)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Cost Category"),
+							(this.props.name = requestDetails.costCategory)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Cost Centre"),
+							(this.props.name = requestDetails.costCentre)
+						)}
+					</View>
+					<Text style={styles.headingText}>APPROVERS</Text>
+					<View style={styles.boxContainer}>
+						{this.renderBox(
+							(this.props.heading = "Nominator 1"),
+							(this.props.name = requestDetails.nominatorName)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Nominator 2"),
+							(this.props.name = requestDetails.nominator2Name)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Endorser"),
+							(this.props.name = requestDetails.endorserName)
+						)}
+						{this.renderBox(
+							(this.props.heading = "Approver"),
+							(this.props.name = requestDetails.approverName)
+						)}
+					</View>
+					<Text style={styles.headingText}>COMMENTS</Text>
+					<View style={styles.boxContainer}>
+						<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>
+							{requestDetails.endorserName}
+						</Text>
+						<Text>{requestDetails.commentTextLatest}</Text>
+						<TouchableOpacity
+							style={{ alignItems: "center", paddingVertical: 8 }}
+							onPress={() => this.handlePressComment(navigate, requestDetails)}
+						>
+							<Text style={styles.headingText}>READ MORE</Text>
+						</TouchableOpacity>
+					</View>
 				</ScrollView>
 			</View>
 		);
@@ -105,155 +236,24 @@ class RequestStatus extends React.Component {
 
 export default RequestStatus;
 
-const TravelDetails = ({ requestDetails }) => (
-	<View
-		style={{
-			paddingHorizontal: 8,
-			paddingBottom: 40,
-			marginHorizontal: 8,
-			borderBottomWidth: 0.5,
-			borderColor: "#c4c4c4"
-		}}
-	>
-		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
-			Travel Details
-		</Text>
-		<Text style={{ fontSize: 16, paddingBottom: 24, fontWeight: "bold" }}>
-			{requestDetails.destination}
-		</Text>
-		<View
-			style={{
-				flexDirection: "row",
-				justifyContent: "space-between",
-				paddingBottom: 24
-			}}
-		>
-			<View>
-				<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
-					Departure
-				</Text>
-				<Text style={{ fontSize: 16, fontWeight: "bold" }}>
-					{requestDetails.travelFrom}
-				</Text>
-			</View>
-			<View>
-				<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
-					Arrival
-				</Text>
-				<Text style={{ fontSize: 16, fontWeight: "bold" }}>
-					{requestDetails.travelUntil}
-				</Text>
-			</View>
-		</View>
-		<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
-			Travel Type
-		</Text>
-		<Text style={{ fontSize: 16, paddingBottom: 24, fontWeight: "bold" }}>
-			{requestDetails.travelType}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
-			Justification
-		</Text>
-		<Text style={{ fontSize: 16, lineHeight: 24, fontWeight: "bold" }}>
-			{requestDetails.justificationText}
-		</Text>
-	</View>
-);
-
-const ProfileDetails = ({ friendsDetails, requestDetails }) => (
-	<View
-		style={{
-			paddingVertical: 40,
-			paddingHorizontal: 8,
-			borderBottomWidth: 0.3,
-			borderColor: "#c4c4c4",
-			marginHorizontal: 8
-		}}
-	>
-		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
-			Profile Details
-		</Text>
-		<Text style={{ fontSize: 16, paddingBottom: 4, fontWeight: "bold" }}>
-			{requestDetails.requestorName}
-		</Text>
-		<Text style={{ fontSize: 16, paddingBottom: 24 }}>
-			{requestDetails.requestorDivision}
-		</Text>
-		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
-			Other Travellers
-		</Text>
-		<FlatList
-			data={friendsDetails}
-			keyExtractor={(item, index) => item.id}
-			renderItem={({ item }) => (
-				<FriendList
-					id={item.id}
-					staffName={item.staffName}
-					staffDivision={item.staffDivision}
-				/>
-			)}
-		/>
-	</View>
-);
-
-const FriendList = ({ staffName, staffDivision }) => (
-	<View>
-		<Text
-			style={{
-				fontSize: 16,
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{staffName}
-		</Text>
-		<Text
-			style={{
-				fontSize: 16,
-				paddingBottom: 12
-			}}
-		>
-			{staffDivision}
-		</Text>
-	</View>
-);
-
-const CostDetails = ({ requestDetails }) => (
-	<View
-		style={{
-			flexDirection: "row",
-			paddingHorizontal: 8,
-			paddingVertical: 40,
-			marginHorizontal: 8,
-			justifyContent: "space-between",
-			borderBottomWidth: 0.5,
-			borderColor: "#c4c4c4"
-		}}
-	>
-		<View>
-			{requestDetails.costCategory ? (
-				<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
-					Budget {requestDetails.costCategory}
-				</Text>
-			) : (
-				<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
-					Budget {requestDetails.costCentre}
-				</Text>
-			)}
-			<Text style={{ fontSize: 16, fontWeight: "bold" }}>
-				RM{requestDetails.budget}
-			</Text>
-		</View>
-		<View>
-			<Text style={{ fontSize: 12, color: "#a9a9a9", paddingBottom: 8 }}>
-				Cost
-			</Text>
-			<Text style={{ fontSize: 16, fontWeight: "bold" }}>
-				RM{requestDetails.cost}
-			</Text>
-		</View>
-	</View>
-);
+// <TouchableOpacity
+// 	onPress={() =>
+// 		navigate("Comments", {
+// 			commentId: `${this.props.commentId}`
+// 		})
+// 	}
+// 	style={styles.commentContainer}
+// >
+// 	<View style={{ justifyContent: "center" }}>
+// 		<Icon name="comment" size={32} color="#000000" />
+// 	</View>
+// 	<View style={{ paddingLeft: 8 }}>
+// 		<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>
+// 			{requestDetails.endorserName}
+// 		</Text>
+// 		<Text>{requestDetails.commentTextLatest}</Text>
+// 	</View>
+// </TouchableOpacity>
 
 const styles = StyleSheet.create({
 	eeiuTrackingBar: {
@@ -266,16 +266,49 @@ const styles = StyleSheet.create({
 		paddingBottom: 16,
 		alignItems: "center"
 	},
-	requestDetailsBox: {
-		flex: 1,
-		flexDirection: "row",
-		paddingVertical: 24,
-		paddingHorizontal: 16
+	headerBar: {
+		borderColor: "#c4c4c4",
+		borderBottomWidth: 1
 	},
-	commentContainer: {
-		flex: 1,
+	// requestDetailsBox: {
+	// 	flex: 1,
+	// 	flexDirection: "row",
+	// 	paddingVertical: 24,
+	// 	paddingHorizontal: 16
+	// },
+	// commentContainer: {
+	// 	flex: 1,
+	// 	flexDirection: "row",
+	// 	paddingVertical: 24,
+	// 	paddingHorizontal: 16
+	// },
+	descriptionText: {
+		textAlign: "justify",
+		fontSize: 14,
+		paddingBottom: 16,
+		lineHeight: 22
+	},
+	headingText: {
+		fontSize: 12,
+		paddingBottom: 8,
+		paddingHorizontal: 8
+	},
+	headingText1: {
+		fontSize: 12,
+		paddingVertical: 8,
+		paddingHorizontal: 8
+	},
+	boxContainer: {
+		paddingHorizontal: 24,
+		paddingTop: 16,
+		paddingBottom: 8,
+		backgroundColor: "#ffffff",
+		borderRadius: 4,
+		marginBottom: 8
+	},
+	dateBoxStyle: {
 		flexDirection: "row",
-		paddingVertical: 24,
-		paddingHorizontal: 16
+		justifyContent: "center",
+		paddingBottom: 16
 	}
 });

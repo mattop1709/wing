@@ -36,10 +36,10 @@ export const setDestination = destinationText => {
 	};
 };
 
-export const setTravelType = value => {
+export const setTravelType = travelText => {
 	return {
 		type: "SET_TRAVEL_TYPE",
-		value
+		travelText
 	};
 };
 
@@ -68,6 +68,13 @@ export const setCostCategory = value => {
 	return {
 		type: "SET_COST_CATEGORY",
 		value
+	};
+};
+
+export const setCostCentre = costCentreText => {
+	return {
+		type: "SET_COST_CENTRE",
+		costCentreText
 	};
 };
 

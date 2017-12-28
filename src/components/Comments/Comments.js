@@ -14,6 +14,37 @@ import Send from "react-native-vector-icons/MaterialIcons";
 import NavigationBar from "react-native-navbar";
 import moment from "moment";
 
+const ChatInfo = ({ requestDetails }) => (
+	<View style={styles.travelDetailsContainer}>
+		<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
+			{requestDetails.destination}
+		</Text>
+		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
+			{requestDetails.travelFrom} until {requestDetails.travelUntil}
+		</Text>
+	</View>
+);
+
+const ChatSingle = ({ id, senderName, commentText, timeStamp }) => (
+	<View
+		style={{
+			paddingHorizontal: 16,
+			paddingVertical: 16,
+			borderBottomWidth: 1,
+			borderColor: "#f9f9f9",
+			marginHorizontal: 8
+		}}
+	>
+		<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>{senderName}</Text>
+		<Text style={{ paddingBottom: 4, lineHeight: 24 }}>{commentText}</Text>
+		<Text style={{ fontSize: 12, color: "#c4c4c4" }}>
+			{moment(timeStamp)
+				.startOf("minute")
+				.fromNow()}
+		</Text>
+	</View>
+);
+
 class Comments extends React.Component {
 	constructor(props) {
 		super(props);
@@ -27,18 +58,16 @@ class Comments extends React.Component {
 		const { goBack } = this.props.navigation;
 		const { requestDetails, commentDetails } = this.props;
 		const { name } = this.props.userDetails;
+		const leftButtonConfig = {
+			title: "Back",
+			handler: () => goBack()
+		};
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
 				<NavigationBar
-					style={{
-						borderColor: "#c4c4c4",
-						borderBottomWidth: 1
-					}}
+					style={styles.headerBar}
 					title={{ title: "Comments" }}
-					leftButton={{
-						title: "Back",
-						handler: () => goBack()
-					}}
+					leftButton={leftButtonConfig}
 				/>
 
 				<ChatInfo requestDetails={requestDetails} />
@@ -92,37 +121,6 @@ class Comments extends React.Component {
 
 export default Comments;
 
-const ChatSingle = ({ id, senderName, commentText, timeStamp }) => (
-	<View
-		style={{
-			paddingHorizontal: 16,
-			paddingVertical: 16,
-			borderBottomWidth: 1,
-			borderColor: "#f9f9f9",
-			marginHorizontal: 8
-		}}
-	>
-		<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>{senderName}</Text>
-		<Text style={{ paddingBottom: 4, lineHeight: 24 }}>{commentText}</Text>
-		<Text style={{ fontSize: 12, color: "#c4c4c4" }}>
-			{moment(timeStamp)
-				.startOf("minute")
-				.fromNow()}
-		</Text>
-	</View>
-);
-
-const ChatInfo = ({ requestDetails }) => (
-	<View style={styles.travelDetailsContainer}>
-		<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
-			{requestDetails.destination}
-		</Text>
-		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
-			{requestDetails.travelFrom} until {requestDetails.travelUntil}
-		</Text>
-	</View>
-);
-
 const styles = StyleSheet.create({
 	travelDetailsContainer: {
 		marginHorizontal: 8,
@@ -141,6 +139,10 @@ const styles = StyleSheet.create({
 	textInputBox: {
 		flex: 0.9,
 		marginBottom: 8
+	},
+	headerBar: {
+		borderColor: "#c4c4c4",
+		borderBottomWidth: 1
 	}
 });
 

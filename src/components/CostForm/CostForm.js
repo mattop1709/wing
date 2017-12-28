@@ -14,22 +14,46 @@ import { Dropdown } from "react-native-material-dropdown";
 import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 
+import FormBar from "../Bar/FormBar";
+
 class CostForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			data: "",
-			costValue: "",
-			budgetValue: ""
+			costText: "",
+			budgetText: ""
 		};
 	}
 	handleCost(costValue) {
-		this.setState({ costValue: costValue });
+		this.setState({ costText: costValue });
 		this.props.setCostValue(costValue);
 	}
 	handleBudget(budgetValue) {
-		this.setState({ budgetValue: budgetValue });
+		this.setState({ budgetText: budgetValue });
 		this.props.setBudgetValue(budgetValue);
+	}
+	handleCostCentre(costCentreText) {
+		this.setState({ costCentreText: costCentreText });
+		this.props.setCostCentre(costCentreText);
+	}
+	handlePress(navigate, state, goBack) {
+		if (state.params.edit !== true) {
+			Alert.alert("Confirm to Exit?", "Request will be saved as Draft", [
+				{
+					text: "No",
+					style: "destructive"
+				},
+				{
+					text: "Yes",
+					onPress: () => navigate("Home"),
+					style: "default"
+				}
+			]);
+		} else
+			navigateTo = navigate("SubmitForm", {
+				formDraftId: `${this.props.requestDetails.id}`
+			});
 	}
 	render() {
 		const { navigate, state, goBack } = this.props.navigation;
@@ -50,123 +74,60 @@ class CostForm extends React.Component {
 		const costCentreEdit = state.params.edit
 			? `${requestDetails.costCentre}`
 			: null;
+		const status = state.params.edit == true ? "Back" : "Exit";
+		const leftButtonConfig = {
+			title: [status],
+			handler: () => {
+				this.handlePress(navigate, state, goBack);
+			}
+		};
 		return (
-			<KeyboardAvoidingView
-				behavior="padding"
-				style={{ flex: 1, backgroundColor: "#ffffff" }}
-			>
-				{state.params.edit == true ? (
-					<NavigationBar
-						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
-						title={{ title: "New Request" }}
-						leftButton={{
-							title: "Back",
-							handler: () =>
-								navigate("SubmitForm", { formDraftId: `${requestDetails.id}` })
-						}}
-					/>
-				) : (
-					<NavigationBar
-						style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
-						title={{ title: "New Request" }}
-						leftButton={{
-							title: "Exit",
-							handler: () =>
-								Alert.alert(
-									"Confirm to Exit?",
-									"Request will be saved as Draft",
-									[
-										{
-											text: "No",
-											style: "destructive"
-										},
-										{
-											text: "Yes",
-											onPress: () => navigate("Request"),
-											style: "default"
-										}
-									]
-								)
-						}}
-					/>
-				)}
-				{state.params.edit == true ? null : (
-					<View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
-						<Text style={{ fontSize: 14, fontWeight: "bold" }}>
-							Step 3: Cost Information
-						</Text>
-					</View>
-				)}
-				<FormBar />
+			<KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+				<NavigationBar
+					style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}
+					title={{ title: "New Request" }}
+					leftButton={leftButtonConfig}
+				/>
 
 				<ScrollView style={{ flex: 1 }}>
-					<View
-						style={{ paddingHorizontal: 16, paddingBottom: 16, paddingTop: 24 }}
-					>
-						<Text style={{ fontSize: 12, paddingBottom: 16 }}>Cost</Text>
-						<View
-							style={{
-								flexDirection: "row",
-								borderColor: "#c4c4c4",
-								borderBottomWidth: 1
-							}}
-						>
-							<View style={{ justifyContent: "center" }}>
-								<Text style={{ fontSize: 16, paddingBottom: 8 }}>RM</Text>
+					<FormBar />
+					<View style={styles.bodyContainer}>
+						<View style={{ paddingBottom: 24 }}>
+							<Text style={styles.textStyle}>Cost</Text>
+							<View style={styles.textInputBox}>
+								<View style={{ justifyContent: "center" }}>
+									<Text style={styles.textStyle}>RM</Text>
+								</View>
+								<TextInput
+									style={styles.textInputStyle}
+									value={costEdit}
+									placeholder="State your cost.."
+									onChangeText={costValue => this.handleCost(costValue)}
+									clearButtonMode="always"
+									underlineColorAndroid="rgba(0,0,0,0)"
+									keyboardType="numeric"
+								/>
 							</View>
-							<TextInput
-								style={{
-									flex: 1,
-									fontSize: 16,
-									paddingLeft: 8,
-									paddingBottom: 8,
-									alignItems: "flex-end",
-									justifyContent: "center"
-								}}
-								value={costEdit}
-								placeholder="State your cost.."
-								onChangeText={costValue => this.handleCost(costValue)}
-								clearButtonMode="always"
-								underlineColorAndroid="rgba(0,0,0,0)"
-								keyboardType="numeric"
-							/>
 						</View>
-					</View>
-					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-						<Text style={{ fontSize: 12, paddingVertical: 16 }}>Budget</Text>
-						<View
-							style={{
-								flexDirection: "row",
-								borderColor: "#c4c4c4",
-								borderBottomWidth: 1
-							}}
-						>
-							<View style={{ justifyContent: "center" }}>
-								<Text style={{ fontSize: 16, paddingBottom: 8 }}>RM</Text>
+						<View style={{ paddingBottom: 24 }}>
+							<Text style={styles.textStyle}>Budget</Text>
+							<View style={styles.textInputBox}>
+								<View style={{ justifyContent: "center" }}>
+									<Text style={styles.textStyle}>RM</Text>
+								</View>
+								<TextInput
+									style={styles.textInputStyle}
+									value={budgetEdit}
+									placeholder="State your budget.."
+									onChangeText={budgetValue => this.handleBudget(budgetValue)}
+									clearButtonMode="always"
+									underlineColorAndroid="rgba(0,0,0,0)"
+									keyboardType="numeric"
+								/>
 							</View>
-							<TextInput
-								style={{
-									flex: 1,
-									fontSize: 16,
-									paddingBottom: 8,
-									paddingLeft: 8,
-									alignItems: "flex-end"
-								}}
-								value={budgetEdit}
-								placeholder="State your budget.."
-								onChangeText={budgetValue => this.handleBudget(budgetValue)}
-								clearButtonMode="always"
-								underlineColorAndroid="rgba(0,0,0,0)"
-								keyboardType="numeric"
-							/>
 						</View>
-					</View>
-
-					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-						<Text style={{ fontSize: 12, paddingVertical: 16 }}>
-							Cost Category
-						</Text>
-						<View style={{ borderColor: "#c4c4c4" }}>
+						<View style={{ paddingBottom: 24 }}>
+							<Text style={styles.textStyle}>Cost Category</Text>
 							<Dropdown
 								value={costCategoryEdit}
 								placeholder="e.g. TM Sponsorship"
@@ -175,147 +136,71 @@ class CostForm extends React.Component {
 								data={data}
 								onChangeText={value => this.props.setCostCategory(value)}
 							/>
-							{this.state.data === "Sponsorship (EEIU)" && (
-								<Text style={{ fontSize: 12, color: "red" }}>
-									Required EEIU Approval
-								</Text>
-							)}
 						</View>
-					</View>
-
-					<View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-						<Text style={{ fontSize: 12, paddingVertical: 16 }}>
-							Cost Centre
-						</Text>
-						<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
-							<TextInput
-								style={{
-									fontSize: 16,
-									paddingBottom: 8,
-									alignItems: "flex-end"
-								}}
-								value={costCentreEdit}
-								placeholder="e.g. BMCE02"
-								clearButtonMode="always"
-								underlineColorAndroid="rgba(0,0,0,0)"
-							/>
+						<View style={{ paddingBottom: 24 }}>
+							<Text style={styles.textStyle}>Cost Centre</Text>
+							<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
+								<TextInput
+									style={styles.textInputStyle}
+									value={costCentreEdit}
+									placeholder="e.g. BMCE02"
+									onChangeText={costCentreText =>
+										this.handleCostCentre(costCentreText)
+									}
+									clearButtonMode="always"
+									underlineColorAndroid="rgba(0,0,0,0)"
+								/>
+							</View>
 						</View>
 					</View>
 				</ScrollView>
-
 				{state.params.edit == true ? null : (
-					<View
-						style={{
-							flexDirection: "row",
-							paddingVertical: 4,
-							justifyContent: "center"
-						}}
+					<TouchableOpacity
+						onPress={() => navigate("ApprovalForm", { edit: false })}
+						style={styles.nextButton}
 					>
-						<TouchableOpacity
-							onPress={() => goBack()}
-							style={{
-								alignItems: "center",
-								marginRight: 16,
-								borderRadius: 100
-							}}
-						>
-							<Icon name="chevron-left" size={32} color="#000000" />
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() => navigate("ApprovalForm", { edit: false })}
-							style={{
-								alignItems: "center",
-								borderRadius: 100
-							}}
-						>
-							<Icon name="chevron-right" size={32} color="#000000" />
-						</TouchableOpacity>
-					</View>
+						<Text>NEXT</Text>
+					</TouchableOpacity>
 				)}
 			</KeyboardAvoidingView>
 		);
 	}
 }
 
-export default CostForm;
+const styles = StyleSheet.create({
+	bodyContainer: {
+		backgroundColor: "#ffffff",
+		padding: 16,
+		marginHorizontal: 16,
+		marginTop: 16,
+		borderRadius: 4
+	},
+	textInputBox: {
+		flexDirection: "row",
+		borderColor: "#c4c4c4",
+		borderBottomWidth: 1
+	},
+	textInputStyle: {
+		flex: 1,
+		fontSize: 16,
+		paddingLeft: 8,
+		paddingBottom: 8,
+		alignItems: "flex-end",
+		justifyContent: "center"
+	},
+	nextButton: {
+		backgroundColor: "#ee7202",
+		justifyContent: "center",
+		flexDirection: "row",
+		padding: 16,
+		marginHorizontal: 16,
+		marginVertical: 16,
+		borderRadius: 100
+	},
+	textStyle: {
+		fontSize: 12,
+		paddingBottom: 8
+	}
+});
 
-const FormBar = () => (
-	<View
-		style={{
-			flexDirection: "row",
-			justifyContent: "space-around",
-			paddingTop: 8,
-			borderTopWidth: 1,
-			borderBottomWidth: 1,
-			borderColor: "#c4c4c4"
-		}}
-	>
-		<View
-			style={{
-				flexDirection: "row",
-				paddingBottom: 4,
-				flex: 0.2,
-				justifyContent: "center"
-			}}
-		>
-			<View style={{ justifyContent: "center", paddingHorizontal: 2 }}>
-				<Icon name="user" size={24} color="#000000" />
-			</View>
-			<View style={{ justifyContent: "center" }}>
-				<Text style={{ fontSize: 12 }}>One</Text>
-			</View>
-		</View>
-		<View
-			style={{
-				flexDirection: "row",
-				paddingBottom: 4,
-				flex: 0.2,
-				justifyContent: "center"
-			}}
-		>
-			<View style={{ justifyContent: "center", paddingHorizontal: 2 }}>
-				<Icon name="location" size={24} color="#000000" />
-			</View>
-			<View style={{ justifyContent: "center" }}>
-				<Text style={{ fontSize: 12 }}>Two</Text>
-			</View>
-		</View>
-		<View
-			style={{
-				flexDirection: "row",
-				paddingBottom: 4,
-				flex: 0.2,
-				justifyContent: "center",
-				borderBottomWidth: 2,
-				borderColor: "#f27178"
-			}}
-		>
-			<View
-				style={{
-					justifyContent: "center",
-					paddingHorizontal: 2
-				}}
-			>
-				<Icon name="credit-card" size={24} color="#f27178" />
-			</View>
-			<View style={{ justifyContent: "center" }}>
-				<Text style={{ fontSize: 12, color: "#f27178" }}>Three</Text>
-			</View>
-		</View>
-		<View
-			style={{
-				flexDirection: "row",
-				paddingBottom: 4,
-				flex: 0.2,
-				justifyContent: "center"
-			}}
-		>
-			<View style={{ justifyContent: "center", paddingHorizontal: 2 }}>
-				<Icon name="check" size={24} color="#000000" />
-			</View>
-			<View style={{ justifyContent: "center" }}>
-				<Text style={{ fontSize: 12 }}>Four</Text>
-			</View>
-		</View>
-	</View>
-);
+export default CostForm;

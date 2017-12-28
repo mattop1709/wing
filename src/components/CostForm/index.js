@@ -4,7 +4,8 @@ import CostForm from "./CostForm";
 import {
 	setCostValue,
 	setBudgetValue,
-	setCostCategory
+	setCostCategory,
+	setCostCentre
 } from "../../redux/request/action";
 
 const mapStateToProps = state => {
@@ -26,6 +27,10 @@ const mapDispatchToProps = dispatch => {
 		setCostCategory: value => {
 			dispatch(setCostCategory(value));
 			console.log(value);
+		},
+		setCostCentre: costCentreText => {
+			dispatch(setCostCentre(costCentreText));
+			console.log(costCentreText);
 		}
 	};
 };
