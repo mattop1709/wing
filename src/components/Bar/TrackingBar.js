@@ -18,8 +18,8 @@ class TrackingBar extends React.Component {
 				>
 					{status === "Submit" ||
 					status === "Nominate" ||
-					status === "Endorsement" ||
-					status === "Approval" ? (
+					status === "Endorse" ||
+					status === "Approve" ? (
 						<Check
 							name="check-circle"
 							size={24}
@@ -37,8 +37,8 @@ class TrackingBar extends React.Component {
 
 					<View style={{ flex: 0.25 }}>
 						{status === "Nominate" ||
-						status === "Endorsement" ||
-						status === "Approval" ? (
+						status === "Endorse" ||
+						status === "Approve" ? (
 							<View
 								style={{
 									alignItems: "center",
@@ -66,8 +66,8 @@ class TrackingBar extends React.Component {
 					</View>
 
 					{status === "Nominate" ||
-					status === "Endorsement" ||
-					status === "Approval" ? (
+					status === "Endorse" ||
+					status === "Approve" ? (
 						<Check
 							name="check-circle"
 							size={24}
@@ -84,7 +84,7 @@ class TrackingBar extends React.Component {
 					)}
 
 					<View style={{ flex: 0.25 }}>
-						{status === "Endorsement" || status === "Approval" ? (
+						{status === "Endorse" || status === "Approve" ? (
 							<View
 								style={{
 									alignItems: "center",
@@ -111,7 +111,7 @@ class TrackingBar extends React.Component {
 						/>
 					</View>
 
-					{status === "Endorsement" || status === "Approval" ? (
+					{status === "Endorse" || status === "Approve" ? (
 						<Check
 							name="check-circle"
 							size={24}
@@ -128,7 +128,7 @@ class TrackingBar extends React.Component {
 					)}
 
 					<View style={{ flex: 0.25 }}>
-						{status === "Approval" ? (
+						{status === "Approve" ? (
 							<View
 								style={{
 									alignItems: "center",
@@ -155,7 +155,7 @@ class TrackingBar extends React.Component {
 						/>
 					</View>
 
-					{status === "Approval" ? (
+					{status === "Approve" ? (
 						<Check
 							name="check-circle"
 							size={24}
@@ -181,25 +181,25 @@ class TrackingBar extends React.Component {
 				>
 					{status === "Submit" ||
 					status === "Nominate" ||
-					status === "Endorsement" ||
-					status === "Approval" ? (
+					status === "Endorse" ||
+					status === "Approve" ? (
 						<Text style={{ fontSize: 10, color: "green" }}>Submission</Text>
 					) : (
 						<Text style={{ fontSize: 10, color: "grey" }}>Submission</Text>
 					)}
 					{status === "Nominate" ||
-					status === "Endorsement" ||
-					status === "Approval" ? (
+					status === "Endorse" ||
+					status === "Approve" ? (
 						<Text style={{ fontSize: 10, color: "green" }}>Nomination</Text>
 					) : (
 						<Text style={{ fontSize: 10, color: "grey" }}>Nomination</Text>
 					)}
-					{status === "Endorsement" || status === "Approval" ? (
+					{status === "Endorse" || status === "Approve" ? (
 						<Text style={{ fontSize: 10, color: "green" }}>Endorsement</Text>
 					) : (
 						<Text style={{ fontSize: 10, color: "grey" }}>Endorsement</Text>
 					)}
-					{status === "Approval" ? (
+					{status === "Approve" ? (
 						<Text style={{ fontSize: 10, color: "green" }}>Approval</Text>
 					) : (
 						<Text style={{ fontSize: 10, color: "grey" }}>Approval</Text>

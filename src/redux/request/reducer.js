@@ -2,7 +2,7 @@ const initialState = [
 	{
 		id: "1001",
 		completed: true,
-		status: "Approve",
+		status: "EEIU",
 		notification: "new",
 		timeStamp: "1 Jan 2017, 8.00am",
 		destination: "Singapore",

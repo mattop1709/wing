@@ -152,6 +152,7 @@ class Task extends React.Component {
 								travelUntil={item.travelUntil}
 								cost={item.cost}
 								notification={item.notification}
+								status={item.status}
 							/>
 						)}
 					/>

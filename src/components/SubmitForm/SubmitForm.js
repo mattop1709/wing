@@ -110,9 +110,7 @@ class SubmitForm extends React.Component {
 			{
 				text: "Yes",
 				onPress: () => {
-					navigate("Request"),
-						this.props.submitRequest(),
-						this.props.userSubmit();
+					navigate("Request"), this.props.submitRequest();
 				},
 				style: "default"
 			}
