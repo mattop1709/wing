@@ -100,25 +100,32 @@ const CalltoAction = ({
 	</View>
 );
 
-const ProfileInfo = ({ staffName, staffDivision }) => (
+const ProfileInfo = ({ staffName, staffDivision, thumbnail }) => (
 	<View
 		style={{
 			backgroundColor: "#ffffff",
+			flexDirection: "row",
 			paddingVertical: 16,
 			paddingHorizontal: 24,
 			marginBottom: 0.5,
 			borderRadius: 4
 		}}
 	>
-		<Text
-			style={{
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{staffName}
-		</Text>
-		<Text>{staffDivision}</Text>
+		<View style={{ justifyContent: "center", paddingRight: 16 }}>
+			<Icon name={thumbnail} size={32} color="#000000" />
+		</View>
+		<View style={{ flex: 1 }}>
+			<Text
+				style={{
+					paddingBottom: 4,
+					fontWeight: "bold"
+				}}
+			>
+				{staffName}
+			</Text>
+
+			<Text>{staffDivision}</Text>
+		</View>
 	</View>
 );
 
@@ -276,8 +283,9 @@ class TaskStatus extends React.Component {
 					<Text style={styles.headingText}>PROFILE</Text>
 					<View style={{ marginBottom: 8 }}>
 						<ProfileInfo
-							staffName={userDetails.name}
-							staffDivision={userDetails.division}
+							staffName={taskDetails.requestorName}
+							staffDivision={taskDetails.requestorDivision}
+							thumbnail="user"
 						/>
 						<FlatList
 							data={friendsDetails}
@@ -287,6 +295,7 @@ class TaskStatus extends React.Component {
 									id={item.id}
 									staffName={item.staffName}
 									staffDivision={item.staffDivision}
+									thumbnail="plus"
 								/>
 							)}
 						/>

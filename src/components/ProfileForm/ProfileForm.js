@@ -100,7 +100,7 @@ class ProfileForm extends React.Component {
 		const status = state.params.edit == true ? "Back" : "Exit";
 		const caption = friendsInformation == "" ? null : "OTHER STAFF";
 		const leftButtonConfig = {
-			title: [status],
+			title: status,
 			handler: () => {
 				this.handlePress(navigate, state, goBack);
 			}
@@ -114,7 +114,7 @@ class ProfileForm extends React.Component {
 				/>
 
 				<ScrollView style={{ flex: 1 }}>
-					<FormBar />
+					<FormBar profile={true} />
 					<View style={styles.userCardStyle}>
 						<View style={{ justifyContent: "center" }}>
 							<Icon name="user" size={50} color="#000000" />

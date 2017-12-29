@@ -118,7 +118,7 @@ class TravelForm extends React.Component {
 			: null;
 		const status = state.params.edit == true ? "Back" : "Exit";
 		const leftButtonConfig = {
-			title: [status],
+			title: status,
 			handler: () => {
 				this.handlePress(navigate, state, goBack);
 			}
@@ -140,13 +140,13 @@ class TravelForm extends React.Component {
 					leftButton={leftButtonConfig}
 				/>
 				<ScrollView style={{ flex: 1 }}>
-					<FormBar />
+					<FormBar travel={true} />
 					<View style={styles.bodyContainer}>
 						<Text style={styles.textStyle}>Destination</Text>
 						<View style={styles.textInputBox}>
 							<TextInput
 								style={styles.textInputStyle}
-								value={destinationEdit}
+								data={destinationEdit}
 								placeholder="e.g. Jakarta, Indonesia"
 								underlineColorAndroid={"transparent"}
 								onChangeText={destinationText =>
@@ -158,7 +158,7 @@ class TravelForm extends React.Component {
 						<View style={styles.textInputBox}>
 							<TextInput
 								style={styles.textInputStyle}
-								value={travelTypeEdit}
+								data={travelTypeEdit}
 								placeholder="e.g. UI/ UX Conference"
 								underlineColorAndroid={"transparent"}
 								onChangeText={travelText => this.handleTravelType(travelText)}
@@ -185,7 +185,7 @@ class TravelForm extends React.Component {
 						<View style={{ paddingBottom: 8 }}>
 							<Text style={styles.textStyle}>Justification</Text>
 							<TextInput
-								value={justificationTextEdit}
+								data={justificationTextEdit}
 								placeholder={this.state.justificationText}
 								multiline={true}
 								underlineColorAndroid={"transparent"}

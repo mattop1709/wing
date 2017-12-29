@@ -15,25 +15,32 @@ import NavigationBar from "react-native-navbar";
 import TrackingBar from "../Bar/TrackingBar";
 import RequestHeader from "../Bar/RequestHeader";
 
-const ProfileInfo = ({ staffName, staffDivision }) => (
+const ProfileInfo = ({ staffName, staffDivision, thumbnail }) => (
 	<View
 		style={{
 			backgroundColor: "#ffffff",
+			flexDirection: "row",
 			paddingVertical: 16,
 			paddingHorizontal: 24,
 			marginBottom: 0.5,
 			borderRadius: 4
 		}}
 	>
-		<Text
-			style={{
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{staffName}
-		</Text>
-		<Text>{staffDivision}</Text>
+		<View style={{ justifyContent: "center", paddingRight: 16 }}>
+			<Icon name={thumbnail} size={32} color="#000000" />
+		</View>
+		<View style={{ flex: 1 }}>
+			<Text
+				style={{
+					paddingBottom: 4,
+					fontWeight: "bold"
+				}}
+			>
+				{staffName}
+			</Text>
+
+			<Text>{staffDivision}</Text>
+		</View>
 	</View>
 );
 
@@ -164,6 +171,7 @@ class RequestStatus extends React.Component {
 						<ProfileInfo
 							staffName={userDetails.name}
 							staffDivision={userDetails.division}
+							thumbnail="user"
 						/>
 						<FlatList
 							data={friendsDetails}
@@ -173,6 +181,7 @@ class RequestStatus extends React.Component {
 									id={item.id}
 									staffName={item.staffName}
 									staffDivision={item.staffDivision}
+									thumbnail="plus"
 								/>
 							)}
 						/>

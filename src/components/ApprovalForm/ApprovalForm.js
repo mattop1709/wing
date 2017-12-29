@@ -37,7 +37,7 @@ class ApprovalForm extends React.Component {
 			]);
 		} else
 			navigateTo = navigate("SubmitForm", {
-				formDraftId: `${this.props.requestDetails.id}`
+				formDraftId: `${this.props.approverDetails.id}`
 			});
 	}
 	render() {
@@ -71,7 +71,7 @@ class ApprovalForm extends React.Component {
 		];
 		const status = state.params.edit == true ? "Back" : "Exit";
 		const leftButtonConfig = {
-			title: [status],
+			title: status,
 			handler: () => {
 				this.handlePress(navigate, state, goBack);
 			}
@@ -99,7 +99,7 @@ class ApprovalForm extends React.Component {
 				/>
 
 				<ScrollView style={{ flex: 1 }}>
-					<FormBar />
+					<FormBar approver={true} />
 					<View style={styles.bodyContainer}>
 						<Text style={styles.textStyle}>Your Designation</Text>
 						<View style={{ borderColor: "#c4c4c4" }}>

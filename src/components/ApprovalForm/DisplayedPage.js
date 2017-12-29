@@ -86,7 +86,7 @@ const DisplayedPage = ({ navigate, page, approverDetails }) => {
 				<TouchableOpacity
 					onPress={() => navigate(screen, { nominator1: true })}
 				>
-					<Text style={{ fontSize: 12, paddingVertical: 20, color: "#f44242" }}>
+					<Text style={{ fontSize: 12, paddingVertical: 20 }}>
 						+ Add Nominator 1 ({nominator1Name})
 					</Text>
 				</TouchableOpacity>
@@ -102,7 +102,7 @@ const DisplayedPage = ({ navigate, page, approverDetails }) => {
 				<TouchableOpacity
 					onPress={() => navigate(screen, { nominator2: true })}
 				>
-					<Text style={{ fontSize: 12, paddingVertical: 20, color: "#f44242" }}>
+					<Text style={{ fontSize: 12, paddingVertical: 20 }}>
 						+ Add Nominator 2 ({nominator2Name})
 					</Text>
 				</TouchableOpacity>
@@ -116,7 +116,7 @@ const DisplayedPage = ({ navigate, page, approverDetails }) => {
 
 			<View style={{ paddingBottom: 16 }}>
 				<TouchableOpacity onPress={() => navigate(screen, { endorser: true })}>
-					<Text style={{ fontSize: 12, paddingVertical: 20, color: "#f44242" }}>
+					<Text style={{ fontSize: 12, paddingVertical: 20 }}>
 						+ Add Endorser ({endorserName})
 					</Text>
 				</TouchableOpacity>
@@ -130,7 +130,7 @@ const DisplayedPage = ({ navigate, page, approverDetails }) => {
 
 			<View style={{ paddingBottom: 16 }}>
 				<TouchableOpacity onPress={() => navigate(screen, { approver: true })}>
-					<Text style={{ fontSize: 12, paddingVertical: 20, color: "#f44242" }}>
+					<Text style={{ fontSize: 12, paddingVertical: 20 }}>
 						+ Add Approver ({approverName})
 					</Text>
 				</TouchableOpacity>

@@ -12,6 +12,18 @@ import {
 import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import Send from "react-native-vector-icons/MaterialIcons";
 import NavigationBar from "react-native-navbar";
+import moment from "moment";
+
+const ChatInfo = ({ taskInfo }) => (
+	<View style={styles.travelDetailsContainer}>
+		<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
+			{taskInfo.destination}
+		</Text>
+		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
+			{taskInfo.travelFrom} until {taskInfo.travelUntil}
+		</Text>
+	</View>
+);
 
 const ChatSingle = ({ id, senderName, commentText, timeStamp }) => (
 	<View
@@ -25,17 +37,10 @@ const ChatSingle = ({ id, senderName, commentText, timeStamp }) => (
 	>
 		<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>{senderName}</Text>
 		<Text style={{ paddingBottom: 4, lineHeight: 24 }}>{commentText}</Text>
-		<Text style={{ fontSize: 12, color: "#c4c4c4" }}>{timeStamp}</Text>
-	</View>
-);
-
-const ChatInfo = ({ taskInfo }) => (
-	<View style={styles.travelDetailsContainer}>
-		<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
-			{taskInfo.destination}
-		</Text>
-		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
-			{taskInfo.travelFrom} until {taskInfo.travelUntil}
+		<Text style={{ fontSize: 12, color: "#c4c4c4" }}>
+			{moment(timeStamp)
+				.startOf("minute")
+				.fromNow()}
 		</Text>
 	</View>
 );
@@ -43,9 +48,12 @@ const ChatInfo = ({ taskInfo }) => (
 class CommentsTask extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { height: "" };
+		this.state = { height: "", texts: "" };
+		this._handlePress = this._handlePress.bind(this);
 	}
-
+	_handlePress(comments) {
+		this.setState({ comments: texts });
+	}
 	render() {
 		const { goBack } = this.props.navigation;
 		const { taskInfo, commentDetails } = this.props;
@@ -84,22 +92,22 @@ class CommentsTask extends React.Component {
 				>
 					<View style={styles.textInputBox}>
 						<TextInput
-							style={{
-								padding: 8,
-								fontSize: 14,
-								height: Math.max(35, this.state.height),
-								underlineColorAndroid: "transparent"
-							}}
 							placeholder="Type your comment here.."
 							underlineColorAndroid="rgba(0,0,0,0)"
 							multiline={true}
+							onChangeText={comments => this._handlePress(comments)}
 							onContentSizeChange={event => {
 								this.setState({ height: event.nativeEvent.contentSize.height });
+							}}
+							style={{
+								padding: 8,
+								fontSize: 14,
+								height: Math.max(35, this.state.height)
 							}}
 						/>
 					</View>
 					<View style={{ justifyContent: "center", marginBottom: 8 }}>
-						<TouchableOpacity onPress={() => null}>
+						<TouchableOpacity onPress={() => this.props.addComment()}>
 							<Send name="send" size={24} color="#000000" />
 						</TouchableOpacity>
 					</View>

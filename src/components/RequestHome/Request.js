@@ -15,24 +15,30 @@ import Circle from "react-native-vector-icons/FontAwesome";
 
 import HomeHeader from "../Bar/HomeHeader";
 
-// const RequestEmpty = (
-// 	<View
-// 		style={{
-// 			flex: 1,
-// 			justifyContent: "center",
-// 			alignItems: "center"
-// 		}}
-// 	>
-// 		<Text style={{ fontWeight: "bold" }}>Let us start!</Text>
-// 		<Text>Click on the Action Button to Start!</Text>
-// 	</View>
-// );
+const RequestEmpty = (
+	<View
+		style={{
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center"
+		}}
+	>
+		<Text style={{ fontWeight: "bold" }}>Let us start!</Text>
+		<Text>Click on the Action Button to Start!</Text>
+	</View>
+);
 
-function Texts({ text, size, type, gap }) {
+function Heading({ text, size, type, gap }) {
 	return (
-		<Text style={{ paddingBottom: gap, fontSize: size, fontWeight: type }}>
+		<Text style={{ paddingBottom: gap, fontSize: size, fontWeight: "bold" }}>
 			{(value = text)}
 		</Text>
+	);
+}
+
+function Texts({ text, size, gap }) {
+	return (
+		<Text style={{ paddingBottom: gap, fontSize: size }}>{(value = text)}</Text>
 	);
 }
 
@@ -68,6 +74,9 @@ class CardSingle extends React.Component {
 	}
 	renderText(text, size, type, gap) {
 		return <Texts text={text} size={size} type={type} gap={gap} />;
+	}
+	renderHeading(text, size, gap) {
+		return <Heading text={text} size={size} gap={gap} />;
 	}
 	renderIcon(caption, thumbnail) {
 		return (
@@ -105,19 +114,18 @@ class CardSingle extends React.Component {
 							flex: 0.7,
 							paddingVertical: 8,
 							paddingHorizontal: 24,
-							borderRightWidth: 0.5
+							borderRightWidth: 0.5,
+							borderColor: "#dcdcdc"
 						}}
 					>
 						<View style={{ flexDirection: "row" }}>
 							{this.renderText(
 								(this.props.text = draft),
-								(this.props.size = 12),
-								(this.props.type = "bold")
+								(this.props.size = 12)
 							)}
-							{this.renderText(
+							{this.renderHeading(
 								(this.props.text = this.props.destination),
-								(this.props.size = 14),
-								(this.props.type = "bold")
+								(this.props.size = 14)
 							)}
 						</View>
 						{this.renderText(
@@ -183,9 +191,8 @@ class Request extends React.Component {
 	render() {
 		const { navigate } = this.props.navigation;
 		const { requestDetails, user, formDraftId, taskDetails } = this.props;
-		const captionRequest =
-			user.submitRequest == true ? "PENDING REQUEST" : null;
-		const captionTask = user.receiveTask == true ? "PENDING APPROVAL" : null;
+		const captionRequest = requestDetails == "" ? null : "PENDING REQUEST";
+		const captionTask = taskDetails == "" ? null : "PENDING APPROVAL";
 		return (
 			<View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
 				<ScrollView>
@@ -208,47 +215,54 @@ class Request extends React.Component {
 							(this.props.text = "DRAFT REQUEST ")
 						)}
 					</View>
-					<View style={{ paddingHorizontal: 8, paddingBottom: 16 }}>
-						{this.renderCaption((this.props.text = captionRequest))}
-						<FlatList
-							data={requestDetails}
-							keyExtractor={(item, index) => item.id}
-							renderItem={({ item }) => (
-								<CardSingle
-									formId={item.id}
-									formDraftId={item.id}
-									navigate={navigate}
-									requestDetails={requestDetails}
-									destination={item.destination}
-									travelFrom={item.travelFrom}
-									travelUntil={item.travelUntil}
-									travelType={item.travelType}
-									status={item.status}
-									notification={item.notification}
-								/>
-							)}
-						/>
+					{requestDetails == "" && taskDetails == "" ? (
+						<View style={styles.emptyContainer}>
+							<Text style={{ fontWeight: "bold" }}>Let us start!</Text>
+							<Text>Click on the Action Button to Start!</Text>
+						</View>
+					) : (
+						<View style={{ paddingHorizontal: 8, paddingBottom: 16 }}>
+							{this.renderCaption((this.props.text = captionRequest))}
+							<FlatList
+								data={requestDetails}
+								keyExtractor={(item, index) => item.id}
+								renderItem={({ item }) => (
+									<CardSingle
+										formId={item.id}
+										formDraftId={item.id}
+										navigate={navigate}
+										requestDetails={requestDetails}
+										destination={item.destination}
+										travelFrom={item.travelFrom}
+										travelUntil={item.travelUntil}
+										travelType={item.travelType}
+										status={item.status}
+										notification={item.notification}
+									/>
+								)}
+							/>
 
-						{this.renderCaption((this.props.text = captionTask))}
-						<FlatList
-							data={taskDetails}
-							keyExtractor={(item, index) => item.id}
-							renderItem={({ item }) => (
-								<CardSingle
-									formId={item.id}
-									formDraftId={item.id}
-									taskId={item.id}
-									navigate={navigate}
-									destination={item.destination}
-									travelFrom={item.travelFrom}
-									travelUntil={item.travelUntil}
-									travelType={item.travelType}
-									status={item.status}
-									notification={item.notification}
-								/>
-							)}
-						/>
-					</View>
+							{this.renderCaption((this.props.text = captionTask))}
+							<FlatList
+								data={taskDetails}
+								keyExtractor={(item, index) => item.id}
+								renderItem={({ item }) => (
+									<CardSingle
+										formId={item.id}
+										formDraftId={item.id}
+										taskId={item.id}
+										navigate={navigate}
+										destination={item.destination}
+										travelFrom={item.travelFrom}
+										travelUntil={item.travelUntil}
+										travelType={item.travelType}
+										status={item.status}
+										notification={item.notification}
+									/>
+								)}
+							/>
+						</View>
+					)}
 				</ScrollView>
 				<ActionButton
 					buttonColor="#333333"
@@ -268,6 +282,13 @@ class Request extends React.Component {
 export default Request;
 
 const styles = StyleSheet.create({
+	emptyContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		paddingTop: 24,
+		paddingHorizontal: 24
+	},
 	requestCardStyle: {
 		flexDirection: "row",
 		paddingVertical: 8,

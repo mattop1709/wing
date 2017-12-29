@@ -4,8 +4,10 @@ import {
 	Text,
 	TextInput,
 	View,
-	TouchableOpacity
+	TouchableOpacity,
+	Image
 } from "react-native";
+import Icon from "react-native-vector-icons/EvilIcons";
 
 class LoginScreen extends React.Component {
 	constructor(props) {
@@ -26,38 +28,60 @@ class LoginScreen extends React.Component {
 		return (
 			<View style={{ flex: 1 }}>
 				<View style={styles.logoContainer}>
-					<Text>Hi</Text>
+					<Image
+						source={require("../../image/logo.png")}
+						style={{ width: "40%", height: "80%" }}
+					/>
 				</View>
 
-				<View style={{ flex: 1, backgroundColor: "#ffffff", paddingTop: 8 }}>
-					<View style={{ paddingHorizontal: 70 }}>
-						<TextInput
-							style={styles.staffIdBox}
-							value={this.state.staffID}
-							placeholder="Staff ID"
-							clearButtonMode="always"
-							underlineColorAndroid="rgba(0,0,0,0)"
-							onChangeText={text => this.setState({ staffID: text })}
-						/>
-						<TextInput
-							style={styles.staffIdBox}
-							value={this.state.authentication}
-							placeholder="Password"
-							clearButtonMode="always"
-							secureTextEntry={true}
-							onChangeText={text => this.setState({ authentication: text })}
-						/>
-
-						<TouchableOpacity
-							onPress={e => this.userLogin(e)}
-							style={styles.loginBox}
-						>
-							<Text style={{ fontSize: 16 }}>Login</Text>
-						</TouchableOpacity>
+				<View style={styles.textInputContainer}>
+					<View style={styles.staffIdBox}>
+						<View style={{ flex: 1 }}>
+							<TextInput
+								value={this.state.staffID}
+								placeholder="Staff ID"
+								placeholderCo
+								clearButtonMode="always"
+								underlineColorAndroid="rgba(0,0,0,0)"
+								onChangeText={text => this.setState({ staffID: text })}
+							/>
+						</View>
+						<View style={{ justifyContent: "center" }}>
+							<Icon name="user" size={24} color="#ffffff" />
+						</View>
 					</View>
+
+					<View style={styles.staffIdBox}>
+						<View style={{ flex: 1 }}>
+							<TextInput
+								value={this.state.authentication}
+								placeholder="Password"
+								clearButtonMode="always"
+								underlineColorAndroid="rgba(0,0,0,0)"
+								secureTextEntry={true}
+								onChangeText={text => this.setState({ authentication: text })}
+							/>
+						</View>
+						<View style={{ justifyContent: "center" }}>
+							<Icon name="lock" size={24} color="#ffffff" />
+						</View>
+					</View>
+
+					<TouchableOpacity
+						onPress={e => this.userLogin(e)}
+						style={styles.loginBox}
+					>
+						<Text style={{ fontSize: 16, color: "#ee7202" }}>LOG IN</Text>
+					</TouchableOpacity>
 				</View>
 
-				<View style={{ alignItems: "center", paddingBottom: 16 }}>
+				<View
+					style={{
+						backgroundColor: "#ee7202",
+						alignItems: "center",
+						paddingBottom: 16
+					}}
+				>
 					<Text>Version 0.1.0</Text>
 				</View>
 			</View>
@@ -69,25 +93,30 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
 	logoContainer: {
-		flex: 0.25,
-		backgroundColor: "red",
+		flex: 0.5,
+		backgroundColor: "#ee7202",
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "flex-end"
+	},
+	textInputContainer: {
+		flex: 1,
+		backgroundColor: "#ee7202",
+		paddingTop: 24,
+		paddingHorizontal: 60
 	},
 	staffIdBox: {
 		marginBottom: 8,
-		fontSize: 14,
 		paddingHorizontal: 16,
-		paddingVertical: 8,
-		borderColor: "#f27178",
+		borderColor: "#ffffff",
 		borderWidth: 1,
-		borderRadius: 8
+		borderRadius: 100,
+		flexDirection: "row"
 	},
 	loginBox: {
 		paddingHorizontal: 16,
 		paddingVertical: 16,
-		backgroundColor: "grey",
+		backgroundColor: "#ffffff",
 		alignItems: "center",
-		borderRadius: 8
+		borderRadius: 100
 	}
 });

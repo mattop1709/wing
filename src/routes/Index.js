@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 class Index extends React.Component {
 	render() {
 		const { user } = this.props;
-		if (user.authenticated == "false") return <Login />;
+		if (user.authenticated == false) return <Login />;
 		else return <Drawer />;
 	}
 }

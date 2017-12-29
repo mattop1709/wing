@@ -51,7 +51,7 @@ class Comments extends React.Component {
 		this.state = { height: 0, texts: "" };
 		this._handlePress = this._handlePress.bind(this);
 	}
-	_handlePress(texts, comments) {
+	_handlePress(comments) {
 		this.setState({ comments: texts });
 	}
 	render() {
@@ -96,15 +96,14 @@ class Comments extends React.Component {
 							placeholder="Type your comment here.."
 							underlineColorAndroid="transparent"
 							multiline={true}
-							onChangeText={this._handlePress}
+							onChangeText={comments => this._handlePress(comments)}
 							onContentSizeChange={event => {
 								this.setState({ height: event.nativeEvent.contentSize.height });
 							}}
 							style={{
 								padding: 8,
 								fontSize: 14,
-								height: Math.max(35, this.state.height),
-								underlineColorAndroid: "transparent"
+								height: Math.max(35, this.state.height)
 							}}
 						/>
 					</View>

@@ -1,4 +1,4 @@
-// exist to replicate state from GEMS
+// exist to replicate database from GEMS
 const initialState = [
 	{
 		ref: "1",

@@ -29,7 +29,7 @@ const store = createStore(wingApp, undefined, compose(applyMiddleware(thunk)));
 
 export default class wing extends Component {
 	render() {
-		console.disableYellowBox = true;
+		// console.disableYellowBox = true;
 		return (
 			<Provider store={store}>
 				<View style={styles.container}>

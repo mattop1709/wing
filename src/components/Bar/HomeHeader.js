@@ -27,11 +27,11 @@ class HomeHeader extends React.Component {
 					)}
 					{this.renderText(
 						(this.props.text = user.division),
-						(this.props.size = 10)
+						(this.props.size = 12)
 					)}
 					{this.renderText(
 						(this.props.text = user.staffID),
-						(this.props.size = 10)
+						(this.props.size = 12)
 					)}
 				</View>
 			</View>

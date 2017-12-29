@@ -58,7 +58,7 @@ class CostForm extends React.Component {
 	render() {
 		const { navigate, state, goBack } = this.props.navigation;
 		const { requestDetails, formDraftId } = this.props;
-		let data = [
+		let costCategory = [
 			{
 				value: "Cost Centre"
 			},
@@ -76,11 +76,20 @@ class CostForm extends React.Component {
 			: null;
 		const status = state.params.edit == true ? "Back" : "Exit";
 		const leftButtonConfig = {
-			title: [status],
+			title: status,
 			handler: () => {
 				this.handlePress(navigate, state, goBack);
 			}
 		};
+		const button =
+			state.params.edit == true ? null : (
+				<TouchableOpacity
+					onPress={() => navigate("ApprovalForm", { edit: false })}
+					style={styles.nextButton}
+				>
+					<Text>NEXT</Text>
+				</TouchableOpacity>
+			);
 		return (
 			<KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
 				<NavigationBar
@@ -90,7 +99,7 @@ class CostForm extends React.Component {
 				/>
 
 				<ScrollView style={{ flex: 1 }}>
-					<FormBar />
+					<FormBar cost={true} />
 					<View style={styles.bodyContainer}>
 						<View style={{ paddingBottom: 24 }}>
 							<Text style={styles.textStyle}>Cost</Text>
@@ -129,11 +138,11 @@ class CostForm extends React.Component {
 						<View style={{ paddingBottom: 24 }}>
 							<Text style={styles.textStyle}>Cost Category</Text>
 							<Dropdown
-								value={costCategoryEdit}
+								value=""
 								placeholder="e.g. TM Sponsorship"
 								labelHeight={0}
 								label=""
-								data={data}
+								data={costCategory}
 								onChangeText={value => this.props.setCostCategory(value)}
 							/>
 						</View>
@@ -154,14 +163,7 @@ class CostForm extends React.Component {
 						</View>
 					</View>
 				</ScrollView>
-				{state.params.edit == true ? null : (
-					<TouchableOpacity
-						onPress={() => navigate("ApprovalForm", { edit: false })}
-						style={styles.nextButton}
-					>
-						<Text>NEXT</Text>
-					</TouchableOpacity>
-				)}
+				{button}
 			</KeyboardAvoidingView>
 		);
 	}

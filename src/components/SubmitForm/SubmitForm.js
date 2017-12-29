@@ -10,28 +10,36 @@ import {
 } from "react-native";
 import NavigationBar from "react-native-navbar";
 import Send from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/EvilIcons";
 
 import RequestHeader from "../Bar/RequestHeader";
 
-const ProfileInfo = ({ staffName, staffDivision }) => (
+const ProfileInfo = ({ staffName, staffDivision, thumbnail, size }) => (
 	<View
 		style={{
 			backgroundColor: "#ffffff",
+			flexDirection: "row",
 			paddingVertical: 16,
 			paddingHorizontal: 24,
 			marginBottom: 0.5,
 			borderRadius: 4
 		}}
 	>
-		<Text
-			style={{
-				paddingBottom: 4,
-				fontWeight: "bold"
-			}}
-		>
-			{staffName}
-		</Text>
-		<Text>{staffDivision}</Text>
+		<View style={{ justifyContent: "center", paddingRight: 16 }}>
+			<Icon name={thumbnail} size={32} color="#000000" />
+		</View>
+		<View style={{ flex: 1 }}>
+			<Text
+				style={{
+					paddingBottom: 4,
+					fontWeight: "bold"
+				}}
+			>
+				{staffName}
+			</Text>
+
+			<Text>{staffDivision}</Text>
+		</View>
 	</View>
 );
 
@@ -86,7 +94,7 @@ class SubmitForm extends React.Component {
 			}
 		]);
 	}
-	handlePress(navigate, state, goBack) {
+	handlePress(navigate, state) {
 		if (state.params.saved !== true) {
 			Alert.alert("Confirm to Exit?", "Request will be saved as Draft", [
 				{
@@ -116,6 +124,30 @@ class SubmitForm extends React.Component {
 			}
 		]);
 	}
+	handleNavigateTravel(navigate) {
+		navigate("TravelForm", {
+			edit: true,
+			formDraftId: `${this.props.requestDetails.id}`
+		});
+	}
+	handleNavigateProfile(navigate) {
+		navigate("ProfileForm", {
+			edit: true,
+			formDraftId: `${this.props.requestDetails.id}`
+		});
+	}
+	handleNavigateCost(navigate) {
+		navigate("CostForm", {
+			edit: true,
+			formDraftId: `${this.props.requestDetails.id}`
+		});
+	}
+	handleNavigateApprover(navigate) {
+		navigate("ApprovalForm", {
+			edit: true,
+			formDraftId: `${this.props.requestDetails.id}`
+		});
+	}
 	renderDateBox(caption, date) {
 		return <DateBox caption={caption} date={date} />;
 	}
@@ -127,9 +159,9 @@ class SubmitForm extends React.Component {
 		const { userDetails, requestDetails, friendsInfo } = this.props;
 		const status = state.params.saved == true ? "Back" : "Exit";
 		const leftButtonConfig = {
-			title: [status],
+			title: status,
 			handler: () => {
-				this.handlePress(navigate, state, goBack);
+				this.handlePress(navigate, state);
 			}
 		};
 		return (
@@ -145,12 +177,7 @@ class SubmitForm extends React.Component {
 						<Text style={styles.headingText1}>DESCRIPTION</Text>
 						<View style={{ flexDirection: "row", paddingVertical: 8 }}>
 							<TouchableOpacity
-								onPress={() =>
-									navigate("TravelForm", {
-										edit: true,
-										formDraftId: `${requestDetails.id}`
-									})
-								}
+								onPress={() => this.handleNavigateTravel(navigate)}
 							>
 								<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
 							</TouchableOpacity>
@@ -186,24 +213,19 @@ class SubmitForm extends React.Component {
 
 					<View style={styles.headingStyle}>
 						<Text style={styles.headingText}>PROFILE</Text>
-						<View>
-							<TouchableOpacity
-								onPress={() =>
-									navigate("ProfileForm", {
-										edit: true,
-										formDraftId: `${requestDetails.id}`
-									})
-								}
-							>
-								<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
-							</TouchableOpacity>
-						</View>
+
+						<TouchableOpacity
+							onPress={() => this.handleNavigateProfile(navigate)}
+						>
+							<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
+						</TouchableOpacity>
 					</View>
 
 					<View style={{ marginBottom: 8 }}>
 						<ProfileInfo
 							staffName={userDetails.name}
 							staffDivision={userDetails.division}
+							thumbnail="user"
 						/>
 						<FlatList
 							data={friendsInfo}
@@ -213,6 +235,7 @@ class SubmitForm extends React.Component {
 									id={item.id}
 									staffName={item.staffName}
 									staffDivision={item.staffDivision}
+									thumbnail="plus"
 								/>
 							)}
 						/>
@@ -220,18 +243,9 @@ class SubmitForm extends React.Component {
 
 					<View style={styles.headingStyle}>
 						<Text style={styles.headingText}>COSTING</Text>
-						<View>
-							<TouchableOpacity
-								onPress={() =>
-									navigate("CostForm", {
-										edit: true,
-										formDraftId: `${requestDetails.id}`
-									})
-								}
-							>
-								<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
-							</TouchableOpacity>
-						</View>
+						<TouchableOpacity onPress={() => this.handleNavigateCost(navigate)}>
+							<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
+						</TouchableOpacity>
 					</View>
 
 					<View style={styles.boxContainer}>
@@ -255,18 +269,11 @@ class SubmitForm extends React.Component {
 
 					<View style={styles.headingStyle}>
 						<Text style={styles.headingText}>APPROVER</Text>
-						<View>
-							<TouchableOpacity
-								onPress={() =>
-									navigate("ApproverForm", {
-										edit: true,
-										formDraftId: `${requestDetails.id}`
-									})
-								}
-							>
-								<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
-							</TouchableOpacity>
-						</View>
+						<TouchableOpacity
+							onPress={() => this.handleNavigateApprover(navigate)}
+						>
+							<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
+						</TouchableOpacity>
 					</View>
 					<View style={styles.boxContainer}>
 						{this.renderBox(

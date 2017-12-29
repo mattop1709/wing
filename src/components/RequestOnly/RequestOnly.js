@@ -13,20 +13,19 @@ import Menu from "react-native-vector-icons/Ionicons";
 import ActionButton from "react-native-action-button";
 import Circle from "react-native-vector-icons/FontAwesome";
 
-// import HomeHeader from "../Bar/HomeHeader";
+function Heading({ text, size, type, gap }) {
+	return (
+		<Text style={{ paddingBottom: gap, fontSize: size, fontWeight: "bold" }}>
+			{(value = text)}
+		</Text>
+	);
+}
 
-// const RequestEmpty = (
-// 	<View
-// 		style={{
-// 			flex: 1,
-// 			justifyContent: "center",
-// 			alignItems: "center"
-// 		}}
-// 	>
-// 		<Text style={{ fontWeight: "bold" }}>Let us start!</Text>
-// 		<Text>Click on the Action Button to Start!</Text>
-// 	</View>
-// );
+function Texts({ text, size, gap }) {
+	return (
+		<Text style={{ paddingBottom: gap, fontSize: size }}>{(value = text)}</Text>
+	);
+}
 
 class CardSingle extends React.Component {
 	handlePressRequest(navigate) {
@@ -50,11 +49,10 @@ class CardSingle extends React.Component {
 			);
 	}
 	renderText(text, size, type, gap) {
-		return (
-			<Text style={{ paddingBottom: gap, fontSize: size, fontWeight: type }}>
-				{(value = text)}
-			</Text>
-		);
+		return <Texts text={text} size={size} type={type} gap={gap} />;
+	}
+	renderHeading(text, size, gap) {
+		return <Heading text={text} size={size} gap={gap} />;
 	}
 	renderIcon(caption, thumbnail) {
 		return (
@@ -104,7 +102,8 @@ class CardSingle extends React.Component {
 							flex: 0.7,
 							paddingVertical: 8,
 							paddingHorizontal: 24,
-							borderRightWidth: 0.5
+							borderRightWidth: 0.5,
+							borderColor: "#dcdcdc"
 						}}
 					>
 						<View style={{ flexDirection: "row" }}>
@@ -113,10 +112,9 @@ class CardSingle extends React.Component {
 								(this.props.size = 16),
 								(this.props.type = "bold")
 							)}
-							{this.renderText(
+							{this.renderHeading(
 								(this.props.text = this.props.destination),
-								(this.props.size = 14),
-								(this.props.type = "bold")
+								(this.props.size = 14)
 							)}
 						</View>
 						{this.renderText(
@@ -167,9 +165,15 @@ class RequestOnly extends React.Component {
 	render() {
 		const { navigate } = this.props.navigation;
 		const { requestDetails, user, formDraftId, taskDetails } = this.props;
-		const captionRequest =
-			user.submitRequest === false ? null : "PENDING REQUEST";
-		const captionTask = user.receiveTask === false ? null : "PENDING APPROVAL";
+		const captionRequest = requestDetails == "" ? null : "PENDING REQUEST";
+		if (requestDetails == "") {
+			return (
+				<View style={styles.emptyContainer}>
+					<Text style={{ fontWeight: "bold" }}>Let us start!</Text>
+					<Text>Click on the Action Button to Start!</Text>
+				</View>
+			);
+		}
 		return (
 			<ScrollView
 				style={{ flex: 1, backgroundColor: "#f3f3f3", paddingHorizontal: 8 }}
@@ -195,8 +199,17 @@ class RequestOnly extends React.Component {
 				/>
 			</ScrollView>
 		);
-		// }
 	}
 }
 
 export default RequestOnly;
+
+const styles = StyleSheet.create({
+	emptyContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		paddingTop: 24,
+		paddingHorizontal: 24
+	}
+});
