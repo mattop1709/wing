@@ -9,9 +9,7 @@ import {
 	KeyboardAvoidingView,
 	Alert
 } from "react-native";
-import Next from "react-native-vector-icons/Entypo";
 import { Dropdown } from "react-native-material-dropdown";
-import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 import DisplayedPage from "./DisplayedPage";
 
@@ -35,14 +33,10 @@ class ApprovalForm extends React.Component {
 					style: "default"
 				}
 			]);
-		} else
-			navigateTo = navigate("SubmitForm", {
-				formDraftId: `${this.props.approverDetails.id}`
-			});
+		} else navigateTo = goBack();
 	}
 	render() {
 		const { navigate, state, goBack } = this.props.navigation;
-		const { approverDetails, formDraftId } = this.props;
 		let data = [
 			{
 				value: "AGM and below"
@@ -79,12 +73,7 @@ class ApprovalForm extends React.Component {
 		const button =
 			state.params.edit == true ? null : (
 				<TouchableOpacity
-					onPress={() =>
-						navigate("SubmitForm", {
-							saved: false,
-							formDraftId: `${approverDetails.id}`
-						})
-					}
+					onPress={() => navigate("SubmitForm", { saved: false })}
 					style={styles.nextButton}
 				>
 					<Text>NEXT</Text>
@@ -116,7 +105,7 @@ class ApprovalForm extends React.Component {
 						<DisplayedPage
 							navigate={navigate}
 							page={this.state.data}
-							approverDetails={approverDetails}
+							approverDetails={data1}
 						/>
 					</View>
 				</ScrollView>
@@ -133,7 +122,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#ffffff",
 		padding: 16,
 		marginHorizontal: 16,
-		marginTop: 16,
+		marginVertical: 16,
 		borderRadius: 4
 	},
 	textStyle: {
@@ -151,78 +140,31 @@ const styles = StyleSheet.create({
 	}
 });
 
-// const FormBar = () => (
-// 	<View
-// 		style={{
-// 			flexDirection: "row",
-// 			justifyContent: "space-around",
-// 			paddingTop: 8,
-// 			borderTopWidth: 1,
-// 			borderBottomWidth: 1,
-// 			borderColor: "#c4c4c4"
-// 		}}
-// 	>
-// 		<View
-// 			style={{
-// 				flexDirection: "row",
-// 				paddingBottom: 4,
-// 				flex: 0.2,
-// 				justifyContent: "center"
-// 			}}
-// 		>
-// 			<View style={{ justifyContent: "center", paddingHorizontal: 2 }}>
-// 				<Icon name="user" size={24} color="#000000" />
-// 			</View>
-// 			<View style={{ justifyContent: "center" }}>
-// 				<Text style={{ fontSize: 12 }}>One</Text>
-// 			</View>
-// 		</View>
-// 		<View
-// 			style={{
-// 				flexDirection: "row",
-// 				paddingBottom: 4,
-// 				flex: 0.2,
-// 				justifyContent: "center"
-// 			}}
-// 		>
-// 			<View style={{ justifyContent: "center", paddingHorizontal: 2 }}>
-// 				<Icon name="location" size={24} color="#000000" />
-// 			</View>
-// 			<View style={{ justifyContent: "center" }}>
-// 				<Text style={{ fontSize: 12 }}>Two</Text>
-// 			</View>
-// 		</View>
-// 		<View
-// 			style={{
-// 				flexDirection: "row",
-// 				paddingBottom: 4,
-// 				flex: 0.2,
-// 				justifyContent: "center"
-// 			}}
-// 		>
-// 			<View style={{ justifyContent: "center", paddingHorizontal: 2 }}>
-// 				<Icon name="credit-card" size={24} color="#000000" />
-// 			</View>
-// 			<View style={{ justifyContent: "center" }}>
-// 				<Text style={{ fontSize: 12 }}>Three</Text>
-// 			</View>
-// 		</View>
-// 		<View
-// 			style={{
-// 				flexDirection: "row",
-// 				paddingBottom: 4,
-// 				borderBottomWidth: 2,
-// 				borderColor: "#f27178",
-// 				flex: 0.2,
-// 				justifyContent: "center"
-// 			}}
-// 		>
-// 			<View style={{ justifyContent: "center", paddingHorizontal: 2 }}>
-// 				<Icon name="check" size={24} color="#f27178" />
-// 			</View>
-// 			<View style={{ justifyContent: "center" }}>
-// 				<Text style={{ fontSize: 12, color: "#f27178" }}>Four</Text>
-// 			</View>
-// 		</View>
-// 	</View>
-// );
+const data1 = {
+	id: "1001",
+	completed: true,
+	status: "EEIU",
+	notification: "new",
+	timeStamp: "1 Jan 2017, 8.00am",
+	destination: "Singapore",
+	travelFrom: "1/1/2017",
+	travelUntil: "31/1/2017",
+	travelType: "Site Survey",
+	justificationText:
+		"I would like to Experience the ka-cing ka-cing while experiencing the magnificent of Alain Ducasse Le Louis XV Dinner",
+	requestorName: "Mohammad Hafiz bin Burhan",
+	requestorDivision: "Group Brand and Communication",
+	cost: "12000",
+	budget: "34000",
+	costCategory: "EEIU",
+	costCentre: "BMCE02",
+	dialogBox: "Hi",
+	commentTextLatest: "Ali, What is your name?",
+	friendId1Name: "Mohammad Hafiz bin Burhan",
+	friendId1Division: "Group Digital Centre",
+	eeiuName: "Abu bin Awang",
+	nominatorName: "Jusoh bin Ali",
+	nominator2Name: "Check Check, Rock Rock",
+	endorserName: "Ali bin Awang",
+	approverName: "Kabil bin Ali"
+};

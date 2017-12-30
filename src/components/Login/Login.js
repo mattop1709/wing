@@ -17,13 +17,13 @@ class LoginScreen extends React.Component {
 			authentication: ""
 		};
 	}
-	userLogin(e) {
-		const staffID = this.state.staffID;
-		const password = this.state.authentication;
-		if (staffID == "TM35438" && password == "123456") {
-			return this.props.login(this.state.staffID, this.state.authentication);
-		} else alert("Wrong Staff ID or password");
-	}
+	// userLogin(e) {
+	// 	const staffID = this.state.staffID;
+	// 	const password = this.state.authentication;
+	// 	if (staffID == "TM35438" && password == "123456") {
+	// 		return this.props.login(this.state.staffID, this.state.authentication);
+	// 	} else alert("Wrong Staff ID or password");
+	// }
 	render() {
 		return (
 			<View style={{ flex: 1 }}>
@@ -67,10 +67,7 @@ class LoginScreen extends React.Component {
 						</View>
 					</View>
 
-					<TouchableOpacity
-						onPress={e => this.userLogin(e)}
-						style={styles.loginBox}
-					>
+					<TouchableOpacity onPress={() => null} style={styles.loginBox}>
 						<Text style={{ fontSize: 16, color: "#ee7202" }}>LOG IN</Text>
 					</TouchableOpacity>
 				</View>

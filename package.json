@@ -1,48 +1,48 @@
 {
-  "name": "wing",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
-  },
-  "dependencies": {
-    "moment": "^2.19.3",
-    "react": "16.0.0-alpha.12",
-    "react-native": "0.48.4",
-    "react-native-action-button": "^2.8.0",
-    "react-native-autogrow-textinput": "^4.1.0",
-    "react-native-datepicker": "^1.6.0",
-    "react-native-elements": "^0.17.0",
-    "react-native-material-dropdown": "^0.5.0",
-    "react-native-nav": "^2.0.2",
-    "react-native-navbar": "^2.0.1",
-    "react-native-vector-icons": "^4.4.0",
-    "react-navigation": "^1.0.0-beta.13",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "redux-persist": "^4.10.2",
-    "redux-thunk": "^2.2.0"
-  },
-  "devDependencies": {
-    "babel-jest": "21.2.0",
-    "babel-preset-react-native": "4.0.0",
-    "jest": "21.2.1",
-    "react-test-renderer": "16.0.0-alpha.12"
-  },
-  "jest": {
-    "preset": "react-native"
-  },
-  "description": "Development",
-  "main": "index.android.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mattop1709/wing.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mattop1709/wing/issues"
-  },
-  "homepage": "https://github.com/mattop1709/wing#readme"
+	"name": "wing",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"test": "jest"
+	},
+	"dependencies": {
+		"moment": "^2.19.3",
+		"react": "16.0.0-alpha.12",
+		"react-native": "0.48.4",
+		"react-native-action-button": "^2.8.0",
+		"react-native-autogrow-textinput": "^4.1.0",
+		"react-native-datepicker": "^1.6.0",
+		"react-native-elements": "^0.17.0",
+		"react-native-material-dropdown": "^0.5.0",
+		"react-native-nav": "^2.0.2",
+		"react-native-navbar": "^2.0.1",
+		"react-native-vector-icons": "^4.4.0",
+		"react-navigation": "^1.0.0-beta.13",
+		"react-redux": "^5.0.6",
+		"redux": "^3.7.2",
+		"redux-persist": "^4.10.2",
+		"redux-thunk": "^2.2.0"
+	},
+	"devDependencies": {
+		"babel-jest": "21.2.0",
+		"babel-preset-react-native": "4.0.0",
+		"jest": "21.2.1",
+		"react-test-renderer": "16.0.0-alpha.12"
+	},
+	"jest": {
+		"preset": "react-native"
+	},
+	"description": "Development",
+	"main": "index.android.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mattop1709/wing.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/mattop1709/wing/issues"
+	},
+	"homepage": "https://github.com/mattop1709/wing#readme"
 }

@@ -9,163 +9,12 @@ import {
 	Alert,
 	FlatList
 } from "react-native";
-import Icon from "react-native-vector-icons/EvilIcons";
-import Send from "react-native-vector-icons/MaterialIcons";
 import NavigationBar from "react-native-navbar";
 
-const CalltoAction = ({
-	navigate,
-	checkAuth,
-	taskDetails,
-	userDetails,
-	eeiuApprove,
-	nominatorApprove,
-	nominator2Approve,
-	endorserApprove,
-	approverApprove
-}) => (
-	<View
-		style={{
-			flexDirection: "row",
-			justifyContent: "center",
-			paddingVertical: 8
-		}}
-	>
-		<TouchableOpacity
-			onPress={() =>
-				Alert.alert("Revert Request", "Confirm to revert this Request?", [
-					{
-						text: "Back",
-						onPress: () => console.log("Ask"),
-						style: "default"
-					},
-					{
-						text: "Revert",
-						onPress: () => navigate("Task"),
-						style: "default"
-					}
-				])
-			}
-			style={{
-				alignItems: "center",
-				borderColor: "grey"
-			}}
-		>
-			<Text style={{ fontSize: 16, color: "red", padding: 16 }}>Revert</Text>
-		</TouchableOpacity>
-		<TouchableOpacity
-			onPress={() =>
-				Alert.alert("Approve Request", "Wish to approve this Request?", [
-					{
-						text: "Back",
-						onPress: () => console.log("Ask"),
-						style: "default"
-					},
-					{
-						text: "Confirm",
-						onPress: e => {
-							if (taskDetails.eeiuName == userDetails.name) {
-								eeiuApprove(e);
-							} else if (taskDetails.nominatorName == userDetails.name) {
-								nominatorApprove(e);
-							} else if (taskDetails.nominator2Name == userDetails.name) {
-								nominator2Approve(e);
-							} else if (taskDetails.endorserName == userDetails.name) {
-								endorserApprove(e);
-							} else approverApprove(e);
-							navigate("Task");
-						},
-						style: "default"
-					}
-				])
-			}
-			style={{
-				alignItems: "center",
-				borderColor: "grey",
-				backgroundColor: "#4cd964",
-				paddingVertical: 16,
-				paddingHorizontal: 32,
-				borderRadius: 100,
-				marginLeft: 32
-			}}
-		>
-			<Text
-				style={{
-					fontSize: 16
-				}}
-			>
-				{checkAuth}
-			</Text>
-		</TouchableOpacity>
-	</View>
-);
-
-const ProfileInfo = ({ staffName, staffDivision, thumbnail }) => (
-	<View
-		style={{
-			backgroundColor: "#ffffff",
-			flexDirection: "row",
-			paddingVertical: 16,
-			paddingHorizontal: 24,
-			marginBottom: 0.5,
-			borderRadius: 4
-		}}
-	>
-		<View style={{ justifyContent: "center", paddingRight: 16 }}>
-			<Icon name={thumbnail} size={32} color="#000000" />
-		</View>
-		<View style={{ flex: 1 }}>
-			<Text
-				style={{
-					paddingBottom: 4,
-					fontWeight: "bold"
-				}}
-			>
-				{staffName}
-			</Text>
-
-			<Text>{staffDivision}</Text>
-		</View>
-	</View>
-);
-
-function DateBox({ caption, date }) {
-	return (
-		<View style={{ flex: 0.4, backgroundColor: "orange" }}>
-			<View
-				style={{
-					backgroundColor: "#ee7202",
-					alignItems: "center"
-				}}
-			>
-				<Text style={{ fontSize: 12, paddingVertical: 8 }}>
-					{(value = caption)}
-				</Text>
-			</View>
-			<View style={{ paddingVertical: 24, alignItems: "center" }}>
-				<Text style={{ fontSize: 16 }}>{(value = date)}</Text>
-			</View>
-		</View>
-	);
-}
-
-function Box({ heading, name }) {
-	return (
-		<View
-			style={{
-				paddingBottom: 8,
-				marginBottom: 16,
-				borderBottomWidth: 0.5,
-				borderColor: "#dcdcdc"
-			}}
-		>
-			<Text style={{ fontSize: 12, paddingBottom: 8 }}>
-				{(value = heading)}
-			</Text>
-			<Text>{(value = name)}</Text>
-		</View>
-	);
-}
+import CalltoAction from "./CalltoAction";
+import ProfileInfo from "./ProfileInfo";
+import DateBox from "./DateBox";
+import Box from "./Box";
 
 class TaskStatus extends React.Component {
 	renderDateBox(caption, date) {
@@ -174,56 +23,34 @@ class TaskStatus extends React.Component {
 	renderBox(heading, name) {
 		return <Box heading={heading} name={name} />;
 	}
-	handlePressComment(navigate, taskDetails) {
-		navigate("CommentsTask", {
-			commentTaskId: `${taskDetails.id}`
-		});
+	handlePressComment(navigate, task) {
+		navigate("CommentsTask");
 	}
 	render() {
-		const { navigate, goBack } = this.props.navigation;
-		const {
-			taskDetails,
-			friendsDetails,
-			userDetails,
-			eeiuApprove,
-			nominatorApprove,
-			nominator2Approve,
-			endorserApprove,
-			approverApprove
-		} = this.props;
 		let checkAuth;
-		if (
-			taskDetails.nominatorName == userDetails.name ||
-			taskDetails.nominator2Name == userDetails.name
-		) {
+		if (task.nominatorName == info.name || task.nominator2Name == info.name) {
 			checkAuth = "Nominate";
-		} else if (taskDetails.endorserName == userDetails.name) {
+		} else if (task.endorserName == info.name) {
 			checkAuth = "Endorse";
-		} else if (
-			taskDetails.approverName == userDetails.name ||
-			taskDetails.eeiuName == userDetails.name
-		) {
+		} else if (task.approverName == info.name || task.eeiuName == info.name) {
 			checkAuth = "Approve";
 		}
 		let taskAuth;
-		if (
-			taskDetails.nominatorName == userDetails.name &&
-			taskDetails.eeiuApproved == false
+		if (task.nominatorName == info.name && task.eeiuApproved == false) {
+			taskAuth = true;
+		} else if (
+			task.nominator2Name == info.name &&
+			task.nominatorApproved == false
 		) {
 			taskAuth = true;
 		} else if (
-			taskDetails.nominator2Name == userDetails.name &&
-			taskDetails.nominatorApproved == false
+			task.endorserName == info.name &&
+			task.nominator2Approved == false
 		) {
 			taskAuth = true;
 		} else if (
-			taskDetails.endorserName == userDetails.name &&
-			taskDetails.nominator2Approved == false
-		) {
-			taskAuth = true;
-		} else if (
-			taskDetails.approverName == userDetails.name &&
-			taskDetails.endorserApproved == false
+			task.approverName == info.name &&
+			task.endorserApproved == false
 		) {
 			taskAuth = true;
 		}
@@ -238,15 +65,11 @@ class TaskStatus extends React.Component {
 			<CalltoAction
 				navigate={navigate}
 				checkAuth={checkAuth}
-				taskDetails={taskDetails}
-				userDetails={userDetails}
-				eeiuApprove={eeiuApprove}
-				nominatorApprove={nominatorApprove}
-				nominator2Approve={nominator2Approve}
-				endorserApprove={endorserApprove}
-				approverApprove={approverApprove}
+				task={task}
+				info={info}
 			/>
 		);
+		const { navigate, goBack } = this.props.navigation;
 		return (
 			<View style={{ flex: 1 }}>
 				<NavigationBar
@@ -261,34 +84,32 @@ class TaskStatus extends React.Component {
 						<Text
 							style={{ fontSize: 16, fontWeight: "bold", paddingBottom: 2 }}
 						>
-							{taskDetails.destination}
+							{task.destination}
 						</Text>
 						<Text style={{ fontSize: 16, paddingBottom: 2 }}>
-							{taskDetails.travelType}
+							{task.travelType}
 						</Text>
-						<Text style={styles.descriptionText}>
-							{taskDetails.justificationText}
-						</Text>
+						<Text style={styles.descriptionText}>{task.justificationText}</Text>
 						<View style={styles.dateBoxStyle}>
 							{this.renderDateBox(
 								(this.props.caption = "DEPARTURE"),
-								(this.props.date = taskDetails.travelFrom)
+								(this.props.date = task.travelFrom)
 							)}
 							{this.renderDateBox(
 								(this.props.caption = "ARRIVAL"),
-								(this.props.date = taskDetails.travelUntil)
+								(this.props.date = task.travelUntil)
 							)}
 						</View>
 					</View>
 					<Text style={styles.headingText}>PROFILE</Text>
 					<View style={{ marginBottom: 8 }}>
 						<ProfileInfo
-							staffName={taskDetails.requestorName}
-							staffDivision={taskDetails.requestorDivision}
+							staffName={task.requestorName}
+							staffDivision={task.requestorDivision}
 							thumbnail="user"
 						/>
 						<FlatList
-							data={friendsDetails}
+							data={friends}
 							keyExtractor={(item, index) => item.id}
 							renderItem={({ item }) => (
 								<ProfileInfo
@@ -304,30 +125,30 @@ class TaskStatus extends React.Component {
 					<View style={styles.boxContainer}>
 						{this.renderBox(
 							(this.props.heading = "Cost"),
-							(this.props.name = taskDetails.cost)
+							(this.props.name = task.cost)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Budget"),
-							(this.props.name = taskDetails.budget)
+							(this.props.name = task.budget)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Cost Category"),
-							(this.props.name = taskDetails.costCategory)
+							(this.props.name = task.costCategory)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Cost Centre"),
-							(this.props.name = taskDetails.costCentre)
+							(this.props.name = task.costCentre)
 						)}
 					</View>
 					<Text style={styles.headingText}>COMMENTS</Text>
 					<View style={styles.boxContainer}>
 						<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>
-							{taskDetails.endorserName}
+							{task.endorserName}
 						</Text>
-						<Text>{taskDetails.commentTextLatest}</Text>
+						<Text>{task.commentTextLatest}</Text>
 						<TouchableOpacity
 							style={{ alignItems: "center", paddingVertical: 8 }}
-							onPress={() => this.handlePressComment(navigate, taskDetails)}
+							onPress={() => this.handlePressComment(navigate, task)}
 						>
 							<Text style={styles.headingText}>READ MORE</Text>
 						</TouchableOpacity>
@@ -340,84 +161,6 @@ class TaskStatus extends React.Component {
 }
 
 export default TaskStatus;
-
-// <TouchableOpacity
-// 	onPress={() =>
-// 		navigate("CommentsTask", {
-// 			commentTaskId: `${taskDetails.ticketNumber}`
-// 		})
-// 	}
-// 	style={styles.commentContainer}
-// >
-// 	<View style={{ justifyContent: "center" }}>
-// 		<Icon name="comment" size={32} color="#000000" />
-// 	</View>
-// 	<View style={{ paddingLeft: 8 }}>
-// 		<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>
-// 			{taskDetails.endorserName}
-// 		</Text>
-// 		<Text>{taskDetails.commentTextLatest}</Text>
-// 	</View>
-// </TouchableOpacity>
-
-// const ProfileDetails = ({ taskDetails, friendsDetails }) => (
-// 	<View
-// 		style={{
-// 			paddingBottom: 40,
-// 			paddingHorizontal: 8,
-// 			borderBottomWidth: 0.3,
-// 			borderColor: "#c4c4c4",
-// 			marginHorizontal: 8
-// 		}}
-// 	>
-// 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
-// 			Profile Details
-// 		</Text>
-// 		<Text style={{ fontSize: 16, paddingBottom: 4, fontWeight: "bold" }}>
-// 			{taskDetails.requestorName}
-// 		</Text>
-// 		<Text style={{ fontSize: 16, paddingBottom: 24, color: "#000000" }}>
-// 			{taskDetails.requestorDivision}
-// 		</Text>
-// 		<Text style={{ fontSize: 12, paddingBottom: 8, color: "#a9a9a9" }}>
-// 			Other Travellers
-// 		</Text>
-//
-// 		<FlatList
-// 			data={friendsDetails}
-// 			keyExtractor={(item, index) => item.id}
-// 			renderItem={({ item }) => (
-// 				<FriendList
-// 					id={item.id}
-// 					staffName={item.staffName}
-// 					staffDivision={item.staffDivision}
-// 				/>
-// 			)}
-// 		/>
-// 	</View>
-// );
-
-// const FriendList = ({ staffName, staffDivision }) => (
-// 	<View>
-// 		<Text
-// 			style={{
-// 				fontSize: 16,
-// 				paddingBottom: 4,
-// 				fontWeight: "bold"
-// 			}}
-// 		>
-// 			{staffName}
-// 		</Text>
-// 		<Text
-// 			style={{
-// 				fontSize: 16,
-// 				paddingBottom: 12
-// 			}}
-// 		>
-// 			{staffDivision}
-// 		</Text>
-// 	</View>
-// );
 
 const styles = StyleSheet.create({
 	descriptionText: {
@@ -454,3 +197,89 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1
 	}
 });
+
+const task = {
+	id: "1001",
+	completed: true,
+	status: "Submit",
+	notification: "new",
+	timeStamp: "1 Jan 2017, 8.00am",
+	destination: "Singapore",
+	travelFrom: "21 Oct",
+	travelUntil: "10 Nov",
+	travelType: "Site Survey",
+	justificationText:
+		"I would like to Experience the ka-cing ka-cing while experiencing the magnificent of Alain Ducasse Le Louis XV Dinner",
+	requestorName: "Ali Muhd Wasil bin Ali Absar bin Al Amin",
+	requestorDivision: "Group Brand and Communication",
+	eeiuName: "Abu bin Awang",
+	eeiuApproved: false,
+	nominatorName: "Salam bin Awang",
+	nominatorApproved: false,
+	nominator2Name: "Check Check, Rock Rock",
+	nominator2Approved: true,
+	endorserName: "Mohammad Hafiz bin Burhan",
+	endorserApproved: false,
+	approverName: "Kabil bin Ali",
+	approverApproved: false,
+	cost: "12000",
+	budget: "34000",
+	costCategory: "EEIU",
+	costCentre: "BMCE02",
+	dialogBox: "Hi",
+	commentTextLatest: "Ali, What is your name?",
+	friendId1Name: "Mohammad Hafiz bin Burhan",
+	friendId1Division: "Group Digital Centre",
+	comments: [
+		{
+			senderId: "1",
+			senderName: "Ali Muhd Wasil bin Ali Absar",
+			commentText:
+				"Hafiz, where can we have all beautiful shawties around that area? I want them like right now!",
+			timeStamp: "13 September 2017, 3.20pm"
+		},
+		{
+			senderId: "2",
+			senderName: "Mohammad Hafiz bin Burhan",
+			commentText: "Get the boot, into the mommy house",
+			timeStamp: "14 September 2017, 4.17pm"
+		}
+	]
+};
+
+const info = {
+	name: "Mohammad Hafiz bin Burhan",
+	staffID: "TM35438",
+	division: "IT & Network Technology",
+	authentication: "bbS1992",
+	submitRequest: true,
+	receiveTask: true,
+	authenticated: true
+};
+
+const friends = [
+	{
+		id: 1,
+		deleted: false,
+		staffName: "Engku Fariez bin Engku Azahan",
+		staffDivision: "Group Digital Centre"
+	},
+	{
+		id: 2,
+		deleted: false,
+		staffName: "Nur Izzati binti Amir Amzah",
+		staffDivision: "Group Procurement"
+	},
+	{
+		id: 3,
+		deleted: false,
+		staffName: "Choo Chia Pooh",
+		staffDivision: "Group Brand and Communicatin"
+	},
+	{
+		id: 4,
+		deleted: false,
+		staffName: "Roaida binti Abdullah",
+		staffDivision: "Group Procurement"
+	}
+];

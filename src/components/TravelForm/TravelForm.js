@@ -9,43 +9,11 @@ import {
 	ScrollView,
 	Alert
 } from "react-native";
-import Next from "react-native-vector-icons/Entypo";
-// import { Dropdown } from "react-native-material-dropdown";
-import DatePicker from "react-native-datepicker";
-import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 
 import FormBar from "../Bar/FormBar";
-
-class TravelFormComponentDate extends React.Component {
-	render() {
-		return (
-			<DatePicker
-				style={{ width: 200, borderColor: "transparent" }}
-				underlineColorAndroid="transparent"
-				date={this.props.value}
-				placeholder="Enter date"
-				mode="date"
-				format="ll"
-				minDate="01-01-1990"
-				confirmBtnText="Confirm"
-				cancelBtnText="Cancel"
-				customStyles={{
-					dateIcon: {
-						position: "absolute",
-						left: 0,
-						top: 4,
-						marginLeft: 0
-					},
-					dateInput: {
-						borderColor: "transparent"
-					}
-				}}
-				onDateChange={value => this.props.onDateChange(value)}
-			/>
-		);
-	}
-}
+import TravelFormComponentDate from "./DatePickerComponent";
+import TextInputComponent from "./TextInputComponent";
 
 class TravelForm extends React.Component {
 	constructor(props) {
@@ -60,26 +28,6 @@ class TravelForm extends React.Component {
 			edited: false
 		};
 	}
-	handleDestinationText(destinationText) {
-		this.setState({ destinationText: destinationText });
-		this.props.setDestination(destinationText);
-	}
-	handleTravelType(travelText) {
-		this.setState({ travelText: travelText });
-		this.props.setTravelType(travelText);
-	}
-	handleDateFrom(date) {
-		this.setState({ dateFrom: date });
-		this.props.setTravelFrom(date);
-	}
-	handleDateUntil(date) {
-		this.setState({ dateUntil: date });
-		this.props.setTravelUntil(date);
-	}
-	handleJustification(justificationText) {
-		this.setState({ justificationText: justificationText });
-		this.props.setJustificationText(justificationText);
-	}
 	handlePress(navigate, state, goBack) {
 		if (state.params.edit !== true) {
 			Alert.alert("Confirm to Exit?", "Request will be saved as Draft", [
@@ -93,29 +41,11 @@ class TravelForm extends React.Component {
 					style: "default"
 				}
 			]);
-		} else
-			navigateTo = navigate("SubmitForm", {
-				formDraftId: `${this.props.requestDetails.id}`
-			});
+		} else navigateTo = goBack();
 	}
+
 	render() {
 		const { navigate, state, goBack } = this.props.navigation;
-		const { formDraftId, requestDetails } = this.props;
-		const destinationEdit = state.params.edit
-			? `${requestDetails.destination}`
-			: null;
-		const travelTypeEdit = state.params.edit
-			? `${requestDetails.travelType}`
-			: false;
-		const dateFromEdit = state.params.edit
-			? `${requestDetails.travelFrom}`
-			: this.state.dateFrom;
-		const dateUntilEdit = state.params.edit
-			? `${requestDetails.travelUntil}`
-			: this.state.dateUntil;
-		const justificationTextEdit = state.params.edit
-			? `${requestDetails.justificationText}`
-			: null;
 		const status = state.params.edit == true ? "Back" : "Exit";
 		const leftButtonConfig = {
 			title: status,
@@ -144,40 +74,37 @@ class TravelForm extends React.Component {
 					<View style={styles.bodyContainer}>
 						<Text style={styles.textStyle}>Destination</Text>
 						<View style={styles.textInputBox}>
-							<TextInput
-								style={styles.textInputStyle}
-								data={destinationEdit}
-								placeholder="e.g. Jakarta, Indonesia"
-								underlineColorAndroid={"transparent"}
+							<TextInputComponent
+								value={this.state.destinationText}
+								caption="e.g. Jakarta, Indonesia"
 								onChangeText={destinationText =>
-									this.handleDestinationText(destinationText)
+									this.setState({ destinationText: destinationText })
 								}
 							/>
 						</View>
 						<Text style={styles.textStyle}>Type</Text>
 						<View style={styles.textInputBox}>
-							<TextInput
-								style={styles.textInputStyle}
-								data={travelTypeEdit}
-								placeholder="e.g. UI/ UX Conference"
-								underlineColorAndroid={"transparent"}
-								onChangeText={travelText => this.handleTravelType(travelText)}
+							<TextInputComponent
+								value={this.state.travelText}
+								caption="e.g. UI/ UX Conference"
+								onChangeText={travelText =>
+									this.setState({ travelText: travelText })
+								}
 							/>
 						</View>
-
 						<View style={styles.datePickerBox}>
 							<View style={styles.datePickerStyle}>
 								<Text style={styles.textStyle}>Travel from</Text>
 								<TravelFormComponentDate
-									value={dateFromEdit}
-									onDateChange={date => this.handleDateFrom(date)}
+									value={this.state.dateFrom}
+									onDateChange={date => this.setState({ dateFrom: date })}
 								/>
 							</View>
 							<View style={styles.datePickerStyle}>
 								<Text style={styles.textStyle}>Travel until</Text>
 								<TravelFormComponentDate
-									value={dateUntilEdit}
-									onDateChange={date => this.handleDateUntil(date)}
+									value={this.state.dateUntil}
+									onDateChange={date => this.setState({ dateUntil: date })}
 								/>
 							</View>
 						</View>
@@ -185,12 +112,11 @@ class TravelForm extends React.Component {
 						<View style={{ paddingBottom: 8 }}>
 							<Text style={styles.textStyle}>Justification</Text>
 							<TextInput
-								data={justificationTextEdit}
 								placeholder={this.state.justificationText}
 								multiline={true}
 								underlineColorAndroid={"transparent"}
 								onChangeText={justificationText =>
-									this.handleJustification(justificationText)
+									this.setState({ justificationText: justificationText })
 								}
 								onContentSizeChange={event => {
 									this.setState({
@@ -223,18 +149,13 @@ const styles = StyleSheet.create({
 		backgroundColor: "#ffffff",
 		padding: 16,
 		marginHorizontal: 16,
-		marginTop: 16,
+		marginVertical: 16,
 		borderRadius: 4
 	},
 	textInputBox: {
 		borderColor: "#c4c4c4",
 		borderBottomWidth: 0.5,
 		marginBottom: 24
-	},
-	textInputStyle: {
-		fontSize: 16,
-		paddingBottom: 8,
-		alignItems: "flex-end"
 	},
 	datePickerBox: {
 		flexDirection: "row",

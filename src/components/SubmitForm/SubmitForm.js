@@ -9,77 +9,12 @@ import {
 	FlatList
 } from "react-native";
 import NavigationBar from "react-native-navbar";
-import Send from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/EvilIcons";
 
 import RequestHeader from "../Bar/RequestHeader";
-
-const ProfileInfo = ({ staffName, staffDivision, thumbnail, size }) => (
-	<View
-		style={{
-			backgroundColor: "#ffffff",
-			flexDirection: "row",
-			paddingVertical: 16,
-			paddingHorizontal: 24,
-			marginBottom: 0.5,
-			borderRadius: 4
-		}}
-	>
-		<View style={{ justifyContent: "center", paddingRight: 16 }}>
-			<Icon name={thumbnail} size={32} color="#000000" />
-		</View>
-		<View style={{ flex: 1 }}>
-			<Text
-				style={{
-					paddingBottom: 4,
-					fontWeight: "bold"
-				}}
-			>
-				{staffName}
-			</Text>
-
-			<Text>{staffDivision}</Text>
-		</View>
-	</View>
-);
-
-function DateBox({ caption, date }) {
-	return (
-		<View style={{ flex: 0.4, backgroundColor: "orange" }}>
-			<View
-				style={{
-					backgroundColor: "#ee7202",
-					alignItems: "center"
-				}}
-			>
-				<Text style={{ fontSize: 12, paddingVertical: 8 }}>
-					{(value = caption)}
-				</Text>
-			</View>
-			<View style={{ paddingVertical: 24, alignItems: "center" }}>
-				<Text style={{ fontSize: 16 }}>{(value = date)}</Text>
-			</View>
-		</View>
-	);
-}
-
-function Box({ heading, name }) {
-	return (
-		<View
-			style={{
-				paddingBottom: 8,
-				marginBottom: 16,
-				borderBottomWidth: 0.5,
-				borderColor: "#dcdcdc"
-			}}
-		>
-			<Text style={{ fontSize: 12, paddingBottom: 8 }}>
-				{(value = heading)}
-			</Text>
-			<Text>{(value = name)}</Text>
-		</View>
-	);
-}
+import ProfileInfo from "./ProfileInfo";
+import Box from "./Box";
+import DateBox from "./DateBox";
 
 class SubmitForm extends React.Component {
 	handlePressDelete(goBack) {
@@ -126,26 +61,22 @@ class SubmitForm extends React.Component {
 	}
 	handleNavigateTravel(navigate) {
 		navigate("TravelForm", {
-			edit: true,
-			formDraftId: `${this.props.requestDetails.id}`
+			edit: true
 		});
 	}
 	handleNavigateProfile(navigate) {
 		navigate("ProfileForm", {
-			edit: true,
-			formDraftId: `${this.props.requestDetails.id}`
+			edit: true
 		});
 	}
 	handleNavigateCost(navigate) {
 		navigate("CostForm", {
-			edit: true,
-			formDraftId: `${this.props.requestDetails.id}`
+			edit: true
 		});
 	}
 	handleNavigateApprover(navigate) {
 		navigate("ApprovalForm", {
-			edit: true,
-			formDraftId: `${this.props.requestDetails.id}`
+			edit: true
 		});
 	}
 	renderDateBox(caption, date) {
@@ -156,7 +87,6 @@ class SubmitForm extends React.Component {
 	}
 	render() {
 		const { navigate, goBack, state } = this.props.navigation;
-		const { userDetails, requestDetails, friendsInfo } = this.props;
 		const status = state.params.saved == true ? "Back" : "Exit";
 		const leftButtonConfig = {
 			title: status,
@@ -191,44 +121,42 @@ class SubmitForm extends React.Component {
 						<Text
 							style={{ fontSize: 16, fontWeight: "bold", paddingBottom: 2 }}
 						>
-							{requestDetails.destination}
+							{request.destination}
 						</Text>
 						<Text style={{ fontSize: 16, paddingBottom: 2 }}>
-							{requestDetails.travelType}
+							{request.travelType}
 						</Text>
 						<Text style={styles.descriptionText}>
-							{requestDetails.justificationText}
+							{request.justificationText}
 						</Text>
 						<View style={styles.dateBoxStyle}>
 							{this.renderDateBox(
 								(this.props.caption = "DEPARTURE"),
-								(this.props.date = requestDetails.travelFrom)
+								(this.props.date = request.travelFrom)
 							)}
 							{this.renderDateBox(
 								(this.props.caption = "ARRIVAL"),
-								(this.props.date = requestDetails.travelUntil)
+								(this.props.date = request.travelUntil)
 							)}
 						</View>
 					</View>
 
 					<View style={styles.headingStyle}>
 						<Text style={styles.headingText}>PROFILE</Text>
-
 						<TouchableOpacity
 							onPress={() => this.handleNavigateProfile(navigate)}
 						>
 							<Text style={{ fontSize: 12, paddingRight: 16 }}>EDIT</Text>
 						</TouchableOpacity>
 					</View>
-
 					<View style={{ marginBottom: 8 }}>
 						<ProfileInfo
-							staffName={userDetails.name}
-							staffDivision={userDetails.division}
+							staffName={info.name}
+							staffDivision={info.division}
 							thumbnail="user"
 						/>
 						<FlatList
-							data={friendsInfo}
+							data={friends}
 							keyExtractor={(item, index) => item.id}
 							renderItem={({ item }) => (
 								<ProfileInfo
@@ -251,19 +179,19 @@ class SubmitForm extends React.Component {
 					<View style={styles.boxContainer}>
 						{this.renderBox(
 							(this.props.heading = "Cost"),
-							(this.props.name = "RM" + " " + requestDetails.cost)
+							(this.props.name = "RM" + " " + request.cost)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Budget"),
-							(this.props.name = "RM" + " " + requestDetails.budget)
+							(this.props.name = "RM" + " " + request.budget)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Cost Category"),
-							(this.props.name = requestDetails.costCategory)
+							(this.props.name = request.costCategory)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Cost Centre"),
-							(this.props.name = requestDetails.costCentre)
+							(this.props.name = request.costCentre)
 						)}
 					</View>
 
@@ -278,19 +206,19 @@ class SubmitForm extends React.Component {
 					<View style={styles.boxContainer}>
 						{this.renderBox(
 							(this.props.heading = "Nominator 1"),
-							(this.props.name = requestDetails.nominatorName)
+							(this.props.name = request.nominatorName)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Nominator 2"),
-							(this.props.name = requestDetails.nominator2Name)
+							(this.props.name = request.nominator2Name)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Endorser"),
-							(this.props.name = requestDetails.endorserName)
+							(this.props.name = request.endorserName)
 						)}
 						{this.renderBox(
 							(this.props.heading = "Approver"),
-							(this.props.name = requestDetails.approverName)
+							(this.props.name = request.approverName)
 						)}
 					</View>
 				</ScrollView>
@@ -356,3 +284,69 @@ const styles = StyleSheet.create({
 		lineHeight: 22
 	}
 });
+
+const request = {
+	id: "1001",
+	completed: true,
+	status: "EEIU",
+	notification: "new",
+	timeStamp: "1 Jan 2017, 8.00am",
+	destination: "Kuala Lumpur",
+	travelFrom: "1/1/2017",
+	travelUntil: "31/1/2017",
+	travelType: "Site Survey",
+	justificationText:
+		"I would like to Experience the ka-cing ka-cing while experiencing the magnificent of Alain Ducasse Le Louis XV Dinner",
+	requestorName: "Mohammad Hafiz bin Burhan",
+	requestorDivision: "Group Brand and Communication",
+	cost: "12000",
+	budget: "34000",
+	costCategory: "EEIU",
+	costCentre: "BMCE02",
+	dialogBox: "Hi",
+	commentTextLatest: "Ali, What is your name?",
+	friendId1Name: "Mohammad Hafiz bin Burhan",
+	friendId1Division: "Group Digital Centre",
+	eeiuName: "Abu bin Awang",
+	nominatorName: "Jusoh bin Ali",
+	nominator2Name: "Check Check, Rock Rock",
+	endorserName: "Ali bin Awang",
+	approverName: "Kabil bin Ali"
+};
+
+const info = {
+	name: "Mohammad Hafiz bin Burhan",
+	staffID: "TM35438",
+	division: "IT & Network Technology",
+	authentication: "bbS1992",
+	submitRequest: true,
+	receiveTask: true,
+	authenticated: true
+};
+
+const friends = [
+	{
+		id: 1,
+		deleted: false,
+		staffName: "Engku Fariez bin Engku Azahan",
+		staffDivision: "Group Digital Centre"
+	},
+	{
+		id: 2,
+		deleted: false,
+		staffName: "Nur Izzati binti Amir Amzah",
+		staffDivision: "Group Procurement"
+	},
+	{
+		id: 3,
+		deleted: false,
+		staffName: "Choo Chia Pooh",
+		staffDivision: "Group Brand and Communicatin"
+	},
+	{
+		id: 4,
+		deleted: false,
+		staffName: "Roaida binti Abdullah",
+		staffDivision: "Group Procurement"
+	}
+];

@@ -9,38 +9,18 @@ import {
 	TouchableOpacity,
 	FlatList
 } from "react-native";
-import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import Send from "react-native-vector-icons/MaterialIcons";
 import NavigationBar from "react-native-navbar";
-import moment from "moment";
 
-const ChatInfo = ({ taskInfo }) => (
+import CommentSingle from "./CommentSingle";
+
+const ChatInfo = ({ task }) => (
 	<View style={styles.travelDetailsContainer}>
 		<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
-			{taskInfo.destination}
+			{task.destination}
 		</Text>
 		<Text style={{ paddingBottom: 4, fontSize: 14, color: "#808080" }}>
-			{taskInfo.travelFrom} until {taskInfo.travelUntil}
-		</Text>
-	</View>
-);
-
-const ChatSingle = ({ id, senderName, commentText, timeStamp }) => (
-	<View
-		style={{
-			paddingHorizontal: 16,
-			paddingVertical: 16,
-			borderBottomWidth: 1,
-			borderColor: "#f9f9f9",
-			marginHorizontal: 8
-		}}
-	>
-		<Text style={{ fontWeight: "bold", paddingBottom: 4 }}>{senderName}</Text>
-		<Text style={{ paddingBottom: 4, lineHeight: 24 }}>{commentText}</Text>
-		<Text style={{ fontSize: 12, color: "#c4c4c4" }}>
-			{moment(timeStamp)
-				.startOf("minute")
-				.fromNow()}
+			{task.travelFrom} until {task.travelUntil}
 		</Text>
 	</View>
 );
@@ -56,7 +36,6 @@ class CommentsTask extends React.Component {
 	}
 	render() {
 		const { goBack } = this.props.navigation;
-		const { taskInfo, commentDetails } = this.props;
 		const leftButtonConfig = {
 			title: "Back",
 			handler: () => goBack()
@@ -68,15 +47,13 @@ class CommentsTask extends React.Component {
 					title={{ title: "Comments" }}
 					leftButton={leftButtonConfig}
 				/>
-
-				<ChatInfo taskInfo={taskInfo} />
-
+				<ChatInfo task={task} />
 				<ScrollView style={{ flex: 1 }}>
 					<FlatList
-						data={commentDetails}
+						data={comments}
 						keyExtractor={(item, index) => item.id}
 						renderItem={({ item }) => (
-							<ChatSingle
+							<CommentSingle
 								id={item.id}
 								senderName={item.senderName}
 								commentText={item.commentText}
@@ -85,7 +62,6 @@ class CommentsTask extends React.Component {
 						)}
 					/>
 				</ScrollView>
-
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={styles.typeCommentContainer}
@@ -107,7 +83,7 @@ class CommentsTask extends React.Component {
 						/>
 					</View>
 					<View style={{ justifyContent: "center", marginBottom: 8 }}>
-						<TouchableOpacity onPress={() => this.props.addComment()}>
+						<TouchableOpacity onPress={() => null}>
 							<Send name="send" size={24} color="#000000" />
 						</TouchableOpacity>
 					</View>
@@ -143,3 +119,48 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1
 	}
 });
+
+const task = {
+	id: "1001",
+	completed: true,
+	status: "EEIU",
+	notification: "new",
+	timeStamp: "1 Jan 2017, 8.00am",
+	destination: "Singapore",
+	travelFrom: "1/1/2017",
+	travelUntil: "31/1/2017",
+	travelType: "Site Survey",
+	justificationText:
+		"I would like to Experience the ka-cing ka-cing while experiencing the magnificent of Alain Ducasse Le Louis XV Dinner",
+	requestorName: "Mohammad Hafiz bin Burhan",
+	requestorDivision: "Group Brand and Communication",
+	cost: "12000",
+	budget: "34000",
+	costCategory: "EEIU",
+	costCentre: "BMCE02",
+	dialogBox: "Hi",
+	commentTextLatest: "Ali, What is your name?",
+	friendId1Name: "Mohammad Hafiz bin Burhan",
+	friendId1Division: "Group Digital Centre",
+	eeiuName: "Abu bin Awang",
+	nominatorName: "Jusoh bin Ali",
+	nominator2Name: "Check Check, Rock Rock",
+	endorserName: "Ali bin Awang",
+	approverName: "Kabil bin Ali"
+};
+
+const comments = [
+	{
+		id: "1",
+		senderName: "Ali Muhd Wasil bin Ali Absar",
+		commentText:
+			"Hafiz, where can we have all beautiful shawties around that area? I want them like right now!",
+		timeStamp: "13 September 2017, 3.20pm"
+	},
+	{
+		id: "2",
+		senderName: "Mohammad Hafiz bin Burhan",
+		commentText: "Get the boot, into the mommy house",
+		timeStamp: "14 September 2017, 4.17pm"
+	}
+];

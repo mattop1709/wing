@@ -1,5 +1,4 @@
 export const login = (staffID, authentication) => {
-	// alert("authenticated");
 	return {
 		type: "LOGIN",
 		staffID: staffID,
@@ -8,7 +7,6 @@ export const login = (staffID, authentication) => {
 };
 
 export const logout = () => {
-	// alert("authenticated");
 	return {
 		type: "LOGOUT"
 	};

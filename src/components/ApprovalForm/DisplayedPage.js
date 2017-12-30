@@ -9,10 +9,6 @@ import {
 	KeyboardAvoidingView,
 	Alert
 } from "react-native";
-import Next from "react-native-vector-icons/Entypo";
-import { Dropdown } from "react-native-material-dropdown";
-import Icon from "react-native-vector-icons/EvilIcons";
-import NavigationBar from "react-native-navbar";
 
 const DisplayedPage = ({ navigate, page, approverDetails }) => {
 	let screen;

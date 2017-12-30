@@ -13,33 +13,9 @@ import NavigationBar from "react-native-navbar";
 
 class ListSingle extends React.Component {
 	render() {
-		const {
-			staffName,
-			staffDivision,
-			state,
-			goBack,
-			addNominator,
-			addNominator2,
-			addEndorser,
-			addApprover,
-			addFriends
-		} = this.props;
+		const { id, staffName, staffDivision, goBack } = this.props;
 		return (
-			<TouchableOpacity
-				onPress={() => {
-					if (state.params.nominator1 == true) {
-						addNominator(staffName);
-					} else if (state.params.nominator2 == true) {
-						addNominator2(staffName);
-					} else if (state.params.endorser == true) {
-						addEndorser(staffName);
-					} else if (state.params.approver == true) {
-						addApprover(staffName);
-					} else addFriends(staffName, staffDivision);
-					goBack();
-				}}
-				style={styles.contactBox}
-			>
+			<TouchableOpacity onPress={() => goBack()} style={styles.contactBox}>
 				<Text style={{ paddingBottom: 4, fontSize: 16, fontWeight: "bold" }}>
 					{staffName}
 				</Text>
@@ -56,14 +32,14 @@ class AddPerson extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 	}
 	componentDidMount() {
-		this.setState({ displayedFriends: this.props.add });
+		this.setState({ displayedFriends: friends });
 	}
 	componentWillReceiveProps(nextProps) {
-		this.setState({ displayedFriends: nextProps.add });
+		this.setState({ displayedFriends: nextProps.friends });
 	}
 	handleChange(text) {
 		const lowerText = text.toLowerCase();
-		const searchFriends = this.props.add.filter(friend => {
+		const searchFriends = friends.filter(friend => {
 			return (
 				friend.staffName.toLowerCase().includes(lowerText) ||
 				(typeof friend.staffDivision == "string" &&
@@ -74,14 +50,6 @@ class AddPerson extends React.Component {
 	}
 	render() {
 		const { goBack, state } = this.props.navigation;
-		const {
-			add,
-			addNominator,
-			addNominator2,
-			addEndorser,
-			addApprover,
-			addFriends
-		} = this.props;
 		const { displayedFriends } = this.state;
 		return (
 			<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
@@ -116,11 +84,7 @@ class AddPerson extends React.Component {
 						keyExtractor={(item, index) => item.id}
 						renderItem={({ item }) => (
 							<ListSingle
-								addNominator={addNominator}
-								addNominator2={addNominator2}
-								addEndorser={addEndorser}
-								addApprover={addApprover}
-								addFriends={addFriends}
+								id={item.id}
 								staffName={item.staffName}
 								staffDivision={item.staffDivision}
 								goBack={goBack}
@@ -168,3 +132,30 @@ const styles = StyleSheet.create({
 		borderColor: "#c4c4c4"
 	}
 });
+
+const friends = [
+	{
+		id: 1,
+		deleted: false,
+		staffName: "Engku Fariez bin Engku Azahan",
+		staffDivision: "Group Digital Centre"
+	},
+	{
+		id: 2,
+		deleted: false,
+		staffName: "Nur Izzati binti Amir Amzah",
+		staffDivision: "Group Procurement"
+	},
+	{
+		id: 3,
+		deleted: false,
+		staffName: "Choo Chia Pooh",
+		staffDivision: "Group Brand and Communicatin"
+	},
+	{
+		id: 4,
+		deleted: false,
+		staffName: "Roaida binti Abdullah",
+		staffDivision: "Group Procurement"
+	}
+];

@@ -13,32 +13,6 @@ class DrawerContainer extends React.Component {
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={{ flex: 1 }}>
-				<View
-					style={{
-						marginTop: 40,
-						marginHorizontal: 16,
-						paddingVertical: 16,
-						backgroundColor: "red"
-					}}
-				>
-					<Text>Logo</Text>
-				</View>
-
-				<View
-					style={{
-						borderBottomWidth: 1,
-						borderColor: "#c4c4c4",
-						marginHorizontal: 16,
-						paddingVertical: 24,
-						alignItems: "center"
-					}}
-				>
-					<Text style={{ textAlign: "center", paddingBottom: 4 }}>
-						Mohammad Hafiz bin Burhan
-					</Text>
-					<Text>Group Digital Centre</Text>
-				</View>
-
 				<View style={{ flex: 1 }}>
 					<TouchableOpacity
 						style={{ paddingTop: 32, paddingLeft: 16, flexDirection: "row" }}
@@ -49,18 +23,6 @@ class DrawerContainer extends React.Component {
 						</View>
 						<View style={{ justifyContent: "center", paddingLeft: 16 }}>
 							<Text style={{ fontSize: 16 }}>Home</Text>
-						</View>
-					</TouchableOpacity>
-
-					<TouchableOpacity
-						style={{ paddingTop: 32, paddingLeft: 16, flexDirection: "row" }}
-						onPress={() => navigate("ActivityLog")}
-					>
-						<View style={{ justifyContent: "center" }}>
-							<DrawerIcon name="list" size={32} color="#000000" />
-						</View>
-						<View style={{ justifyContent: "center", paddingLeft: 16 }}>
-							<Text style={{ fontSize: 16 }}>Activity Log</Text>
 						</View>
 					</TouchableOpacity>
 
@@ -121,3 +83,15 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrawerContainer);
+
+// <TouchableOpacity
+// 	style={{ paddingTop: 32, paddingLeft: 16, flexDirection: "row" }}
+// 	onPress={() => navigate("ActivityLog")}
+// >
+// 	<View style={{ justifyContent: "center" }}>
+// 		<DrawerIcon name="list" size={32} color="#000000" />
+// 	</View>
+// 	<View style={{ justifyContent: "center", paddingLeft: 16 }}>
+// 		<Text style={{ fontSize: 16 }}>Activity Log</Text>
+// 	</View>
+// </TouchableOpacity>

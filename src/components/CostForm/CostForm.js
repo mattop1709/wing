@@ -9,33 +9,21 @@ import {
 	KeyboardAvoidingView,
 	Alert
 } from "react-native";
-import Next from "react-native-vector-icons/Entypo";
 import { Dropdown } from "react-native-material-dropdown";
-import Icon from "react-native-vector-icons/EvilIcons";
 import NavigationBar from "react-native-navbar";
 
 import FormBar from "../Bar/FormBar";
+import TextInputComponent from "./TextInputComponent";
 
 class CostForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: "",
+			costCategory: "",
 			costText: "",
-			budgetText: ""
+			budgetText: "",
+			costCentreText: ""
 		};
-	}
-	handleCost(costValue) {
-		this.setState({ costText: costValue });
-		this.props.setCostValue(costValue);
-	}
-	handleBudget(budgetValue) {
-		this.setState({ budgetText: budgetValue });
-		this.props.setBudgetValue(budgetValue);
-	}
-	handleCostCentre(costCentreText) {
-		this.setState({ costCentreText: costCentreText });
-		this.props.setCostCentre(costCentreText);
 	}
 	handlePress(navigate, state, goBack) {
 		if (state.params.edit !== true) {
@@ -50,14 +38,10 @@ class CostForm extends React.Component {
 					style: "default"
 				}
 			]);
-		} else
-			navigateTo = navigate("SubmitForm", {
-				formDraftId: `${this.props.requestDetails.id}`
-			});
+		} else navigateTo = goBack();
 	}
 	render() {
 		const { navigate, state, goBack } = this.props.navigation;
-		const { requestDetails, formDraftId } = this.props;
 		let costCategory = [
 			{
 				value: "Cost Centre"
@@ -66,14 +50,6 @@ class CostForm extends React.Component {
 				value: "Sponsorship (EEIU)"
 			}
 		];
-		const costEdit = state.params.edit ? `${requestDetails.cost}` : null;
-		const budgetEdit = state.params.edit ? `${requestDetails.budget}` : null;
-		const costCategoryEdit = state.params.edit
-			? `${requestDetails.costCategory}`
-			: false;
-		const costCentreEdit = state.params.edit
-			? `${requestDetails.costCentre}`
-			: null;
 		const status = state.params.edit == true ? "Back" : "Exit";
 		const leftButtonConfig = {
 			title: status,
@@ -101,40 +77,34 @@ class CostForm extends React.Component {
 				<ScrollView style={{ flex: 1 }}>
 					<FormBar cost={true} />
 					<View style={styles.bodyContainer}>
-						<View style={{ paddingBottom: 24 }}>
-							<Text style={styles.textStyle}>Cost</Text>
-							<View style={styles.textInputBox}>
-								<View style={{ justifyContent: "center" }}>
-									<Text style={styles.textStyle}>RM</Text>
-								</View>
-								<TextInput
-									style={styles.textInputStyle}
-									value={costEdit}
-									placeholder="State your cost.."
-									onChangeText={costValue => this.handleCost(costValue)}
-									clearButtonMode="always"
-									underlineColorAndroid="rgba(0,0,0,0)"
-									keyboardType="numeric"
-								/>
+						<Text style={styles.textStyle}>Cost</Text>
+						<View style={styles.textInputBox}>
+							<View style={{ justifyContent: "center" }}>
+								<Text style={styles.textStyle}>RM</Text>
 							</View>
+							<TextInputComponent
+								value={this.state.costValue}
+								caption="State your cost"
+								onChangeText={costValue =>
+									this.setState({ costText: costValue })
+								}
+							/>
 						</View>
-						<View style={{ paddingBottom: 24 }}>
-							<Text style={styles.textStyle}>Budget</Text>
-							<View style={styles.textInputBox}>
-								<View style={{ justifyContent: "center" }}>
-									<Text style={styles.textStyle}>RM</Text>
-								</View>
-								<TextInput
-									style={styles.textInputStyle}
-									value={budgetEdit}
-									placeholder="State your budget.."
-									onChangeText={budgetValue => this.handleBudget(budgetValue)}
-									clearButtonMode="always"
-									underlineColorAndroid="rgba(0,0,0,0)"
-									keyboardType="numeric"
-								/>
+
+						<Text style={styles.textStyle}>Budget</Text>
+						<View style={styles.textInputBox}>
+							<View style={{ justifyContent: "center" }}>
+								<Text style={styles.textStyle}>RM</Text>
 							</View>
+							<TextInputComponent
+								value={this.state.budgetValue}
+								caption="State your budget.."
+								onChangeText={budgetValue =>
+									this.setState({ budgetText: budgetValue })
+								}
+							/>
 						</View>
+
 						<View style={{ paddingBottom: 24 }}>
 							<Text style={styles.textStyle}>Cost Category</Text>
 							<Dropdown
@@ -146,20 +116,16 @@ class CostForm extends React.Component {
 								onChangeText={value => this.props.setCostCategory(value)}
 							/>
 						</View>
-						<View style={{ paddingBottom: 24 }}>
-							<Text style={styles.textStyle}>Cost Centre</Text>
-							<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
-								<TextInput
-									style={styles.textInputStyle}
-									value={costCentreEdit}
-									placeholder="e.g. BMCE02"
-									onChangeText={costCentreText =>
-										this.handleCostCentre(costCentreText)
-									}
-									clearButtonMode="always"
-									underlineColorAndroid="rgba(0,0,0,0)"
-								/>
-							</View>
+
+						<Text style={styles.textStyle}>Cost Centre</Text>
+						<View style={{ borderColor: "#c4c4c4", borderBottomWidth: 1 }}>
+							<TextInputComponent
+								value={this.state.costCentreText}
+								caption="e.g. BMCE02"
+								onChangeText={budgetValue =>
+									this.setState({ budgetText: budgetValue })
+								}
+							/>
 						</View>
 					</View>
 				</ScrollView>
@@ -169,26 +135,21 @@ class CostForm extends React.Component {
 	}
 }
 
+export default CostForm;
+
 const styles = StyleSheet.create({
 	bodyContainer: {
 		backgroundColor: "#ffffff",
 		padding: 16,
 		marginHorizontal: 16,
-		marginTop: 16,
+		marginVertical: 16,
 		borderRadius: 4
 	},
 	textInputBox: {
 		flexDirection: "row",
 		borderColor: "#c4c4c4",
-		borderBottomWidth: 1
-	},
-	textInputStyle: {
-		flex: 1,
-		fontSize: 16,
-		paddingLeft: 8,
-		paddingBottom: 8,
-		alignItems: "flex-end",
-		justifyContent: "center"
+		borderBottomWidth: 1,
+		marginBottom: 24
 	},
 	nextButton: {
 		backgroundColor: "#ee7202",
@@ -204,5 +165,3 @@ const styles = StyleSheet.create({
 		paddingBottom: 8
 	}
 });
-
-export default CostForm;
